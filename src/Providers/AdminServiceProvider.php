@@ -31,7 +31,8 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->registerRouteMiddleware();
+        $this->commands($this->commands);
     }
 
     /**
