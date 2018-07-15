@@ -23,10 +23,11 @@ return [
         'namespace' => 'App\\Admin\\Controllers',
         'middleware' => ['web', 'admin'],
     ],
+
     /*
      * Laravel-admin install directory.
      */
-    'directory' => app_path('Http\\Controller\\Admin'),
+    'directory' => app_path('Http/Controllers/Admin'),
 
     /*
      * Use `https`.

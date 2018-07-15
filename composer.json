@@ -1,6 +1,6 @@
 {
     "name": "guesl/laravel-admin",
-    "version": "v1.0.0",
+    "version": "1.0.0",
     "description": "Laravel admin wrote by Jianfeng Li, Guesl.",
     "keywords": [
         "admin",

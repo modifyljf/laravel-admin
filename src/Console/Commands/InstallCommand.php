@@ -71,9 +71,8 @@ class InstallCommand extends Command
             return;
         }
 
-        $this->makeDir('/');
+        $this->makeDir("/");
         $this->line('<info>Admin directory was created:</info> ' . str_replace(base_path(), '', $this->directory));
-        $this->makeDir('Controllers');
 
         $this->createHomeController();
         $this->createRoutesFile();
@@ -86,7 +85,7 @@ class InstallCommand extends Command
      */
     public function createHomeController()
     {
-        $homeController = $this->directory . '/Controllers/HomeController.php';
+        $homeController = $this->directory . '/HomeController.php';
         $contents = $this->getStub('HomeController');
 
         $this->laravel['files']->put(
