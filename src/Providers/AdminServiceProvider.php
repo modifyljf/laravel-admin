@@ -22,6 +22,10 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->publishes([
+            __DIR__ . '/../../config' => config_path()],
+            'laravel-admin-config'
+        );
     }
 
     /**

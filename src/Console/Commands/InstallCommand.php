@@ -54,7 +54,6 @@ class InstallCommand extends Command
      */
     public function initDatabase()
     {
-        $this->call('entrust:migration');
         $this->call('migrate');
     }
 
