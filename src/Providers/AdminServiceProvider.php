@@ -27,6 +27,11 @@ class AdminServiceProvider extends ServiceProvider
             [__DIR__ . '/../../config' => config_path()],
             'laravel-admin-config'
         );
+
+        $this->publishes(
+            [__DIR__ . '/../../routes' => base_path('routes')],
+            'laravel-admin-config'
+        );
     }
 
     /**

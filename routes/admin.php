@@ -1,11 +1,14 @@
 <?php
 
-use Illuminate\Routing\Route;
+use Illuminate\Http\Request;
 
-Route::group([
-    'prefix' => config('admin.route.prefix'),
-    'namespace' => config('admin.route.namespace'),
-    'middleware' => config('admin.route.middleware'),
-], function () {
-    Route::get('/', 'HomeController@index');
-});
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/

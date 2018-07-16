@@ -53,7 +53,7 @@ class AuthMakeCommand extends Command
             );
 
             file_put_contents(
-                base_path('routes/web.php'),
+                base_path('routes/admin.php'),
                 file_get_contents(__DIR__ . '/stubs/make/routes.stub'),
                 FILE_APPEND
             );
