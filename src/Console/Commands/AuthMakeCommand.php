@@ -1,6 +1,6 @@
 <?php
 
-namespace uesl\Admin\Console\Commands;
+namespace Guesl\Admin\Console\Commands;
 
 use Illuminate\Console\Command;
 
