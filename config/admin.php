@@ -20,7 +20,7 @@ return [
      * Route configuration.
      */
     'route' => [
-        'prefix' => 'admin',
+        'prefix' => '',
         'namespace' => 'App\Http\Controllers\Admin',
         'middleware' => ['web', 'admin'],
     ],

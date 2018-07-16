@@ -59,6 +59,12 @@ class AuthMakeCommand extends GeneratorCommand
                 file_get_contents(__DIR__ . '/stubs/make/routes.stub'),
                 FILE_APPEND
             );
+
+            file_put_contents(
+                base_path('routes/web.php'),
+                file_get_contents(__DIR__.'/stubs/make/routes.auth.stub'),
+                FILE_APPEND
+            );
         }
 
         $this->info('Authentication scaffolding generated successfully.');
