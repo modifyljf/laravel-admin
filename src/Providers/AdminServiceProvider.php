@@ -25,12 +25,12 @@ class AdminServiceProvider extends ServiceProvider
     {
         $this->publishes(
             [__DIR__ . '/../../config' => config_path()],
-            'laravel-admin-config'
+            'guesl-admin'
         );
 
         $this->publishes(
             [__DIR__ . '/../../routes' => base_path('routes')],
-            'laravel-admin-config'
+            'guesl-admin'
         );
     }
 

@@ -31,6 +31,8 @@ class AuthMakeCommand extends Command
         'auth/login.blade.stub' => 'auth/login.blade.php',
         'auth/passwords/email.blade.stub' => 'auth/passwords/email.blade.php',
         'auth/passwords/reset.blade.stub' => 'auth/passwords/reset.blade.php',
+        'auth/incs/foot.blade.stub' => 'auth/incs/foot.blade.php',
+        'auth/incs/head.blade.stub' => 'auth/incs/head.blade.php',
         'auth/layouts/app.blade.stub' => 'auth/layouts/app.blade.php',
     ];
 
@@ -48,7 +50,7 @@ class AuthMakeCommand extends Command
 
         if (!$this->option('views')) {
             file_put_contents(
-                app_path('Http/Controllers/HomeController.php'),
+                app_path('Http/Controllers/Admin/HomeController.php'),
                 $this->compileControllerStub()
             );
 
@@ -69,6 +71,11 @@ class AuthMakeCommand extends Command
      */
     protected function createDirectories()
     {
+
+        if (!is_dir($directory = app_path('Http/Controllers/Admin'))) {
+            mkdir($directory, 0755, true);
+        }
+
         if (!is_dir($directory = resource_path('views/auth/layouts'))) {
             mkdir($directory, 0755, true);
         }
@@ -114,13 +121,22 @@ class AuthMakeCommand extends Command
      */
     protected function exportAssets()
     {
-        if (is_dir(public_path('template')) && !$this->option('force')) {
+        if (is_dir(public_path('templates')) && !$this->option('force')) {
             if (!$this->confirm("The template assets already exists. Do you want to replace it?")) {
                 return;
             }
+
+            $this->rrmdir(public_path('templates'));
         }
 
-        $this->recurseCopy(__DIR__ . '/../../../public', public_path());
+        $this->recurseCopy(__DIR__ . '/../../../public/templates', public_path('templates'));
+
+        if (!file_exists(public_path('assets/images/logo.png'))) {
+            copy(
+                __DIR__ . '/../../../public/assets/images/logo.png',
+                public_path('assets/images/logo.png')
+            );
+        }
     }
 
     /**
@@ -131,7 +147,7 @@ class AuthMakeCommand extends Command
     protected function compileControllerStub()
     {
         return str_replace(
-            '{{namespace}}',
+            'AppNamespace\\',
             $this->getAppNamespace(),
             file_get_contents(__DIR__ . '/stubs/make/controllers/HomeController.stub')
         );
@@ -146,11 +162,12 @@ class AuthMakeCommand extends Command
     protected function recurseCopy($src, $dst)
     {
         $dir = opendir($src);
+
         mkdir($dst);
         while (false !== ($file = readdir($dir))) {
             if (($file != '.') && ($file != '..')) {
                 if (is_dir($src . '/' . $file)) {
-                    recurseCopy($src . '/' . $file, $dst . '/' . $file);
+                    $this->recurseCopy($src . '/' . $file, $dst . '/' . $file);
                 } else {
                     copy($src . '/' . $file, $dst . '/' . $file);
                 }
@@ -158,6 +175,29 @@ class AuthMakeCommand extends Command
         }
         closedir($dir);
     }
+
+    /**
+     * Recurse remove entire directory.
+     *
+     * @param string $src
+     */
+    protected function rrmdir($src)
+    {
+        $dir = opendir($src);
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                $full = $src . '/' . $file;
+                if (is_dir($full)) {
+                    $this->rrmdir($full);
+                } else {
+                    unlink($full);
+                }
+            }
+        }
+        closedir($dir);
+        rmdir($src);
+    }
+
 
     /**
      * Get the application namespace.
