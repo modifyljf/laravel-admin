@@ -29,6 +29,7 @@ class AuthMakeCommand extends GeneratorCommand
      */
     protected $views = [
         'auth/login.blade.stub' => 'auth/login.blade.php',
+        'auth/register.blade.stub' => 'auth/register.blade.php',
         'auth/passwords/email.blade.stub' => 'auth/passwords/email.blade.php',
         'auth/passwords/reset.blade.stub' => 'auth/passwords/reset.blade.php',
         'auth/incs/foot.blade.stub' => 'auth/incs/foot.blade.php',
