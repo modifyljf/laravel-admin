@@ -11,7 +11,7 @@ class InstallAdminCommand extends Command
      *
      * @var string
      */
-    protected $name = 'admin:install';
+    protected $name = 'guesl:install';
     /**
      * The console command description.
      *

@@ -1,0 +1,2 @@
+
+Route::get('/DummyRoute', 'DummyController@index')->name('DummyModel.index');

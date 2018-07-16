@@ -11,7 +11,7 @@ class UninstallAdminCommand extends Command
      *
      * @var string
      */
-    protected $name = 'admin:uninstall';
+    protected $name = 'guesl:uninstall';
     /**
      * The console command description.
      *
