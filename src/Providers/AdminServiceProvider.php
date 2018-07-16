@@ -13,6 +13,7 @@ class AdminServiceProvider extends ServiceProvider
     protected $commands = [
         'Guesl\Admin\Console\Commands\InstallAdminCommand',
         'Guesl\Admin\Console\Commands\UninstallAdminCommand',
+        'Guesl\Admin\Console\Commands\AuthMakeCommand',
     ];
 
     /**
@@ -22,8 +23,8 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([
-            __DIR__ . '/../../config' => config_path()],
+        $this->publishes(
+            [__DIR__ . '/../../config' => config_path()],
             'laravel-admin-config'
         );
     }

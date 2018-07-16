@@ -3,7 +3,6 @@
 namespace Illuminate\Auth\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Console\DetectsApplicationNamespace;
 
 class AuthMakeCommand extends Command
 {
@@ -30,11 +29,9 @@ class AuthMakeCommand extends Command
      */
     protected $views = [
         'auth/login.blade.stub' => 'auth/login.blade.php',
-        'auth/register.blade.stub' => 'auth/register.blade.php',
         'auth/passwords/email.blade.stub' => 'auth/passwords/email.blade.php',
         'auth/passwords/reset.blade.stub' => 'auth/passwords/reset.blade.php',
-        'layouts/app.blade.stub' => 'layouts/app.blade.php',
-        'home.blade.stub' => 'home.blade.php',
+        'auth/layouts/app.blade.stub' => 'auth/layouts/app.blade.php',
     ];
 
     /**
@@ -47,6 +44,7 @@ class AuthMakeCommand extends Command
         $this->createDirectories();
 
         $this->exportViews();
+        $this->exportAssets();
 
         if (!$this->option('views')) {
             file_put_contents(
@@ -71,7 +69,15 @@ class AuthMakeCommand extends Command
      */
     protected function createDirectories()
     {
-        if (!is_dir($directory = resource_path('views/layouts'))) {
+        if (!is_dir($directory = resource_path('views/auth/layouts'))) {
+            mkdir($directory, 0755, true);
+        }
+
+        if (!is_dir($directory = resource_path('views/auth/incs'))) {
+            mkdir($directory, 0755, true);
+        }
+
+        if (!is_dir($directory = resource_path('views/auth/layouts'))) {
             mkdir($directory, 0755, true);
         }
 
@@ -102,6 +108,22 @@ class AuthMakeCommand extends Command
     }
 
     /**
+     * Export the authentication views.
+     *
+     * @return void
+     */
+    protected function exportAssets()
+    {
+        if (is_dir(public_path('template')) && !$this->option('force')) {
+            if (!$this->confirm("The template assets already exists. Do you want to replace it?")) {
+                return;
+            }
+        }
+
+        $this->recurseCopy(__DIR__ . '/../../../public', public_path());
+    }
+
+    /**
      * Compiles the HomeController stub.
      *
      * @return string
@@ -116,12 +138,34 @@ class AuthMakeCommand extends Command
     }
 
     /**
+     * Recurse copy entire directory.
+     *
+     * @param string $src
+     * @param string $dst
+     */
+    protected function recurseCopy($src, $dst)
+    {
+        $dir = opendir($src);
+        mkdir($dst);
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                if (is_dir($src . '/' . $file)) {
+                    recurseCopy($src . '/' . $file, $dst . '/' . $file);
+                } else {
+                    copy($src . '/' . $file, $dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
+    }
+
+    /**
      * Get the application namespace.
      *
      * @return string
      */
     protected function getAppNamespace()
     {
-        return Container::getInstance()->getNamespace();
+        return $this->laravel->getNamespace();
     }
 }
