@@ -1,4 +1,5 @@
 <?php
+
 return [
     /*
      * Version displayed in footer.
@@ -20,7 +21,7 @@ return [
      */
     'route' => [
         'prefix' => 'admin',
-        'namespace' => 'App\\Admin\\Controllers',
+        'namespace' => 'App\Http\Controllers\Admin',
         'middleware' => ['web', 'admin'],
     ],
 
