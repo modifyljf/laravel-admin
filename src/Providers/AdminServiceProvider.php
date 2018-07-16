@@ -72,10 +72,12 @@ class AdminServiceProvider extends ServiceProvider
      */
     protected function mapAdminRoutes()
     {
-        Route::middleware(config('admin.route.middleware'))
-            ->namespace(config('admin.route.namespace'))
-            ->prefix(config('admin.route.prefix'))
-            ->group(base_path('routes/admin.php'));
+        if (file_exists(base_path('routes/admin.php'))) {
+            Route::middleware(config('admin.route.middleware'))
+                ->namespace(config('admin.route.namespace'))
+                ->prefix(config('admin.route.prefix'))
+                ->group(base_path('routes/admin.php'));
+        }
     }
 
     /**
