@@ -3,7 +3,7 @@
 namespace Guesl\Admin\Providers;
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class AdminServiceProvider extends ServiceProvider
 {
@@ -23,6 +23,8 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        parent::boot();
+
         $this->publishes(
             [__DIR__ . '/../../config' => config_path()],
             'guesl-admin'
@@ -43,6 +45,12 @@ class AdminServiceProvider extends ServiceProvider
     {
         $this->registerRouteMiddleware();
         $this->commands($this->commands);
+    }
+
+
+    protected function loadRoutesFrom($path)
+    {
+
     }
 
     /**

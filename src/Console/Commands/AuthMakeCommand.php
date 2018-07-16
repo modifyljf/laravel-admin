@@ -2,9 +2,9 @@
 
 namespace Guesl\Admin\Console\Commands;
 
-use Illuminate\Console\Command;
+use Illuminate\Console\GeneratorCommand;
 
-class AuthMakeCommand extends Command
+class AuthMakeCommand extends GeneratorCommand
 {
     /**
      * The name and signature of the console command.
@@ -71,30 +71,13 @@ class AuthMakeCommand extends Command
      */
     protected function createDirectories()
     {
-
-        if (!is_dir($directory = app_path('Http/Controllers/Admin'))) {
-            mkdir($directory, 0755, true);
-        }
-
-        if (!is_dir($directory = resource_path('views/auth/layouts'))) {
-            mkdir($directory, 0755, true);
-        }
-
-        if (!is_dir($directory = resource_path('views/auth/incs'))) {
-            mkdir($directory, 0755, true);
-        }
-
-        if (!is_dir($directory = resource_path('views/auth/layouts'))) {
-            mkdir($directory, 0755, true);
-        }
-
-        if (!is_dir($directory = resource_path('views/auth/passwords'))) {
-            mkdir($directory, 0755, true);
-        }
-
-        if (!is_dir($directory = public_path('images'))) {
-            mkdir($directory, 0755, true);
-        }
+        $this->makeDirectory(app_path('Http/Controllers/Admin'), 0755, true);
+        $this->makeDirectory(resource_path('views/auth/layouts'), 0755, true);
+        $this->makeDirectory(resource_path('views/auth/incs'), 0755, true);
+        $this->makeDirectory(resource_path('views/auth/layouts'), 0755, true);
+        $this->makeDirectory(resource_path('views/auth/passwords'), 0755, true);
+        $this->makeDirectory(resource_path('views/auth/passwords'), 0755, true);
+        $this->makeDirectory(public_path('images'), 0755, true);
     }
 
     /**
@@ -152,7 +135,7 @@ class AuthMakeCommand extends Command
     {
         return str_replace(
             'AppNamespace\\',
-            $this->getAppNamespace(),
+            $this->rootNamespace(),
             file_get_contents(__DIR__ . '/stubs/make/controllers/HomeController.stub')
         );
     }
@@ -202,14 +185,13 @@ class AuthMakeCommand extends Command
         rmdir($src);
     }
 
-
     /**
-     * Get the application namespace.
+     * Get the stub file for the generator.
      *
      * @return string
      */
-    protected function getAppNamespace()
+    protected function getStub()
     {
-        return $this->laravel->getNamespace();
+        return __DIR__.'/stubs';
     }
 }
