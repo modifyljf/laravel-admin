@@ -91,6 +91,10 @@ class AuthMakeCommand extends Command
         if (!is_dir($directory = resource_path('views/auth/passwords'))) {
             mkdir($directory, 0755, true);
         }
+
+        if (!is_dir($directory = public_path('images'))) {
+            mkdir($directory, 0755, true);
+        }
     }
 
     /**
@@ -121,6 +125,13 @@ class AuthMakeCommand extends Command
      */
     protected function exportAssets()
     {
+        if (!file_exists(public_path('images/logo.png'))) {
+            copy(
+                __DIR__ . '/../../../public/images/logo.png',
+                public_path('images/logo.png')
+            );
+        }
+
         if (is_dir(public_path('templates')) && !$this->option('force')) {
             if (!$this->confirm("The template assets already exists. Do you want to replace it?")) {
                 return;
@@ -130,13 +141,6 @@ class AuthMakeCommand extends Command
         }
 
         $this->recurseCopy(__DIR__ . '/../../../public/templates', public_path('templates'));
-
-        if (!file_exists(public_path('assets/images/logo.png'))) {
-            copy(
-                __DIR__ . '/../../../public/assets/images/logo.png',
-                public_path('assets/images/logo.png')
-            );
-        }
     }
 
     /**
