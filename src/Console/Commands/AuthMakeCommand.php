@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Auth\Console;
+namespace uesl\Admin\Console\Commands;
 
 use Illuminate\Console\Command;
 
