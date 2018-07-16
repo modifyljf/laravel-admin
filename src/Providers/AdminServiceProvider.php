@@ -11,8 +11,8 @@ class AdminServiceProvider extends ServiceProvider
      * @var array
      */
     protected $commands = [
-        'Guesl\Admin\Console\Commands\InstallCommand',
-        'Guesl\Admin\Console\Commands\UninstallCommand',
+        'Guesl\Admin\Console\Commands\InstallAdminCommand',
+        'Guesl\Admin\Console\Commands\UninstallAdminCommand',
     ];
 
     /**

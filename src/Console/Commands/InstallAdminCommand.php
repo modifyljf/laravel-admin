@@ -4,7 +4,7 @@ namespace Guesl\Admin\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class InstallCommand extends Command
+class InstallAdminCommand extends Command
 {
     /**
      * The console command name.

@@ -4,7 +4,7 @@ namespace Guesl\Admin\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class UninstallCommand extends Command
+class UninstallAdminCommand extends Command
 {
     /**
      * The console command name.
