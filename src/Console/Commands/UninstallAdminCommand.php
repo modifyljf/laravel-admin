@@ -30,7 +30,7 @@ class UninstallAdminCommand extends GeneratorCommand
             return;
         }
         $this->removeFilesAndDirectories();
-        $this->line('<info>Uninstalling laravel admin!</info>');
+        $this->info('Uninstalling laravel admin!');
     }
 
     /**
@@ -40,11 +40,20 @@ class UninstallAdminCommand extends GeneratorCommand
      */
     protected function removeFilesAndDirectories()
     {
-        $this->files->delete(config_path('admin.php'));
-        $this->files->delete(app_path('routes/admin.php'));
-        $this->files->deleteDirectory(app_path('Http/Controllers/Admin'));
-        $this->files->deleteDirectory(resource_path('views/auth'));
-        $this->files->deleteDirectory(public_path('templates'));
+        $this->files->delete($adminConfigPath = config_path('admin.php'));
+        $this->info($adminConfigPath . ' deleted successfully.');
+
+        $this->files->delete($adminRoutePath = app_path('routes/admin.php'));
+        $this->info($adminRoutePath . ' deleted successfully.');
+
+        $this->files->deleteDirectory($adminControllersPath = app_path('Http/Controllers/Admin'));
+        $this->info($adminControllersPath . ' deleted successfully.');
+
+        $this->files->deleteDirectory($authResource = resource_path('views/auth'));
+        $this->info($authResource . ' deleted successfully.');
+
+        $this->files->deleteDirectory($templatesPath = public_path('templates'));
+        $this->info($templatesPath . ' deleted successfully.');
     }
 
     /**

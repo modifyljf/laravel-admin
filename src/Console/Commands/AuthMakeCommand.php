@@ -50,22 +50,32 @@ class AuthMakeCommand extends GeneratorCommand
         $this->exportAssets();
 
         if (!$this->option('views')) {
+
+            $homeControllerPath = app_path('Http/Controllers/Admin/HomeController.php');
             file_put_contents(
-                app_path('Http/Controllers/Admin/HomeController.php'),
+                $homeControllerPath,
                 $this->compileControllerStub()
             );
 
+            $this->info($homeControllerPath . ' generated successfully.');
+
+            $adminRoutePath = base_path('routes/admin.php');
             file_put_contents(
-                base_path('routes/admin.php'),
+                $adminRoutePath,
                 file_get_contents(__DIR__ . '/stubs/make/routes.stub'),
                 FILE_APPEND
             );
 
+            $this->info($adminRoutePath . ' generated successfully.');
+
+            $webRoutePath = base_path('routes/web.php');
             file_put_contents(
-                base_path('routes/web.php'),
+                $webRoutePath,
                 file_get_contents(__DIR__ . '/stubs/make/routes.auth.stub'),
                 FILE_APPEND
             );
+
+            $this->info($webRoutePath . ' updated successfully.');
         }
 
         $this->info('Authentication scaffolding generated successfully.');
@@ -103,6 +113,8 @@ class AuthMakeCommand extends GeneratorCommand
                 __DIR__ . '/stubs/make/views/' . $key,
                 $view
             );
+
+            $this->info(resource_path('views/' . $value) . ' generated successfully.');
         }
     }
 
@@ -113,22 +125,26 @@ class AuthMakeCommand extends GeneratorCommand
      */
     protected function exportAssets()
     {
-        if (!file_exists(public_path('images/logo.png'))) {
+        if (!file_exists($logoPath = public_path('images/logo.png'))) {
             copy(
                 __DIR__ . '/../../../public/images/logo.png',
-                public_path('images/logo.png')
+                $logoPath
             );
+
+            $this->info($logoPath . ' generated successfully.');
         }
 
-        if (is_dir(public_path('templates')) && !$this->option('force')) {
+        if (is_dir($templatesDir = public_path('templates')) && !$this->option('force')) {
             if (!$this->confirm("The template assets already exists. Do you want to replace it?")) {
                 return;
             }
 
-            $this->rrmdir(public_path('templates'));
+            $this->rrmdir($templatesDir);
         }
 
-        $this->recurseCopy(__DIR__ . '/../../../public/templates', public_path('templates'));
+        $this->recurseCopy(__DIR__ . '/../../../public/templates', $templatesDir);
+
+        $this->info($templatesDir . ' directory generated successfully.');
     }
 
     /**
