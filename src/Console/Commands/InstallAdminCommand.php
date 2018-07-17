@@ -41,6 +41,10 @@ class InstallAdminCommand extends GeneratorCommand
         $this->call('guesl:auth', [
             '--template' => $this->getOptions('template') ?: Constant::TEMPLATE_DEFAULT
         ]);
+
+        $this->call('guesl:admin', [
+            '--template' => $this->getOptions('template') ?: Constant::TEMPLATE_DEFAULT
+        ]);
     }
 
     /**

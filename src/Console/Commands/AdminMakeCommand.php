@@ -2,16 +2,18 @@
 
 namespace Guesl\Admin\Console\Commands;
 
-use Illuminate\Console\Command;
+use Guesl\Admin\Contracts\Constant;
+use Illuminate\Console\GeneratorCommand;
 
-class AdminMakeCommand extends Command
+class AdminMakeCommand extends GeneratorCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:admin';
+    protected $signature = 'guesl:admin
+                    {--template : Template name, "metronic" as default.}';
 
     /**
      * The console command description.
@@ -20,19 +22,6 @@ class AdminMakeCommand extends Command
      */
     protected $description = 'Scaffold basic admin views and routes';
 
-    /**
-     * The views that need to be exported.
-     *
-     * @var array
-     */
-    protected $views = [
-        'incs/foot.stub' => 'incs/foot.blade.php',
-        'incs/footer.stub' => 'incs/footer.blade.php',
-        'incs/head.stub' => 'incs/head.blade.php',
-        'incs/header.stub' => 'incs/header.blade.php',
-        'incs/navigator.stub' => 'incs/navigator.blade.php',
-        'layouts/app.stub' => 'layouts/app.blade.php',
-    ];
 
     /**
      * Execute the console command.
@@ -45,20 +34,7 @@ class AdminMakeCommand extends Command
 
         $this->exportViews();
 
-        if (!$this->option('views')) {
-            file_put_contents(
-                app_path('Http/Controllers/HomeController.php'),
-                $this->compileControllerStub()
-            );
-
-            file_put_contents(
-                base_path('routes/web.php'),
-                file_get_contents(__DIR__ . '/stubs/make/routes.stub'),
-                FILE_APPEND
-            );
-        }
-
-        $this->info('Authentication scaffolding generated successfully.');
+        $this->info('Admin views generated successfully.');
     }
 
     /**
@@ -68,13 +44,28 @@ class AdminMakeCommand extends Command
      */
     protected function createDirectories()
     {
-        if (!is_dir($directory = resource_path('views/layouts'))) {
-            mkdir($directory, 0755, true);
-        }
+        $this->makeDirectory(resource_path('views/admin/layouts'));
+        $this->makeDirectory(resource_path('views/admin/incs'));
+    }
 
-        if (!is_dir($directory = resource_path('views/auth/passwords'))) {
-            mkdir($directory, 0755, true);
-        }
+    /**
+     * Get The views that need to be exported.
+     *
+     * @return array
+     */
+    protected function getViews()
+    {
+        $template = $this->option('template') ?: Constant::TEMPLATE_DEFAULT;
+
+        return [
+            "templates/{$template}/admin/incs/foot.blade.stub" => "admin/incs/foot.blade.php",
+            "templates/{$template}/admin/incs/footer.blade.stub" => "admin/incs/footer.blade.php",
+            "templates/{$template}/admin/incs/head.blade.stub" => "admin/incs/head.blade.php",
+            "templates/{$template}/admin/incs/header.blade.stub" => "admin/incs/header.blade.php",
+            "templates/{$template}/admin/incs/navigator.blade.stub" => "admin/incs/navigator.blade.php",
+            "templates/{$template}/admin/layouts/app.blade.stub" => "admin/layouts/app.blade.php",
+            "templates/{$template}/home.blade.stub" => "admin/home.blade.php",
+        ];
     }
 
     /**
@@ -84,7 +75,8 @@ class AdminMakeCommand extends Command
      */
     protected function exportViews()
     {
-        foreach ($this->views as $key => $value) {
+        $views = $this->getViews();
+        foreach ($views as $key => $value) {
             if (file_exists($view = resource_path('views/' . $value)) && !$this->option('force')) {
                 if (!$this->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
                     continue;
@@ -95,6 +87,8 @@ class AdminMakeCommand extends Command
                 __DIR__ . '/stubs/make/views/' . $key,
                 $view
             );
+
+            $this->info(resource_path('views/' . $value) . ' generated successfully.');
         }
     }
 
@@ -107,9 +101,18 @@ class AdminMakeCommand extends Command
     {
         return str_replace(
             'AppNameSpace',
-            $this->getAppNamespace(),
+            $this->rootNamespace(),
             file_get_contents(__DIR__ . '/stubs/make/controllers/HomeController.stub')
         );
     }
 
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        return __DIR__ . '/stubs';
+    }
 }
