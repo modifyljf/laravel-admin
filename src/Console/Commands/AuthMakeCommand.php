@@ -234,16 +234,6 @@ class AuthMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub()
-    {
-        return __DIR__ . '/stubs';
-    }
-
-    /**
      * Build the directory for the class if necessary.
      *
      * @param  string $path
@@ -254,5 +244,15 @@ class AuthMakeCommand extends GeneratorCommand
         if (!is_dir($directory = $path)) {
             $this->files->makeDirectory($directory, 0755, true, true);
         }
+    }
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        return __DIR__ . '/stubs';
     }
 }

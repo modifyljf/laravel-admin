@@ -107,6 +107,19 @@ class AdminMakeCommand extends GeneratorCommand
     }
 
     /**
+     * Build the directory for the class if necessary.
+     *
+     * @param  string $path
+     * @return string
+     */
+    protected function makeDirectory($path)
+    {
+        if (!is_dir($directory = $path)) {
+            $this->files->makeDirectory($directory, 0755, true, true);
+        }
+    }
+
+    /**
      * Get the stub file for the generator.
      *
      * @return string
