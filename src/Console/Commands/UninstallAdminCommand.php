@@ -44,7 +44,7 @@ class UninstallAdminCommand extends GeneratorCommand
         $this->files->delete($adminConfigPath = config_path('admin.php'));
         $this->info($adminConfigPath . ' deleted successfully.');
 
-        $this->files->delete($adminRoutePath = app_path('routes/admin.php'));
+        $this->files->delete($adminRoutePath = base_path('routes/admin.php'));
         $this->info($adminRoutePath . ' deleted successfully.');
 
         $this->files->deleteDirectory($adminControllersPath = app_path('Http/Controllers/Admin'));
