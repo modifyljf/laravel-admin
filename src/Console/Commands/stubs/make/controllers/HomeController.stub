@@ -1,8 +1,8 @@
 <?php
 
-namespace AppNamespace\Http\Controllers\Admin;
+namespace DummyNamespace;
 
-use AppNamespace\Http\Controllers\Controller;
+use DummyRootNamespaceHttp\Controllers\Controller;
 
 class HomeController extends Controller
 {

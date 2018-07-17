@@ -14,7 +14,6 @@ class AuthMakeCommand extends GeneratorCommand
      */
     protected $signature = 'guesl:auth
                     {--template : Template name, "metronic" as default.}
-                    {--views : Only scaffold the authentication views}
                     {--force : Overwrite existing views by default}';
 
     /**
@@ -35,28 +34,27 @@ class AuthMakeCommand extends GeneratorCommand
 
         $this->exportViews();
         $this->exportAssets();
-
-        if (!$this->option('views')) {
-
-            $homeControllerPath = app_path('Http/Controllers/Admin/HomeController.php');
-            file_put_contents(
-                $homeControllerPath,
-                $this->compileControllerStub()
-            );
-
-            $this->info($homeControllerPath . ' generated successfully.');
-
-            $webRoutePath = base_path('routes/web.php');
-            file_put_contents(
-                $webRoutePath,
-                file_get_contents(__DIR__ . '/stubs/make/routes.auth.stub'),
-                FILE_APPEND
-            );
-
-            $this->info($webRoutePath . ' updated successfully.');
-        }
+        $this->exportHomeController();
+        $this->exportRoute();
 
         $this->info('Authentication scaffolding generated successfully.');
+    }
+
+    /**
+     * Export the authentication route.
+     *
+     * @return void
+     */
+    protected function exportRoute()
+    {
+        $webRoutePath = base_path('routes/web.php');
+        file_put_contents(
+            $webRoutePath,
+            file_get_contents(__DIR__ . '/stubs/make/routes.auth.stub'),
+            FILE_APPEND
+        );
+
+        $this->info($webRoutePath . ' updated successfully.');
     }
 
     /**
@@ -175,6 +173,22 @@ class AuthMakeCommand extends GeneratorCommand
     }
 
     /**
+     * Export the HomeController.
+     *
+     * @return void
+     */
+    protected function exportHomeController()
+    {
+        $homeControllerPath = app_path('Http/Controllers/Admin/HomeController.php');
+        file_put_contents(
+            $homeControllerPath,
+            $this->compileControllerStub()
+        );
+
+        $this->info($homeControllerPath . ' generated successfully.');
+    }
+
+    /**
      * Compiles the HomeController stub.
      *
      * @return string
@@ -182,10 +196,31 @@ class AuthMakeCommand extends GeneratorCommand
     protected function compileControllerStub()
     {
         return str_replace(
-            'AppNamespace\\',
-            $this->rootNamespace(),
-            file_get_contents(__DIR__ . '/stubs/make/controllers/HomeController.stub')
+            ['DummyNamespace', 'DummyRootNamespace'],
+            [$this->getDefaultNamespace($this->rootNamespace()), $this->rootNamespace()],
+            file_get_contents($this->getControllerStub())
         );
+    }
+
+    /**
+     * Get the controller stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getControllerStub()
+    {
+        return __DIR__ . '/stubs/make/controllers/HomeController.stub';
+    }
+
+    /**
+     * Get the default namespace for the class.
+     *
+     * @param  string $rootNamespace
+     * @return string
+     */
+    protected function getDefaultNamespace($rootNamespace)
+    {
+        return $rootNamespace . '/Http/Controllers/Admin';
     }
 
     /**
