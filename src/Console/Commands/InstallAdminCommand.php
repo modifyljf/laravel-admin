@@ -2,16 +2,16 @@
 
 namespace Guesl\Admin\Console\Commands;
 
-use Illuminate\Console\Command;
+use Illuminate\Console\GeneratorCommand;
 
-class InstallAdminCommand extends Command
+class InstallAdminCommand extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'guesl:install';
+    protected $signature = 'guesl:install';
 
     /**
      * The console command description.
@@ -28,16 +28,6 @@ class InstallAdminCommand extends Command
     protected $directory = '';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -45,7 +35,25 @@ class InstallAdminCommand extends Command
     public function handle()
     {
         $this->initDatabase();
+        $this->exportRoutes();
         $this->call('guesl:auth');
+    }
+
+    /**
+     * Export the routes file.
+     *
+     * @return void
+     */
+    public function exportRoutes()
+    {
+        if (!file_exists($routePath = base_path('routes/admin.php'))) {
+            copy(
+                $this->getStub() . '/make/routes.stub',
+                $routePath
+            );
+
+            $this->info($routePath . ' generated successfully.');
+        }
     }
 
     /**
@@ -56,5 +64,15 @@ class InstallAdminCommand extends Command
     public function initDatabase()
     {
         $this->call('migrate');
+    }
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        return __DIR__ . '/stubs';
     }
 }

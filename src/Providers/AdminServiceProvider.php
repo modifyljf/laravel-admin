@@ -29,11 +29,6 @@ class AdminServiceProvider extends ServiceProvider
             [__DIR__ . '/../../config' => config_path()],
             'guesl-admin'
         );
-
-        $this->publishes(
-            [__DIR__ . '/../../routes' => base_path('routes')],
-            'guesl-admin'
-        );
     }
 
     /**

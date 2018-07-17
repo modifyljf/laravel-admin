@@ -59,15 +59,6 @@ class AuthMakeCommand extends GeneratorCommand
 
             $this->info($homeControllerPath . ' generated successfully.');
 
-            $adminRoutePath = base_path('routes/admin.php');
-            file_put_contents(
-                $adminRoutePath,
-                file_get_contents(__DIR__ . '/stubs/make/routes.stub'),
-                FILE_APPEND
-            );
-
-            $this->info($adminRoutePath . ' generated successfully.');
-
             $webRoutePath = base_path('routes/web.php');
             file_put_contents(
                 $webRoutePath,

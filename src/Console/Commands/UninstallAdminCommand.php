@@ -11,7 +11,8 @@ class UninstallAdminCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'guesl:uninstall';
+    protected $signature = 'guesl:uninstall';
+
     /**
      * The console command description.
      *
