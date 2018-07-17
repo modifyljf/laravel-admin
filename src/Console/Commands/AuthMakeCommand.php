@@ -2,6 +2,7 @@
 
 namespace Guesl\Admin\Console\Commands;
 
+use Guesl\Admin\Contracts\Constant;
 use Illuminate\Console\GeneratorCommand;
 
 class AuthMakeCommand extends GeneratorCommand
@@ -12,6 +13,7 @@ class AuthMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $signature = 'guesl:auth
+                    {--template : Template name, "metronic" as default.}
                     {--views : Only scaffold the authentication views}
                     {--force : Overwrite existing views by default}';
 
@@ -21,21 +23,6 @@ class AuthMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $description = 'Scaffold basic login and registration views and routes';
-
-    /**
-     * The views that need to be exported.
-     *
-     * @var array
-     */
-    protected $views = [
-        'auth/login.blade.stub' => 'auth/login.blade.php',
-        'auth/register.blade.stub' => 'auth/register.blade.php',
-        'auth/passwords/email.blade.stub' => 'auth/passwords/email.blade.php',
-        'auth/passwords/reset.blade.stub' => 'auth/passwords/reset.blade.php',
-        'auth/incs/foot.blade.stub' => 'auth/incs/foot.blade.php',
-        'auth/incs/head.blade.stub' => 'auth/incs/head.blade.php',
-        'auth/layouts/app.blade.stub' => 'auth/layouts/app.blade.php',
-    ];
 
     /**
      * Execute the console command.
@@ -87,13 +74,34 @@ class AuthMakeCommand extends GeneratorCommand
     }
 
     /**
+     * Get The views that need to be exported.
+     *
+     * @return array
+     */
+    protected function getViews()
+    {
+        $template = $this->option('template') ?: Constant::TEMPLATE_DEFAULT;
+
+        return [
+            "templates/{$template}/auth/login.blade.stub" => "auth/login.blade.php",
+            "templates/{$template}/auth/register.blade.stub" => "auth/register.blade.php",
+            "templates/{$template}/auth/passwords/email.blade.stub" => "auth/passwords/email.blade.php",
+            "templates/{$template}/auth/passwords/reset.blade.stub" => "auth/passwords/reset.blade.php",
+            "templates/{$template}/auth/incs/foot.blade.stub" => "auth/incs/foot.blade.php",
+            "templates/{$template}/auth/incs/head.blade.stub" => "auth/incs/head.blade.php",
+            "templates/{$template}/auth/layouts/app.blade.stub" => "auth/layouts/app.blade.php",
+        ];
+    }
+
+    /**
      * Export the authentication views.
      *
      * @return void
      */
     protected function exportViews()
     {
-        foreach ($this->views as $key => $value) {
+        $views = $this->getViews();
+        foreach ($views as $key => $value) {
             if (file_exists($view = resource_path('views/' . $value)) && !$this->option('force')) {
                 if (!$this->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
                     continue;
@@ -116,14 +124,42 @@ class AuthMakeCommand extends GeneratorCommand
      */
     protected function exportAssets()
     {
-        if (!file_exists($logoPath = public_path('images/logo.png'))) {
+        if (!file_exists($logoPath = public_path('images/gu.png'))) {
             copy(
-                __DIR__ . '/../../../public/images/logo.png',
+                __DIR__ . '/../../../public/images/gu.png',
                 $logoPath
             );
-
-            $this->info($logoPath . ' generated successfully.');
         }
+
+        if (!file_exists($logoPath = public_path('images/guesl.png'))) {
+            copy(
+                __DIR__ . '/../../../public/images/guesl.png',
+                $logoPath
+            );
+        }
+
+        if (!file_exists($logoPath = public_path('images/guesl-blue.png'))) {
+            copy(
+                __DIR__ . '/../../../public/images/guesl-blue.png',
+                $logoPath
+            );
+        }
+
+        if (!file_exists($logoPath = public_path('images/guesl-purple.png'))) {
+            copy(
+                __DIR__ . '/../../../public/images/guesl-purple.png',
+                $logoPath
+            );
+        }
+
+        if (!file_exists($logoPath = public_path('images/guesl-white.png'))) {
+            copy(
+                __DIR__ . '/../../../public/images/guesl-white.png',
+                $logoPath
+            );
+        }
+
+        $this->info('Assets images generated successfully.');
 
         if (is_dir($templatesDir = public_path('templates')) && !$this->option('force')) {
             if (!$this->confirm("The template assets already exists. Do you want to replace it?")) {

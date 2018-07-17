@@ -22,7 +22,7 @@ return [
     'route' => [
         'prefix' => '',
         'namespace' => 'App\Http\Controllers\Admin',
-        'middleware' => ['web', 'admin'],
+        'middleware' => ['web'],
     ],
 
     /*

@@ -2,6 +2,7 @@
 
 namespace Guesl\Admin\Console\Commands;
 
+use Guesl\Admin\Contracts\Constant;
 use Illuminate\Console\GeneratorCommand;
 
 class InstallAdminCommand extends GeneratorCommand
@@ -11,7 +12,8 @@ class InstallAdminCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'guesl:install';
+    protected $signature = 'guesl:install
+                    {--template : Template name, "metronic" as default.}';
 
     /**
      * The console command description.
@@ -36,7 +38,9 @@ class InstallAdminCommand extends GeneratorCommand
     {
         $this->initDatabase();
         $this->exportRoutes();
-        $this->call('guesl:auth');
+        $this->call('guesl:auth', [
+            '--template' => $this->getOptions('template') ?: Constant::TEMPLATE_DEFAULT
+        ]);
     }
 
     /**
