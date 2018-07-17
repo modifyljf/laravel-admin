@@ -33,6 +33,8 @@
       color="#5bbad5"
 >
 
+<link href="https://fonts.googleapis.com/css?family=Berkshire+Swash" rel="stylesheet">
+
 <!--begin::Web font -->
 <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
 <script>
@@ -40,7 +42,7 @@
         google: {
             "families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"]
         },
-        active: function() {
+        active: function () {
             sessionStorage.fonts = true;
         }
     });
@@ -49,10 +51,12 @@
 <!--end::Web font -->
 
 <!--begin::Base Styles -->
-<link href="{{ asset("templates/metronic/default/assets/vendors/base/vendors.bundle.css") }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset("templates/metronic/default/assets/vendors/base/vendors.bundle.css") }}" rel="stylesheet"
+      type="text/css"/>
 
 <!--RTL version:<link href="../../../assets/vendors/base/vendors.bundle.rtl.css" rel="stylesheet" type="text/css" />-->
-<link href="{{ asset("templates/metronic/default/assets/demo/default/base/style.bundle.css") }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset("templates/metronic/default/assets/demo/default/base/style.bundle.css") }}" rel="stylesheet"
+      type="text/css"/>
 
 <!--RTL version:<link href="../../../assets/demo/default/base/style.bundle.rtl.css" rel="stylesheet" type="text/css" />-->
 
