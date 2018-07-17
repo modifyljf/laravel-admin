@@ -34,7 +34,7 @@
                     </div>
                     <div class="row m-login__form-sub">
                         <div class="col m--align-left m-login__form-left">
-                            <label class="m-checkbox  m-checkbox--light">
+                            <label class="m-checkbox  m-checkbox--focus">
                                 <input type="checkbox" name="remember"> Remember me
                                 <span></span>
                             </label>
