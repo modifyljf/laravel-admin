@@ -63,7 +63,7 @@ class AuthMakeCommand extends GeneratorCommand
 
             file_put_contents(
                 base_path('routes/web.php'),
-                file_get_contents(__DIR__.'/stubs/make/routes.auth.stub'),
+                file_get_contents(__DIR__ . '/stubs/make/routes.auth.stub'),
                 FILE_APPEND
             );
         }
@@ -78,13 +78,11 @@ class AuthMakeCommand extends GeneratorCommand
      */
     protected function createDirectories()
     {
-        $this->makeDirectory(app_path('Http/Controllers/Admin'), 0755, true);
-        $this->makeDirectory(resource_path('views/auth/layouts'), 0755, true);
-        $this->makeDirectory(resource_path('views/auth/incs'), 0755, true);
-        $this->makeDirectory(resource_path('views/auth/layouts'), 0755, true);
-        $this->makeDirectory(resource_path('views/auth/passwords'), 0755, true);
-        $this->makeDirectory(resource_path('views/auth/passwords'), 0755, true);
-        $this->makeDirectory(public_path('images'), 0755, true);
+        $this->makeDirectory(app_path('Http/Controllers/Admin'));
+        $this->makeDirectory(resource_path('views/auth/layouts'));
+        $this->makeDirectory(resource_path('views/auth/incs'));
+        $this->makeDirectory(resource_path('views/auth/passwords'));
+        $this->makeDirectory(public_path('images'));
     }
 
     /**
@@ -199,6 +197,19 @@ class AuthMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs';
+        return __DIR__ . '/stubs';
+    }
+
+    /**
+     * Build the directory for the class if necessary.
+     *
+     * @param  string $path
+     * @return string
+     */
+    protected function makeDirectory($path)
+    {
+        if (!is_dir($directory = $path)) {
+            $this->files->makeDirectory($directory, 0755, true, true);
+        }
     }
 }
