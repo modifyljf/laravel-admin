@@ -2,9 +2,9 @@
 
 namespace Guesl\Admin\Console\Commands;
 
-use Illuminate\Console\Command;
+use Illuminate\Console\GeneratorCommand;
 
-class UninstallAdminCommand extends Command
+class UninstallAdminCommand extends GeneratorCommand
 {
     /**
      * The console command name.
@@ -40,10 +40,20 @@ class UninstallAdminCommand extends Command
      */
     protected function removeFilesAndDirectories()
     {
-        $this->laravel['files']->delete(config_path('admin.php'));
-        $this->laravel['files']->delete(app_path('routes/admin.php'));
-        $this->laravel['files']->deleteDirectory(app_path('Http/Controllers/Admin'));
-        $this->laravel['files']->deleteDirectory(resource_path('views/auth'));
-        $this->laravel['files']->deleteDirectory(public_path('templates'));
+        $this->files->delete(config_path('admin.php'));
+        $this->files->delete(app_path('routes/admin.php'));
+        $this->files->deleteDirectory(app_path('Http/Controllers/Admin'));
+        $this->files->deleteDirectory(resource_path('views/auth'));
+        $this->files->deleteDirectory(public_path('templates'));
+    }
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        return '';
     }
 }
