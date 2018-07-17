@@ -14,6 +14,7 @@ class AdminServiceProvider extends ServiceProvider
         'Guesl\Admin\Console\Commands\InstallAdminCommand',
         'Guesl\Admin\Console\Commands\UninstallAdminCommand',
         'Guesl\Admin\Console\Commands\AuthMakeCommand',
+        'Guesl\Admin\Console\Commands\AdminMakeCommand',
     ];
 
     /**
