@@ -38,6 +38,7 @@ class InstallAdminCommand extends GeneratorCommand
     public function handle()
     {
         $this->initDatabase();
+        $this->exportConfig();
         $this->exportRoutes();
         $this->call('guesl:auth', [
             '--template' => $this->option('template') ?: Constant::TEMPLATE_DEFAULT,
@@ -55,15 +56,32 @@ class InstallAdminCommand extends GeneratorCommand
      *
      * @return void
      */
+    public function exportConfig()
+    {
+        if (!file_exists($configPath = config_path('admin.php')) || $this->option('force')) {
+            copy(
+                __DIR__ . '/../../../config/admin.php',
+                $configPath
+            );
+
+            $this->info('Generated: ' . $configPath);
+        }
+    }
+
+    /**
+     * Export the routes file.
+     *
+     * @return void
+     */
     public function exportRoutes()
     {
-        if (!file_exists($routePath = base_path('routes/admin.php'))) {
+        if (!file_exists($routePath = base_path('routes/admin.php')) || $this->option('force')) {
             copy(
                 $this->getStub() . '/make/routes.stub',
                 $routePath
             );
 
-            $this->info($routePath . ' generated successfully.');
+            $this->info('Generated: ' . $routePath);
         }
     }
 
