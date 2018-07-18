@@ -120,7 +120,7 @@ class ControllerMakeCommand extends GeneratorCommand
      */
     protected function controllerNamespace()
     {
-        return $this->getNamespace($this->rootNamespace() . 'Http/Controllers/Admin');
+        return $this->getNamespace($this->rootNamespace()) . '/Http/Controllers/Admin';
     }
 
     /**

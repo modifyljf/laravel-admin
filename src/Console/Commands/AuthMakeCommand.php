@@ -203,6 +203,16 @@ class AuthMakeCommand extends GeneratorCommand
     }
 
     /**
+     * Get the default namespace for the class.
+     *
+     * @return string
+     */
+    protected function controllerNamespace()
+    {
+        return $this->getNamespace($this->rootNamespace()) . '/Http/Controllers/Admin';
+    }
+
+    /**
      * Get the controller stub file for the generator.
      *
      * @return string
@@ -210,16 +220,6 @@ class AuthMakeCommand extends GeneratorCommand
     protected function getControllerStub()
     {
         return __DIR__ . '/stubs/make/controllers/HomeController.stub';
-    }
-
-    /**
-     * Get the default namespace for the class.
-     *
-     * @return string
-     */
-    protected function controllerNamespace()
-    {
-        return $this->getNamespace($this->rootNamespace() . 'Http/Controllers/Admin');
     }
 
     /**
