@@ -102,13 +102,14 @@ class ControllerMakeCommand extends GeneratorCommand
     /**
      * Compiles the HomeController stub.
      *
+     * @param $name
      * @return string
      */
     protected function compileControllerStub($name)
     {
         return str_replace(
             ['DummyNamespace', 'DummyRootNamespace', 'DummyClass'],
-            [$this->controllerNamespace(), $this->rootNamespace(), $this->qualifyClass($name)],
+            [$this->adminControllerNamespace(), $this->rootNamespace(), $this->qualifyClass($name)],
             file_get_contents(__DIR__ . '/stubs/make/controllers/Controller.stub')
         );
     }
@@ -118,7 +119,7 @@ class ControllerMakeCommand extends GeneratorCommand
      *
      * @return string
      */
-    protected function controllerNamespace()
+    protected function adminControllerNamespace()
     {
         return $this->getNamespace($this->rootNamespace()) . '/Http/Controllers/Admin';
     }
