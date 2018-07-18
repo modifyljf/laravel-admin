@@ -56,8 +56,14 @@ class UninstallAdminCommand extends GeneratorCommand
         $this->files->deleteDirectory($adminResourcePath = resource_path('views/admin'));
         $this->info($adminResourcePath . ' deleted successfully.');
 
+        $this->files->deleteDirectory($adminAssetsPath = resource_path('assets/js'));
+        $this->info($adminAssetsPath . ' deleted successfully.');
+
         $this->files->deleteDirectory($templatesPath = public_path('templates'));
         $this->info($templatesPath . ' deleted successfully.');
+
+        $this->files->deleteDirectory($publicAdminAssetsPath = public_path('js/admin'));
+        $this->info($publicAdminAssetsPath . ' deleted successfully.');
     }
 
     /**
