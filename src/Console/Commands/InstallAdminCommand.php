@@ -13,6 +13,7 @@ class InstallAdminCommand extends GeneratorCommand
      * @var string
      */
     protected $signature = 'guesl:install
+                    {--force : Overwrite existing views by default}
                     {--template : Template name, "metronic" as default.}';
 
     /**
@@ -39,11 +40,13 @@ class InstallAdminCommand extends GeneratorCommand
         $this->initDatabase();
         $this->exportRoutes();
         $this->call('guesl:auth', [
-            '--template' => $this->getOptions('template') ?: Constant::TEMPLATE_DEFAULT
+            '--template' => $this->getOptions('template') ?: Constant::TEMPLATE_DEFAULT,
+            '--force' => $this->getOptions('force')
         ]);
 
         $this->call('guesl:admin', [
-            '--template' => $this->getOptions('template') ?: Constant::TEMPLATE_DEFAULT
+            '--template' => $this->getOptions('template') ?: Constant::TEMPLATE_DEFAULT,
+            '--force' => $this->getOptions('force')
         ]);
     }
 

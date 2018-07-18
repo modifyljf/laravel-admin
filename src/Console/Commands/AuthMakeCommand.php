@@ -180,12 +180,15 @@ class AuthMakeCommand extends GeneratorCommand
     protected function exportHomeController()
     {
         $homeControllerPath = app_path('Http/Controllers/Admin/HomeController.php');
-        file_put_contents(
-            $homeControllerPath,
-            $this->compileControllerStub()
-        );
 
-        $this->info($homeControllerPath . ' generated successfully.');
+        if (!file_exists($homeControllerPath)) {
+            file_put_contents(
+                $homeControllerPath,
+                $this->compileControllerStub()
+            );
+
+            $this->info($homeControllerPath . ' generated successfully.');
+        }
     }
 
     /**

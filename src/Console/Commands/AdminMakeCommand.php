@@ -13,7 +13,8 @@ class AdminMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $signature = 'guesl:admin
-                    {--template : Template name, "metronic" as default.}';
+                    {--template : Template name, "metronic" as default.}
+                    {--force : Overwrite existing views by default}';
 
     /**
      * The console command description.
