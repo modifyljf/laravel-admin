@@ -233,19 +233,20 @@ class AuthMakeCommand extends GeneratorCommand
      */
     protected function recurseCopy($src, $dst)
     {
-        $dir = opendir($src);
-
-        mkdir($dst);
-        while (false !== ($file = readdir($dir))) {
-            if (($file != '.') && ($file != '..')) {
-                if (is_dir($src . '/' . $file)) {
-                    $this->recurseCopy($src . '/' . $file, $dst . '/' . $file);
-                } else {
-                    copy($src . '/' . $file, $dst . '/' . $file);
+        if (!file_exists($dst)) {
+            $dir = opendir($src);
+            mkdir($dst);
+            while (false !== ($file = readdir($dir))) {
+                if (($file != '.') && ($file != '..')) {
+                    if (is_dir($src . '/' . $file)) {
+                        $this->recurseCopy($src . '/' . $file, $dst . '/' . $file);
+                    } else {
+                        copy($src . '/' . $file, $dst . '/' . $file);
+                    }
                 }
             }
+            closedir($dir);
         }
-        closedir($dir);
     }
 
     /**
