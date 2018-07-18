@@ -2,6 +2,7 @@
 
 namespace Guesl\Admin\Console\Commands;
 
+use Guesl\Admin\Contracts\Constant;
 use Illuminate\Console\GeneratorCommand;
 
 class GenerateCommand extends GeneratorCommand

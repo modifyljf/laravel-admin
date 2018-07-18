@@ -40,13 +40,13 @@ class InstallAdminCommand extends GeneratorCommand
         $this->initDatabase();
         $this->exportRoutes();
         $this->call('guesl:auth', [
-            '--template' => $this->getOptions('template') ?: Constant::TEMPLATE_DEFAULT,
-            '--force' => $this->getOptions('force')
+            '--template' => $this->option('template') ?: Constant::TEMPLATE_DEFAULT,
+            '--force' => $this->option('force')
         ]);
 
         $this->call('guesl:admin', [
-            '--template' => $this->getOptions('template') ?: Constant::TEMPLATE_DEFAULT,
-            '--force' => $this->getOptions('force')
+            '--template' => $this->option('template') ?: Constant::TEMPLATE_DEFAULT,
+            '--force' => $this->option('force')
         ]);
     }
 
