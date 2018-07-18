@@ -16,6 +16,7 @@ class AdminServiceProvider extends ServiceProvider
         'Guesl\Admin\Console\Commands\AuthMakeCommand',
         'Guesl\Admin\Console\Commands\AdminMakeCommand',
         'Guesl\Admin\Console\Commands\GenerateCommand',
+        'Guesl\Admin\Console\Commands\ControllerMakeCommand',
     ];
 
     /**
