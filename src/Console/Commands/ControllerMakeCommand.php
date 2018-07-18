@@ -108,19 +108,19 @@ class ControllerMakeCommand extends GeneratorCommand
     {
         return str_replace(
             ['DummyNamespace', 'DummyRootNamespace', 'DummyClass'],
-            [$this->adminControllerNamespace(), $this->rootNamespace(), $this->qualifyClass($name)],
+            [$this->controllerNamespace(), $this->rootNamespace(), $this->qualifyClass($name)],
             file_get_contents(__DIR__ . '/stubs/make/controllers/Controller.stub')
         );
     }
 
     /**
-     * Get the admin controller namespace for the class.
+     * Get the default namespace for the class.
      *
      * @return string
      */
-    protected function adminControllerNamespace()
+    protected function controllerNamespace()
     {
-        return $this->rootNamespace() . 'Http/Controllers/Admin';
+        return $this->getNamespace($this->rootNamespace() . 'Http/Controllers/Admin');
     }
 
     /**

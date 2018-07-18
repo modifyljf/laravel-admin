@@ -197,7 +197,7 @@ class AuthMakeCommand extends GeneratorCommand
     {
         return str_replace(
             ['DummyNamespace', 'DummyRootNamespace'],
-            [$this->getDefaultNamespace($this->rootNamespace()), $this->rootNamespace()],
+            [$this->controllerNamespace(), $this->rootNamespace()],
             file_get_contents($this->getControllerStub())
         );
     }
@@ -215,12 +215,11 @@ class AuthMakeCommand extends GeneratorCommand
     /**
      * Get the default namespace for the class.
      *
-     * @param  string $rootNamespace
      * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function controllerNamespace()
     {
-        return $rootNamespace . 'Http/Controllers/Admin';
+        return $this->getNamespace($this->rootNamespace() . 'Http/Controllers/Admin');
     }
 
     /**
