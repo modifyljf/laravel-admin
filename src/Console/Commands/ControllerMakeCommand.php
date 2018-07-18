@@ -49,12 +49,15 @@ class ControllerMakeCommand extends GeneratorCommand
     protected function exportBaseController()
     {
         $baseControllerPath = app_path('Http/Controllers/Admin/BaseController.php');
-        file_put_contents(
-            $baseControllerPath,
-            $this->compileBaseControllerStub()
-        );
 
-        $this->info($baseControllerPath . ' generated successfully.');
+        if (!file_exists($baseControllerPath)) {
+            file_put_contents(
+                $baseControllerPath,
+                $this->compileBaseControllerStub()
+            );
+
+            $this->info($baseControllerPath . ' generated successfully.');
+        }
     }
 
     /**
@@ -72,16 +75,6 @@ class ControllerMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Get the admin controller namespace for the class.
-     *
-     * @return string
-     */
-    protected function adminControllerNamespace()
-    {
-        return $this->rootNamespace() . 'Http/Controllers/Admin';
-    }
-
-    /**
      * Make controllers.
      *
      * @return void
@@ -92,6 +85,12 @@ class ControllerMakeCommand extends GeneratorCommand
         $name = 'Admin/' . $name;
 
         $controllerPath = app_path("Http/Controllers/Admin/$name.php");
+
+        if (file_exists($controllerPath)) {
+            $this->error("Http/Controllers/Admin/$name.php already exists.");
+            return;
+        }
+
         file_put_contents(
             $controllerPath,
             $this->compileControllerStub($name)
@@ -112,6 +111,16 @@ class ControllerMakeCommand extends GeneratorCommand
             [$this->adminControllerNamespace(), $this->rootNamespace(), $this->qualifyClass($name)],
             file_get_contents(__DIR__ . '/stubs/make/controllers/Controller.stub')
         );
+    }
+
+    /**
+     * Get the admin controller namespace for the class.
+     *
+     * @return string
+     */
+    protected function adminControllerNamespace()
+    {
+        return $this->rootNamespace() . 'Http/Controllers/Admin';
     }
 
     /**
