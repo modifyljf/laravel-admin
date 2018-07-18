@@ -38,7 +38,8 @@ class ControllerMakeCommand extends GeneratorCommand
         $this->makeController();
 
         $controllerName = $this->getNameInput();
-        $this->info("BaseController exported and {$controllerName}Controller generated.");
+
+        $this->info('Successful: ' . "BaseController exported and {$controllerName}Controller generated.");
     }
 
     /**
@@ -56,7 +57,7 @@ class ControllerMakeCommand extends GeneratorCommand
                 $this->compileBaseControllerStub()
             );
 
-            $this->info($baseControllerPath . ' generated successfully.');
+            $this->info('Generated: ' . $baseControllerPath);
         }
     }
 
@@ -96,13 +97,12 @@ class ControllerMakeCommand extends GeneratorCommand
             $this->compileControllerStub($name)
         );
 
-        $this->info($controllerPath . ' generated successfully.');
+        $this->info('Generated: ' . $controllerPath);
     }
 
     /**
      * Compiles the HomeController stub.
      *
-     * @param $name
      * @return string
      */
     protected function compileControllerStub($name)

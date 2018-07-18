@@ -37,7 +37,7 @@ class AuthMakeCommand extends GeneratorCommand
         $this->exportHomeController();
         $this->exportRoute();
 
-        $this->info('Authentication scaffolding generated successfully.');
+        $this->info('Successful: Authentication scaffolding generated successfully.');
     }
 
     /**
@@ -54,7 +54,7 @@ class AuthMakeCommand extends GeneratorCommand
             FILE_APPEND
         );
 
-        $this->info($webRoutePath . ' updated successfully.');
+        $this->info('Updated: ' . $webRoutePath);
     }
 
     /**
@@ -111,7 +111,7 @@ class AuthMakeCommand extends GeneratorCommand
                 $view
             );
 
-            $this->info(resource_path('views/' . $value) . ' generated successfully.');
+            $this->info('Generated: ' . $view);
         }
     }
 
@@ -157,7 +157,7 @@ class AuthMakeCommand extends GeneratorCommand
             );
         }
 
-        $this->info('Assets images generated successfully.');
+        $this->info('Generated: Images');
 
         if (is_dir($templatesDir = public_path('templates')) && !$this->option('force')) {
             if (!$this->confirm("The template assets already exists. Do you want to replace it?")) {
@@ -169,7 +169,7 @@ class AuthMakeCommand extends GeneratorCommand
 
         $this->recurseCopy(__DIR__ . '/../../../public/templates', $templatesDir);
 
-        $this->info($templatesDir . ' directory generated successfully.');
+        $this->info('Generated: ' . $templatesDir);
     }
 
     /**
@@ -187,7 +187,7 @@ class AuthMakeCommand extends GeneratorCommand
                 $this->compileControllerStub()
             );
 
-            $this->info($homeControllerPath . ' generated successfully.');
+            $this->info('Generated: ' . $homeControllerPath);
         }
     }
 

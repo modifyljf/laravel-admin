@@ -35,7 +35,7 @@ class AdminMakeCommand extends GeneratorCommand
 
         $this->exportViews();
 
-        $this->info('Admin views generated successfully.');
+        $this->info('Successful: Admin views generated.');
     }
 
     /**
@@ -89,7 +89,7 @@ class AdminMakeCommand extends GeneratorCommand
                 $view
             );
 
-            $this->info(resource_path('views/' . $value) . ' generated successfully.');
+            $this->info('Generated: ' . $view);
         }
     }
 

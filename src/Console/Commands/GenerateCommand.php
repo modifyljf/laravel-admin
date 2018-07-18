@@ -11,7 +11,9 @@ class GenerateCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'guesl:generate {name}';
+    protected $signature = 'guesl:generate {name}
+                    {--template : Template name, "metronic" as default.}
+                    {--force : Overwrite existing objects by default.}';
 
     /**
      * The console command description.
@@ -46,7 +48,8 @@ class GenerateCommand extends GeneratorCommand
     protected function createDirectories()
     {
         $name = $this->getNameInput();
-        $this->makeDirectory(resource_path("views/admin/modules/$name"));
+        $this->makeDirectory(resource_path("views/admin/$name"));
+        $this->makeDirectory(public_path("js/admin/$name"));
     }
 
     /**
@@ -58,20 +61,6 @@ class GenerateCommand extends GeneratorCommand
     {
         $name = $this->getNameInput();
         $this->call("guesl:controller $name");
-    }
-
-    /**
-     * Compiles the HomeController stub.
-     *
-     * @return string
-     */
-    protected function compileControllerStub()
-    {
-        return str_replace(
-            'AppNamespace\\',
-            $this->rootNamespace(),
-            file_get_contents(__DIR__ . '/stubs/make/controllers/HomeController.stub')
-        );
     }
 
     /**
@@ -87,13 +76,19 @@ class GenerateCommand extends GeneratorCommand
     }
 
     /**
-     * Get The views that need to be exported.
+     * Get the views that need to be exported.
      *
      * @return array
      */
     protected function getViews()
     {
+        $template = $this->option('template') ?: Constant::TEMPLATE_DEFAULT;
+        $name = $this->getNameInput();
 
+        return [
+            "templates/{$template}/module/index.blade.stub" => "$name/index.blade.php",
+            "templates/{$template}/module/edit.blade.stub" => "$name/edit.blade.php",
+        ];
     }
 
     /**
@@ -116,8 +111,23 @@ class GenerateCommand extends GeneratorCommand
                 $view
             );
 
-            $this->info(resource_path('views/' . $value) . ' generated successfully.');
+            $this->info('Generated: ' . $view);
         }
+    }
+
+    /**
+     * Get the assets that need to be exported.
+     *
+     * @return array
+     */
+    protected function getAssets()
+    {
+        $template = $this->option('template') ?: Constant::TEMPLATE_DEFAULT;
+        $name = $this->getNameInput();
+
+        return [
+            "{$template}/assets/js/index.js.stub" => "js/$name/index.js",
+        ];
     }
 
     /**
@@ -127,7 +137,21 @@ class GenerateCommand extends GeneratorCommand
      */
     protected function makeAssets()
     {
+        $assets = $this->getAssets();
+        foreach ($assets as $key => $value) {
+            if (file_exists($asset = resource_path('assets/' . $value)) && !$this->option('force')) {
+                if (!$this->confirm("The [{$value}] file already exists. Do you want to replace it?")) {
+                    continue;
+                }
+            }
 
+            copy(
+                __DIR__ . '/stubs/make/resources/' . $key,
+                $asset
+            );
+
+            $this->info('Generated: ' . $asset);
+        }
     }
 
 
