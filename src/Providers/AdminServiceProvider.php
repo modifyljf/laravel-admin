@@ -45,12 +45,6 @@ class AdminServiceProvider extends ServiceProvider
         $this->commands($this->commands);
     }
 
-
-    protected function loadRoutesFrom($path)
-    {
-
-    }
-
     /**
      * Define the routes for the application.
      *

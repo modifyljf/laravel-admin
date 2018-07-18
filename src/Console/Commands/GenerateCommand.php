@@ -4,6 +4,7 @@ namespace Guesl\Admin\Console\Commands;
 
 use Guesl\Admin\Contracts\Constant;
 use Illuminate\Console\GeneratorCommand;
+use Symfony\Component\Console\Input\InputArgument;
 
 class GenerateCommand extends GeneratorCommand
 {
@@ -12,7 +13,8 @@ class GenerateCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'guesl:generate {name}
+    protected $signature = 'guesl:generate 
+                    {name : The name of model.}
                     {--template : Template name, "metronic" as default.}
                     {--force : Overwrite existing objects by default.}';
 
@@ -47,8 +49,9 @@ class GenerateCommand extends GeneratorCommand
      */
     protected function createDirectories()
     {
-        $name = $this->getNameInput();
-        $this->makeDirectory(resource_path("views/admin/$name"));
+        $name = strtolower($this->getNameInput());
+        $this->makeDirectory(resource_path("views/admin/modules/$name"));
+        $this->makeDirectory(resource_path("assets/js/admin/$name"));
         $this->makeDirectory(public_path("js/admin/$name"));
     }
 
@@ -60,7 +63,22 @@ class GenerateCommand extends GeneratorCommand
     protected function makeController()
     {
         $name = $this->getNameInput();
-        $this->call("guesl:controller $name");
+        $controllerName = $this->getControllerName($name);
+
+        $this->call('guesl:controller', [
+            'name' => $controllerName
+        ]);
+    }
+
+    /**
+     * Get controller name.
+     *
+     * @param $name
+     * @return string
+     */
+    protected function getControllerName($name)
+    {
+        return strpos($name, 'Controller') !== false ? $name : $name . 'Controller';
     }
 
     /**
@@ -72,7 +90,9 @@ class GenerateCommand extends GeneratorCommand
     {
         $name = $this->getNameInput();
         $modelName = "Models/$name";
-        $this->call("make:model $modelName");
+        $this->call('make:model', [
+            'name' => $modelName
+        ]);
     }
 
     /**
@@ -86,8 +106,8 @@ class GenerateCommand extends GeneratorCommand
         $name = strtolower($this->getNameInput());
 
         return [
-            "templates/{$template}/module/index.blade.stub" => "$name/index.blade.php",
-            "templates/{$template}/module/edit.blade.stub" => "$name/edit.blade.php",
+            "{$template}/module/index.blade.stub" => "$name/index.blade.php",
+            "{$template}/module/edit.blade.stub" => "$name/edit.blade.php",
         ];
     }
 
@@ -100,14 +120,14 @@ class GenerateCommand extends GeneratorCommand
     {
         $views = $this->getViews();
         foreach ($views as $key => $value) {
-            if (file_exists($view = resource_path('views/' . $value)) && !$this->option('force')) {
+            if (file_exists($view = resource_path('views/admin/modules/' . $value)) && !$this->option('force')) {
                 if (!$this->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
                     continue;
                 }
             }
 
             copy(
-                __DIR__ . '/stubs/make/views/' . $key,
+                __DIR__ . '/stubs/make/views/templates/' . $key,
                 $view
             );
 
@@ -126,7 +146,7 @@ class GenerateCommand extends GeneratorCommand
         $name = strtolower($this->getNameInput());
 
         return [
-            "{$template}/assets/js/index.js.stub" => "js/$name/index.js",
+            "{$template}/assets/js/index.js.stub" => "js/admin/$name/index.js",
         ];
     }
 
@@ -140,7 +160,7 @@ class GenerateCommand extends GeneratorCommand
         $assets = $this->getAssets();
         foreach ($assets as $key => $value) {
             if (file_exists($asset = resource_path('assets/' . $value)) && !$this->option('force')) {
-                if (!$this->confirm("The [{$value}] file already exists. Do you want to replace it?")) {
+                if (!$this->confirm("The [{$value}] file already exists under resource path. Do you want to replace it?")) {
                     continue;
                 }
             }
@@ -150,10 +170,32 @@ class GenerateCommand extends GeneratorCommand
                 $asset
             );
 
+            if (file_exists($assetPublic = public_path($value)) && !$this->option('force')) {
+                if (!$this->confirm("The [{$value}] file already exists under public path. Do you want to replace it?")) {
+                    continue;
+                }
+            }
+
+            copy(
+                __DIR__ . '/stubs/make/resources/' . $key,
+                $assetPublic
+            );
+
             $this->info('Generated: ' . $asset);
         }
     }
 
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            ['name', InputArgument::REQUIRED, 'The name of model.'],
+        ];
+    }
 
     /**
      * Build the directory for the class if necessary.

@@ -83,7 +83,6 @@ class ControllerMakeCommand extends GeneratorCommand
     protected function makeController()
     {
         $name = $this->getNameInput();
-        $name = 'Admin/' . $name;
 
         $controllerPath = app_path("Http/Controllers/Admin/$name.php");
 
