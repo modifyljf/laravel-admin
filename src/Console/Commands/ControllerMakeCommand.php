@@ -121,7 +121,7 @@ class ControllerMakeCommand extends GeneratorCommand
      */
     protected function adminControllerNamespace()
     {
-        return $this->getNamespace($this->rootNamespace()) . '/Http/Controllers/Admin';
+        return $this->getNamespace($this->rootNamespace()) . '\Http\Controllers\Admin';
     }
 
     /**

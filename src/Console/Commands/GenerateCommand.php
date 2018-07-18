@@ -23,7 +23,6 @@ class GenerateCommand extends GeneratorCommand
      */
     protected $description = 'Scaffold basic admin views and routes';
 
-
     /**
      * Execute the console command.
      *
@@ -84,7 +83,7 @@ class GenerateCommand extends GeneratorCommand
     protected function getViews()
     {
         $template = $this->option('template') ?: Constant::TEMPLATE_DEFAULT;
-        $name = $this->getNameInput();
+        $name = strtolower($this->getNameInput());
 
         return [
             "templates/{$template}/module/index.blade.stub" => "$name/index.blade.php",
@@ -124,7 +123,7 @@ class GenerateCommand extends GeneratorCommand
     protected function getAssets()
     {
         $template = $this->option('template') ?: Constant::TEMPLATE_DEFAULT;
-        $name = $this->getNameInput();
+        $name = strtolower($this->getNameInput());
 
         return [
             "{$template}/assets/js/index.js.stub" => "js/$name/index.js",
