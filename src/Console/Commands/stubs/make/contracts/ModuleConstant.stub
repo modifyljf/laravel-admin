@@ -1,0 +1,7 @@
+<?php
+
+namespace DummyRootNamespaceContracts;
+
+interface ModuleConstant
+{
+}

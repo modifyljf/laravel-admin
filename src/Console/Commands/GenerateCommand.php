@@ -16,7 +16,8 @@ class GenerateCommand extends GeneratorCommand
     protected $signature = 'guesl:generate 
                     {name : The name of model.}
                     {--template : Template name, "metronic" as default.}
-                    {--force : Overwrite existing objects by default.}';
+                    {--force : Overwrite existing objects by default.}
+                    {--module= : The module which the `name` belongs to.}';
 
     /**
      * The console command description.
@@ -35,8 +36,12 @@ class GenerateCommand extends GeneratorCommand
         $this->createDirectories();
 
         $this->makeController();
+        $this->makeRoute();
         $this->makeModel();
+
         $this->makeViews();
+        $this->makeNavItem();
+
         $this->makeAssets();
 
         $this->info('Admin views generated successfully.');
@@ -50,7 +55,7 @@ class GenerateCommand extends GeneratorCommand
     protected function createDirectories()
     {
         $name = strtolower($this->getNameInput());
-        $this->makeDirectory(resource_path("views/admin/modules/$name"));
+        $this->makeDirectory(resource_path("views/admin/models/$name"));
         $this->makeDirectory(resource_path("assets/js/admin/$name"));
         $this->makeDirectory(public_path("js/admin/$name"));
     }
@@ -63,22 +68,24 @@ class GenerateCommand extends GeneratorCommand
     protected function makeController()
     {
         $name = $this->getNameInput();
-        $controllerName = $this->getControllerName($name);
+        $module = $this->option('module');
 
         $this->call('guesl:controller', [
-            'name' => $controllerName
+            'name' => $name,
+            '--module' => $module,
         ]);
+
     }
 
     /**
-     * Get controller name.
+     * Make route.
      *
-     * @param $name
-     * @return string
+     * @return void
      */
-    protected function getControllerName($name)
+    protected function makeRoute()
     {
-        return strpos($name, 'Controller') !== false ? $name : $name . 'Controller';
+        $adminRoute = base_path('routes/admin.php');
+        file_put_contents($adminRoute, file_get_contents(''), FILE_APPEND);
     }
 
     /**
@@ -106,8 +113,8 @@ class GenerateCommand extends GeneratorCommand
         $name = strtolower($this->getNameInput());
 
         return [
-            "{$template}/module/index.blade.stub" => "$name/index.blade.php",
-            "{$template}/module/edit.blade.stub" => "$name/edit.blade.php",
+            "{$template}/model/index.blade.stub" => "$name/index.blade.php",
+            "{$template}/model/edit.blade.stub" => "$name/edit.blade.php",
         ];
     }
 
@@ -120,7 +127,7 @@ class GenerateCommand extends GeneratorCommand
     {
         $views = $this->getViews();
         foreach ($views as $key => $value) {
-            if (file_exists($view = resource_path('views/admin/modules/' . $value)) && !$this->option('force')) {
+            if (file_exists($view = resource_path('views/admin/models/' . $value)) && !$this->option('force')) {
                 if (!$this->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
                     continue;
                 }
@@ -133,6 +140,86 @@ class GenerateCommand extends GeneratorCommand
 
             $this->info('Generated: ' . $view);
         }
+    }
+
+    /**
+     * Make navigator item.
+     *
+     * @return void
+     */
+    protected function makeNavItem()
+    {
+        $navigator = resource_path('views/admin/incs/navigator.blade.php');
+        $navigatorArray = file($navigator);
+
+        $module = $this->option('module');
+
+        foreach ($navigatorArray as $key => $line) {
+            if ($module && strpos($line, 'GueslAdminNavigatorSubMenuItemBlock')) {
+                array_splice(
+                    $navigatorArray,
+                    $key,
+                    1,
+                    $this->compileNavitemStub()
+                );
+            }
+
+            if (!$module && strpos($line, 'GueslAdminNavigatorMenuItemBlock')) {
+                array_splice(
+                    $navigatorArray,
+                    $key,
+                    1,
+                    $this->compileNavitemStub()
+                );
+            }
+        }
+
+        file_put_contents(
+            $navigator,
+            implode("", $navigatorArray)
+        );
+
+        $this->info("Updated: $navigator.");
+    }
+
+    /**
+     * Compiles navitem blade stub.
+     *
+     * @return string
+     */
+    protected function compileNavitemStub()
+    {
+        $name = $this->argument('name');
+        $module = $this->option('module');
+
+        $stub = $this->getTemplateViewStub();
+        if ($module) {
+            $stub .= '/admin/incs/navitem.sub.blade.stub';
+        } else {
+            $stub .= '/admin/incs/navitem.blade.stub';
+        }
+
+        $menuName = ucfirst($name);
+        $moduleName = ucfirst($module) . ' Module';
+        $indexUrl = str_plural(strtolower($name));
+
+        return str_replace(
+            ['DummyMenu', 'DummyModule', 'DummyIndexURL'],
+            [$menuName, $moduleName, $indexUrl],
+            file_get_contents($stub)
+        );
+    }
+
+    /**
+     * Get the template view stub.
+     *
+     * @return string
+     */
+    protected function getTemplateViewStub()
+    {
+        $template = $this->option('template') ?: Constant::TEMPLATE_DEFAULT;
+
+        return __DIR__ . "/stubs/make/views/templates/${template}";
     }
 
     /**

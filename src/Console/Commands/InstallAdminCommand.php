@@ -77,7 +77,7 @@ class InstallAdminCommand extends GeneratorCommand
     {
         if (!file_exists($routePath = base_path('routes/admin.php')) || $this->option('force')) {
             copy(
-                $this->getStub() . '/make/routes.stub',
+                __DIR__ . '/../../../routes/admin.php',
                 $routePath
             );
 

@@ -2,8 +2,10 @@
 
 namespace DummyNamespace;
 
+use DummyRootNamespaceContracts\ModuleConstant;
 use Illuminate\Http\Request;
 use DummyRootNamespaceHttp\Controllers\Admin\BaseController as Controller;
+use DummyModelNamespace\DummyModel;
 
 class DummyClass extends Controller
 {
@@ -11,14 +13,15 @@ class DummyClass extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return void
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
     public function index(Request $request)
     {
         if ($request->expectsJson()) {
             //
         } else {
-            return view('admin.DummyModule.index');
+            $this->initSetting(DummyModuleConstant, DummyMenuConstant);
+            return view('admin.models.DummyLowerModel.index');
         }
     }
 
@@ -67,7 +70,7 @@ class DummyClass extends Controller
             abort(404);
         }
 
-        return view('admin.DummyModule.edit');
+        return view('admin.models.DummyLowerModel.edit');
     }
 
     /**
