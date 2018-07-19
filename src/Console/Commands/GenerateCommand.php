@@ -201,7 +201,7 @@ class GenerateCommand extends GeneratorCommand
                     $navigatorArray,
                     $key,
                     1,
-                    $this->compileNavitemStub()
+                    $this->compileNavItemStub()
                 );
             }
 
@@ -210,7 +210,7 @@ class GenerateCommand extends GeneratorCommand
                     $navigatorArray,
                     $key,
                     1,
-                    $this->compileNavitemStub()
+                    $this->compileNavItemStub()
                 );
             }
         }
@@ -228,7 +228,7 @@ class GenerateCommand extends GeneratorCommand
      *
      * @return string
      */
-    protected function compileNavitemStub()
+    protected function compileNavItemStub()
     {
         $name = $this->argument('name');
         $module = $this->option('module');
