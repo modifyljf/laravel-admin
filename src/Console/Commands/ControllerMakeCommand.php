@@ -193,7 +193,7 @@ class ControllerMakeCommand extends GeneratorCommand
                 $this->modelName($name),
                 strtolower($name),
                 $this->menuConstantName(),
-                $this->moduleConstantName() ? "ModuleConstant::{$this->moduleConstantName()}" : '',
+                $this->moduleConstantName() ? $this->moduleConstantName() : '',
             ],
             file_get_contents(__DIR__ . '/stubs/make/controllers/Controller.stub')
         );
