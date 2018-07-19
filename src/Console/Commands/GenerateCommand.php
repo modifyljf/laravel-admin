@@ -276,18 +276,35 @@ class GenerateCommand extends GeneratorCommand
      */
     protected function makeNavItem()
     {
+        $module = $this->getModuleName();
+        $moduleName = ucfirst($module);
+
         $navigator = resource_path('views/admin/incs/navigator.blade.php');
         $navigatorArray = file($navigator);
 
-        foreach ($navigatorArray as $key => $line) {
-            if (strpos($line, 'GueslAdminNavigatorMenuItemBlock') !== false) {
-                array_splice(
-                    $navigatorArray,
-                    $key,
-                    1,
-                    $this->compileNavItemStub()
-                );
-                break;
+        if ($this->isModuleExists()) {
+            foreach ($navigatorArray as $key => $line) {
+                if (strpos($line, "GueslAdmin{$moduleName}SubMenuItem") !== false) {
+                    array_splice(
+                        $navigatorArray,
+                        $key,
+                        1,
+                        $this->compileNavItemStub()
+                    );
+                    break;
+                }
+            }
+        } else {
+            foreach ($navigatorArray as $key => $line) {
+                if (strpos($line, 'GueslAdminNavigatorMenuItemBlock') !== false) {
+                    array_splice(
+                        $navigatorArray,
+                        $key,
+                        1,
+                        $this->compileNavItemStub()
+                    );
+                    break;
+                }
             }
         }
 
@@ -306,18 +323,23 @@ class GenerateCommand extends GeneratorCommand
      */
     protected function compileNavItemStub()
     {
-        $name = $this->argument('name');
-        $module = $this->option('module');
+        $name = $this->getNameInput();
+        $module = $this->getModuleName();
+
 
         $stub = $this->getTemplateViewStub();
         if ($module) {
-            $stub .= '/admin/incs/navitem.sub.blade.stub';
+            if ($this->isModuleExists()) {
+                $stub .= '/admin/incs/submenuitem.blade.stub';
+            } else {
+                $stub .= '/admin/incs/navitem.sub.blade.stub';
+            }
         } else {
             $stub .= '/admin/incs/navitem.blade.stub';
         }
 
         $menuName = ucfirst($name);
-        $moduleName = ucfirst($module) . ' Module';
+        $moduleName = ucfirst($module);
         $indexUrl = str_plural(strtolower($name));
 
         return str_replace(
@@ -342,6 +364,31 @@ class GenerateCommand extends GeneratorCommand
     }
 
     /**
+     * If the module exists, return true;
+     * Else return false;
+     *
+     * @return string|null
+     */
+    protected function isModuleExists()
+    {
+        $module = $this->getModuleName();
+        $moduleName = ucfirst($module);
+
+        $navigator = resource_path('views/admin/incs/navigator.blade.php');
+        $navigatorArray = file($navigator);
+
+        $flag = false;
+        foreach ($navigatorArray as $key => $line) {
+            if (strpos($line, "GueslAdmin{$moduleName}SubMenuItem") !== false) {
+                $flag = true;
+                break;
+            }
+        }
+
+        return $flag;
+    }
+
+    /**
      * Get module constant name.
      *
      * @return string|null
@@ -350,7 +397,7 @@ class GenerateCommand extends GeneratorCommand
     {
         $moduleConstantName = null;
 
-        $module = $this->option('module');
+        $module = $this->getModuleName();
 
         if ($module) {
             $moduleConstantName = strtoupper("MODULE_$module");
@@ -368,8 +415,8 @@ class GenerateCommand extends GeneratorCommand
     {
         $menuConstantName = null;
 
-        $name = $this->argument('name');
-        $module = $this->option('module');
+        $name = $this->getNameInput();
+        $module = $this->getModuleName();
 
         if ($module) {
             $menuConstantName = strtoupper("MENU_{$module}_$name");
@@ -500,5 +547,16 @@ class GenerateCommand extends GeneratorCommand
         $tableId = camel_case(str_replace(' ', '_', strtolower($name)) . 'Table');
 
         return $tableId;
+    }
+
+    /**
+     * Get module name.
+     *
+     * @return string
+     */
+    protected function getModuleName()
+    {
+        $moduleInput = $this->option('module');
+        return $moduleInput ? ucfirst(trim($moduleInput)) : null;
     }
 }
