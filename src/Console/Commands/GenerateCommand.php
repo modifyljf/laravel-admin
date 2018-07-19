@@ -315,7 +315,7 @@ class GenerateCommand extends GeneratorCommand
         $name = strtolower($this->getNameInput());
 
         return [
-            "{$template}/assets/js/index.js.stub" => "js/admin/$name/index.js",
+            "{$template}/assets/js/index.js.stub" => "admin/js/$name/index.js",
         ];
     }
 

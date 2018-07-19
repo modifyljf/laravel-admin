@@ -50,8 +50,8 @@ class UninstallAdminCommand extends GeneratorCommand
         $this->files->deleteDirectory($contractPath = app_path('Contracts'));
         $this->info("Deleted: $contractPath.");
 
-        $this->files->deleteDirectory($gueslImagePath = public_path('images/admin'));
-        $this->info("Deleted: $gueslImagePath.");
+        $this->files->deleteDirectory($adminPublicPath = public_path('admin'));
+        $this->info("Deleted: $adminPublicPath.");
 
         $this->files->deleteDirectory($adminControllersPath = app_path('Http/Controllers/Admin'));
         $this->info("Deleted: $adminControllersPath.");
@@ -59,17 +59,14 @@ class UninstallAdminCommand extends GeneratorCommand
         $this->files->deleteDirectory($authResourcePath = resource_path('views/auth'));
         $this->info("Deleted: $authResourcePath.");
 
-        $this->files->deleteDirectory($adminResourcePath = resource_path('views/admin'));
-        $this->info("Deleted: $adminResourcePath.");
+        $this->files->deleteDirectory($adminViewPath = resource_path('views/admin'));
+        $this->info("Deleted: $adminViewPath.");
 
-        $this->files->deleteDirectory($adminAssetsPath = resource_path('assets/js'));
+        $this->files->deleteDirectory($adminAssetsPath = resource_path('assets/admin'));
         $this->info("Deleted: $adminAssetsPath.");
 
         $this->files->deleteDirectory($templatesPath = public_path('templates'));
         $this->info("Deleted: $templatesPath.");
-
-        $this->files->deleteDirectory($publicAdminAssetsPath = public_path('js/admin'));
-        $this->info("Deleted: $publicAdminAssetsPath.");
     }
 
     /**
