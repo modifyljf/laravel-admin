@@ -23,7 +23,6 @@ class AdminMakeCommand extends GeneratorCommand
      */
     protected $description = 'Scaffold basic admin views and routes';
 
-
     /**
      * Execute the console command.
      *
@@ -111,7 +110,6 @@ class AdminMakeCommand extends GeneratorCommand
      * Build the directory for the class if necessary.
      *
      * @param  string $path
-     * @return string
      */
     protected function makeDirectory($path)
     {

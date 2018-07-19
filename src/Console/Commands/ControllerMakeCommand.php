@@ -121,8 +121,6 @@ class ControllerMakeCommand extends GeneratorCommand
      */
     protected function makeModuleConstant()
     {
-        $name = $this->getNameInput();
-
         $moduleConstantPath = app_path('Contracts/ModuleConstant.php');
 
         file_put_contents(
@@ -141,8 +139,6 @@ class ControllerMakeCommand extends GeneratorCommand
         $moduleConstantPath = app_path('Contracts/ModuleConstant.php');
 
         $fileArray = file($moduleConstantPath);
-
-        $name = $this->argument('name');
         $module = $this->option('module');
 
         if ($module) {
@@ -169,7 +165,6 @@ class ControllerMakeCommand extends GeneratorCommand
      * Get the module constant line.
      *
      * @param  array $fileArray
-     * @param  string $module
      * @return string
      */
     protected function moduleConstantLine($fileArray)
@@ -193,8 +188,6 @@ class ControllerMakeCommand extends GeneratorCommand
      * Get the menu constant line.
      *
      * @param  array $fileArray
-     * @param  string $module
-     * @param  string $name
      * @return string|null
      */
     protected function menuConstantLine($fileArray)
@@ -227,9 +220,9 @@ class ControllerMakeCommand extends GeneratorCommand
     protected function makeController()
     {
         $name = $this->getNameInput();
-        $controllName = $this->controllerName($name);
+        $controllerName = $this->controllerName($name);
 
-        $controllerPath = app_path("Http/Controllers/Admin/$controllName.php");
+        $controllerPath = app_path("Http/Controllers/Admin/$controllerName.php");
 
         if (file_exists($controllerPath)) {
             $this->error("Http/Controllers/Admin/$name.php already exists.");
@@ -238,7 +231,7 @@ class ControllerMakeCommand extends GeneratorCommand
 
         file_put_contents(
             $controllerPath,
-            $this->compileControllerStub($name)
+            $this->compileControllerStub()
         );
 
         $this->info('Generated: ' . $controllerPath);
@@ -249,8 +242,10 @@ class ControllerMakeCommand extends GeneratorCommand
      *
      * @return string
      */
-    protected function compileControllerStub($name)
+    protected function compileControllerStub()
     {
+        $name = $this->argument('name');
+
         return str_replace(
             [
                 'DummyNamespace',
@@ -339,7 +334,6 @@ class ControllerMakeCommand extends GeneratorCommand
     /**
      * Get model namespace.
      *
-     * @param $name
      * @return string
      */
     protected function modelNamespace()
@@ -361,7 +355,6 @@ class ControllerMakeCommand extends GeneratorCommand
      * Build the directory for the class if necessary.
      *
      * @param  string $path
-     * @return string
      */
     protected function makeDirectory($path)
     {

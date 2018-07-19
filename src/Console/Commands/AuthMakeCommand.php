@@ -157,7 +157,7 @@ class AuthMakeCommand extends GeneratorCommand
             );
         }
 
-        $this->info('Generated: Images');
+        $this->info('Generated: Images(Guesl Logos).');
 
         if (is_dir($templatesDir = public_path('templates')) && !$this->option('force')) {
             if (!$this->confirm("The template assets already exists. Do you want to replace it?")) {
@@ -275,7 +275,6 @@ class AuthMakeCommand extends GeneratorCommand
      * Build the directory for the class if necessary.
      *
      * @param  string $path
-     * @return string
      */
     protected function makeDirectory($path)
     {

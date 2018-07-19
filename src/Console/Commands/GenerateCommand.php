@@ -85,7 +85,48 @@ class GenerateCommand extends GeneratorCommand
     protected function makeRoute()
     {
         $adminRoute = base_path('routes/admin.php');
-        file_put_contents($adminRoute, file_get_contents(''), FILE_APPEND);
+        file_put_contents(
+            $adminRoute,
+            $this->compileRouteStub(),
+            FILE_APPEND
+        );
+    }
+
+    /**
+     * Compile route stub.
+     *
+     * @return string
+     */
+    protected function compileRouteStub()
+    {
+        $name = $this->argument('name');
+
+        return str_replace(
+            ['DummyPluralModel', 'DummyController'],
+            [strtolower(str_plural($name)), $this->controllerName($name)],
+            file_get_contents($this->getRouteStub())
+        );
+    }
+
+    /**
+     * Get controller name.
+     *
+     * @param $name
+     * @return string
+     */
+    protected function controllerName($name)
+    {
+        return strpos($name, 'Controller') !== false ? $name : $name . 'Controller';
+    }
+
+    /**
+     * Get route stub.
+     *
+     * @return string
+     */
+    protected function getRouteStub()
+    {
+        return __DIR__ . '/stubs/make/routes.stub';
     }
 
     /**
@@ -288,7 +329,6 @@ class GenerateCommand extends GeneratorCommand
      * Build the directory for the class if necessary.
      *
      * @param  string $path
-     * @return string
      */
     protected function makeDirectory($path)
     {
