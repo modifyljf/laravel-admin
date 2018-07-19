@@ -42,28 +42,34 @@ class UninstallAdminCommand extends GeneratorCommand
     protected function removeFilesAndDirectories()
     {
         $this->files->delete($adminConfigPath = config_path('admin.php'));
-        $this->info($adminConfigPath . ' deleted successfully.');
+        $this->info("Deleted: $adminConfigPath.");
 
         $this->files->delete($adminRoutePath = base_path('routes/admin.php'));
-        $this->info($adminRoutePath . ' deleted successfully.');
+        $this->info("Deleted: $adminRoutePath.");
+
+        $this->files->deleteDirectory($contractPath = app_path('Contracts'));
+        $this->info("Deleted: $contractPath.");
+
+        $this->files->deleteDirectory($gueslImagePath = public_path('images/admin'));
+        $this->info("Deleted: $gueslImagePath.");
 
         $this->files->deleteDirectory($adminControllersPath = app_path('Http/Controllers/Admin'));
-        $this->info($adminControllersPath . ' deleted successfully.');
+        $this->info("Deleted: $adminControllersPath.");
 
         $this->files->deleteDirectory($authResourcePath = resource_path('views/auth'));
-        $this->info($authResourcePath . ' deleted successfully.');
+        $this->info("Deleted: $authResourcePath.");
 
         $this->files->deleteDirectory($adminResourcePath = resource_path('views/admin'));
-        $this->info($adminResourcePath . ' deleted successfully.');
+        $this->info("Deleted: $adminResourcePath.");
 
         $this->files->deleteDirectory($adminAssetsPath = resource_path('assets/js'));
-        $this->info($adminAssetsPath . ' deleted successfully.');
+        $this->info("Deleted: $adminAssetsPath.");
 
         $this->files->deleteDirectory($templatesPath = public_path('templates'));
-        $this->info($templatesPath . ' deleted successfully.');
+        $this->info("Deleted: $templatesPath.");
 
         $this->files->deleteDirectory($publicAdminAssetsPath = public_path('js/admin'));
-        $this->info($publicAdminAssetsPath . ' deleted successfully.');
+        $this->info("Deleted: $publicAdminAssetsPath.");
     }
 
     /**

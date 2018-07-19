@@ -2,8 +2,6 @@
 
 namespace Guesl\Admin\Console\Commands;
 
-use Illuminate\Console\GeneratorCommand;
-
 class ControllerMakeCommand extends GeneratorCommand
 {
     /**
@@ -268,27 +266,5 @@ class ControllerMakeCommand extends GeneratorCommand
     protected function modelNamespace()
     {
         return $this->getNamespace($this->rootNamespace()) . '\Models';
-    }
-
-    /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir($directory = $path)) {
-            $this->files->makeDirectory($directory, 0755, true, true);
-        }
-    }
-
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub()
-    {
-        return __DIR__ . '/stubs/make/controllers';
     }
 }

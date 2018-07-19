@@ -3,7 +3,6 @@
 namespace Guesl\Admin\Console\Commands;
 
 use Guesl\Admin\Contracts\Constant;
-use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
 
 class GenerateCommand extends GeneratorCommand
@@ -311,39 +310,5 @@ class GenerateCommand extends GeneratorCommand
 
             $this->info('Generated: ' . $asset);
         }
-    }
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of model.'],
-        ];
-    }
-
-    /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir($directory = $path)) {
-            $this->files->makeDirectory($directory, 0755, true, true);
-        }
-    }
-
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub()
-    {
-        return __DIR__ . '/stubs';
     }
 }

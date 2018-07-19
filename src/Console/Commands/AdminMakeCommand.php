@@ -3,7 +3,6 @@
 namespace Guesl\Admin\Console\Commands;
 
 use Guesl\Admin\Contracts\Constant;
-use Illuminate\Console\GeneratorCommand;
 
 class AdminMakeCommand extends GeneratorCommand
 {
@@ -145,27 +144,5 @@ class AdminMakeCommand extends GeneratorCommand
             $this->rootNamespace(),
             file_get_contents(__DIR__ . '/stubs/make/controllers/HomeController.stub')
         );
-    }
-
-    /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir($directory = $path)) {
-            $this->files->makeDirectory($directory, 0755, true, true);
-        }
-    }
-
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub()
-    {
-        return __DIR__ . '/stubs';
     }
 }

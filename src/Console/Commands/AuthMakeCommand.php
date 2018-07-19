@@ -3,7 +3,6 @@
 namespace Guesl\Admin\Console\Commands;
 
 use Guesl\Admin\Contracts\Constant;
-use Illuminate\Console\GeneratorCommand;
 
 class AuthMakeCommand extends GeneratorCommand
 {
@@ -67,7 +66,7 @@ class AuthMakeCommand extends GeneratorCommand
         $this->makeDirectory(resource_path('views/auth/layouts'));
         $this->makeDirectory(resource_path('views/auth/incs'));
         $this->makeDirectory(resource_path('views/auth/passwords'));
-        $this->makeDirectory(public_path('images'));
+        $this->makeDirectory(public_path('admin/images'));
     }
 
     /**
@@ -121,35 +120,35 @@ class AuthMakeCommand extends GeneratorCommand
      */
     protected function exportAssets()
     {
-        if (!file_exists($logoPath = public_path('images/gu.png'))) {
+        if (!file_exists($logoPath = public_path('admin/images/gu.png'))) {
             copy(
                 __DIR__ . '/../../../public/images/gu.png',
                 $logoPath
             );
         }
 
-        if (!file_exists($logoPath = public_path('images/guesl.png'))) {
+        if (!file_exists($logoPath = public_path('admin/images/guesl.png'))) {
             copy(
                 __DIR__ . '/../../../public/images/guesl.png',
                 $logoPath
             );
         }
 
-        if (!file_exists($logoPath = public_path('images/guesl-blue.png'))) {
+        if (!file_exists($logoPath = public_path('admin/images/guesl-blue.png'))) {
             copy(
                 __DIR__ . '/../../../public/images/guesl-blue.png',
                 $logoPath
             );
         }
 
-        if (!file_exists($logoPath = public_path('images/guesl-purple.png'))) {
+        if (!file_exists($logoPath = public_path('admin/images/guesl-purple.png'))) {
             copy(
                 __DIR__ . '/../../../public/images/guesl-purple.png',
                 $logoPath
             );
         }
 
-        if (!file_exists($logoPath = public_path('images/guesl-white.png'))) {
+        if (!file_exists($logoPath = public_path('admin/images/guesl-white.png'))) {
             copy(
                 __DIR__ . '/../../../public/images/guesl-white.png',
                 $logoPath
@@ -215,27 +214,5 @@ class AuthMakeCommand extends GeneratorCommand
         }
         closedir($dir);
         rmdir($src);
-    }
-
-    /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir($directory = $path)) {
-            $this->files->makeDirectory($directory, 0755, true, true);
-        }
-    }
-
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub()
-    {
-        return __DIR__ . '/stubs';
     }
 }

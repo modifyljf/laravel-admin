@@ -3,7 +3,6 @@
 namespace Guesl\Admin\Console\Commands;
 
 use Guesl\Admin\Contracts\Constant;
-use Illuminate\Console\GeneratorCommand;
 
 class InstallAdminCommand extends GeneratorCommand
 {
@@ -135,16 +134,6 @@ class InstallAdminCommand extends GeneratorCommand
     }
 
     /**
-     * Get the default namespace for the class.
-     *
-     * @return string
-     */
-    protected function adminControllerNamespace()
-    {
-        return $this->getNamespace($this->rootNamespace()) . '\Http\Controllers\Admin';
-    }
-
-    /**
      * Export Module Constant file.
      *
      * @return void
@@ -203,7 +192,7 @@ class InstallAdminCommand extends GeneratorCommand
     {
         return str_replace(
             ['DummyNamespace', 'DummyRootNamespace'],
-            [$this->controllerNamespace(), $this->rootNamespace()],
+            [$this->adminControllerNamespace(), $this->rootNamespace()],
             file_get_contents($this->getHomeControllerStub())
         );
     }
@@ -219,16 +208,6 @@ class InstallAdminCommand extends GeneratorCommand
     }
 
     /**
-     * Get the default namespace for the class.
-     *
-     * @return string
-     */
-    protected function controllerNamespace()
-    {
-        return $this->getNamespace($this->rootNamespace()) . '\Http\Controllers\Admin';
-    }
-
-    /**
      * Create tables and seed it.
      *
      * @return void
@@ -236,27 +215,5 @@ class InstallAdminCommand extends GeneratorCommand
     public function initDatabase()
     {
         $this->call('migrate');
-    }
-
-    /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir($directory = $path)) {
-            $this->files->makeDirectory($directory, 0755, true, true);
-        }
-    }
-
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub()
-    {
-        return __DIR__ . '/stubs';
     }
 }
