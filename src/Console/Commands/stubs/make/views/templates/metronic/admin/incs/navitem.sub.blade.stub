@@ -1,6 +1,6 @@
                 <a href="javascript:void(0);" class="m-menu__link m-menu__toggle">
                     <i class="m-menu__link-icon flaticon-share"></i>
-                    <span class="m-menu__link-text">DummyMenu</span>
+                    <span class="m-menu__link-text">DummyModule</span>
                     <i class="m-menu__ver-arrow la la-angle-right"></i>
                 </a>
 
