@@ -14,7 +14,7 @@
                         <a href="https://github.com/guesl" class="m-brand__logo-wrapper" target="_blank">
                             <img class="img-fluid"
                                  alt="{{ config('app.name') }}"
-                                 src="{{ asset('images/guesl-white.png') }}"
+                                 src="{{ asset('admin/images/guesl-white.png') }}"
                                  style="max-width: 100px;"
                             />
                         </a>
