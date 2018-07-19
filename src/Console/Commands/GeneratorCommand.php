@@ -2,7 +2,6 @@
 
 namespace Guesl\Admin\Console\Commands;
 
-use Guesl\Admin\Contracts\Constant;
 use Illuminate\Console\GeneratorCommand as Command;
 use Symfony\Component\Console\Input\InputArgument;
 

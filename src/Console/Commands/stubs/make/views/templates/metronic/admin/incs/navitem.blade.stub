@@ -1,9 +1,11 @@
-                <li class="m-menu__item m-menu__item--active" aria-haspopup="true">
+                <li class="m-menu__item {{ \DummyRootNamespaceContracts\ModuleConstant::DummyMenuConstant == $menu ? 'm-menu__item--active' : ''}}"
+                    aria-haspopup="true"
+                >
                     <a href="{{ url('/DummyIndexURL') }}" class="m-menu__link ">
                         <i class="m-menu__link-icon flaticon-share"></i>
                         <span class="m-menu__link-title">
                             <span class="m-menu__link-wrap">
-                                <span class="m-menu__link-text">DummyMenu</span>
+                                <span class="m-menu__link-text">DummyMenuName</span>
                             </span>
                         </span>
                     </a>

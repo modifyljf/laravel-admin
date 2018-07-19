@@ -3,7 +3,6 @@
 namespace Guesl\Admin\Console\Commands;
 
 use Guesl\Admin\Contracts\Constant;
-use Symfony\Component\Console\Input\InputArgument;
 
 class GenerateCommand extends GeneratorCommand
 {
@@ -192,25 +191,15 @@ class GenerateCommand extends GeneratorCommand
         $navigator = resource_path('views/admin/incs/navigator.blade.php');
         $navigatorArray = file($navigator);
 
-        $module = $this->option('module');
-
         foreach ($navigatorArray as $key => $line) {
-            if ($module && strpos($line, 'GueslAdminNavigatorSubMenuItemBlock')) {
+            if (strpos($line, 'GueslAdminNavigatorMenuItemBlock') !== false) {
                 array_splice(
                     $navigatorArray,
                     $key,
                     1,
                     $this->compileNavItemStub()
                 );
-            }
-
-            if (!$module && strpos($line, 'GueslAdminNavigatorMenuItemBlock')) {
-                array_splice(
-                    $navigatorArray,
-                    $key,
-                    1,
-                    $this->compileNavItemStub()
-                );
+                break;
             }
         }
 
@@ -244,8 +233,22 @@ class GenerateCommand extends GeneratorCommand
         $indexUrl = str_plural(strtolower($name));
 
         return str_replace(
-            ['DummyMenu', 'DummyModule', 'DummyIndexURL'],
-            [$menuName, $moduleName, $indexUrl],
+            [
+                'DummyMenuName',
+                'DummyModuleName',
+                'DummyIndexURL',
+                'DummyRootNamespace',
+                'DummyModuleConstant',
+                'DummyMenuConstant'
+            ],
+            [
+                $menuName,
+                $moduleName,
+                $indexUrl,
+                $this->rootNamespace(),
+                $this->moduleConstantName(),
+                $this->menuConstantName()
+            ],
             file_get_contents($stub)
         );
     }

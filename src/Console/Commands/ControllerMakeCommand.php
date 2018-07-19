@@ -206,6 +206,8 @@ class ControllerMakeCommand extends GeneratorCommand
      */
     protected function moduleConstantName()
     {
+        $moduleConstantName = null;
+
         $module = $this->option('module');
 
         if ($module) {

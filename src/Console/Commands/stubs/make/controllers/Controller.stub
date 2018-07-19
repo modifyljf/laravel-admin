@@ -20,7 +20,7 @@ class DummyClass extends Controller
         if ($request->expectsJson()) {
             //
         } else {
-            $this->initSetting(ModuleConstant::DummyModuleConstant, ModuleConstant::DummyMenuConstant);
+            $this->initSetting(ModuleConstant::DummyMenuConstant, ModuleConstant::DummyModuleConstant);
             return view('admin.models.DummyLowerModel.index');
         }
     }
