@@ -54,8 +54,8 @@ class GenerateCommand extends GeneratorCommand
     {
         $name = strtolower($this->getNameInput());
         $this->makeDirectory(resource_path("views/admin/models/$name"));
-        $this->makeDirectory(resource_path("assets/js/admin/$name"));
-        $this->makeDirectory(public_path("js/admin/$name"));
+        $this->makeDirectory(resource_path("assets/admin/js/$name"));
+        $this->makeDirectory(public_path("admin/js/$name"));
     }
 
     /**
