@@ -33,6 +33,7 @@ class AdminMakeCommand extends GeneratorCommand
         $this->createDirectories();
 
         $this->exportViews();
+        $this->exportNavigator();
 
         $this->info('Successful: Admin views generated.');
     }
@@ -62,7 +63,6 @@ class AdminMakeCommand extends GeneratorCommand
             "templates/{$template}/admin/incs/footer.blade.stub" => "admin/incs/footer.blade.php",
             "templates/{$template}/admin/incs/head.blade.stub" => "admin/incs/head.blade.php",
             "templates/{$template}/admin/incs/header.blade.stub" => "admin/incs/header.blade.php",
-            "templates/{$template}/admin/incs/navigator.blade.stub" => "admin/incs/navigator.blade.php",
             "templates/{$template}/admin/layouts/app.blade.stub" => "admin/layouts/app.blade.php",
             "templates/{$template}/home.blade.stub" => "admin/home.blade.php",
         ];
@@ -70,8 +70,6 @@ class AdminMakeCommand extends GeneratorCommand
 
     /**
      * Export the authentication views.
-     *
-     * @return void
      */
     protected function exportViews()
     {
@@ -90,6 +88,49 @@ class AdminMakeCommand extends GeneratorCommand
 
             $this->info('Generated: ' . $view);
         }
+    }
+
+    /**
+     * Export the authentication views.
+     */
+    protected function exportNavigator()
+    {
+        $navigatorPath = resource_path('views/admin/incs/navigator.blade.php');
+
+        if (!file_exists($navigatorPath)) {
+            file_put_contents(
+                $navigatorPath,
+                $this->compileNavigatorStub()
+            );
+
+            $this->info('Generated: ' . $navigatorPath);
+        }
+    }
+
+    /**
+     * Compiles the HomeController stub.
+     *
+     * @return string
+     */
+    protected function compileNavigatorStub()
+    {
+        return str_replace(
+            ['DummyRootNamespace'],
+            $this->rootNamespace(),
+            file_get_contents($this->getNavigatorStub())
+        );
+    }
+
+    /**
+     * Get navigator stub.
+     *
+     * @return string
+     */
+    protected function getNavigatorStub()
+    {
+        $template = $this->option('template') ?: Constant::TEMPLATE_DEFAULT;
+
+        return __DIR__ . "/stubs/make/views/templates/$template/admin/incs/navigator.blade.stub";
     }
 
     /**

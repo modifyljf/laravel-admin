@@ -4,4 +4,5 @@ namespace DummyRootNamespaceContracts;
 
 interface ModuleConstant
 {
+    const ADMIN_DASHBOARD = 'ADMIN_DASHBOARD';
 }

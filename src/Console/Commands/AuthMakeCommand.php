@@ -34,7 +34,6 @@ class AuthMakeCommand extends GeneratorCommand
 
         $this->exportViews();
         $this->exportAssets();
-        $this->exportHomeController();
         $this->exportRoute();
 
         $this->info('Successful: Authentication scaffolding generated successfully.');
@@ -170,59 +169,6 @@ class AuthMakeCommand extends GeneratorCommand
         $this->recurseCopy(__DIR__ . '/../../../public/templates', $templatesDir);
 
         $this->info('Generated: ' . $templatesDir);
-    }
-
-    /**
-     * Export the HomeController.
-     *
-     * @return void
-     */
-    protected function exportHomeController()
-    {
-        $homeControllerPath = app_path('Http/Controllers/Admin/HomeController.php');
-
-        if (!file_exists($homeControllerPath)) {
-            file_put_contents(
-                $homeControllerPath,
-                $this->compileControllerStub()
-            );
-
-            $this->info('Generated: ' . $homeControllerPath);
-        }
-    }
-
-    /**
-     * Compiles the HomeController stub.
-     *
-     * @return string
-     */
-    protected function compileControllerStub()
-    {
-        return str_replace(
-            ['DummyNamespace', 'DummyRootNamespace'],
-            [$this->controllerNamespace(), $this->rootNamespace()],
-            file_get_contents($this->getControllerStub())
-        );
-    }
-
-    /**
-     * Get the default namespace for the class.
-     *
-     * @return string
-     */
-    protected function controllerNamespace()
-    {
-        return $this->getNamespace($this->rootNamespace()) . '\Http\Controllers\Admin';
-    }
-
-    /**
-     * Get the controller stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getControllerStub()
-    {
-        return __DIR__ . '/stubs/make/controllers/HomeController.stub';
     }
 
     /**

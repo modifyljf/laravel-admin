@@ -36,82 +36,12 @@ class ControllerMakeCommand extends GeneratorCommand
      */
     public function handle()
     {
-        $this->exportBaseController();
-        $this->exportModuleConstant();
         $this->makeModuleConstant();
         $this->makeController();
 
         $controllerName = $this->getNameInput();
 
         $this->info('Successful: ' . "BaseController exported and {$controllerName}Controller generated.");
-    }
-
-    /**
-     * Export BaseController.
-     *
-     * @return void
-     */
-    protected function exportBaseController()
-    {
-        $baseControllerPath = app_path('Http/Controllers/Admin/BaseController.php');
-
-        if (!file_exists($baseControllerPath)) {
-            file_put_contents(
-                $baseControllerPath,
-                $this->compileBaseControllerStub()
-            );
-
-            $this->info('Generated: ' . $baseControllerPath);
-        }
-    }
-
-    /**
-     * Compiles the BaseController stub.
-     *
-     * @return string
-     */
-    protected function compileBaseControllerStub()
-    {
-        return str_replace(
-            ['DummyNamespace', 'DummyRootNamespace'],
-            [$this->adminControllerNamespace(), $this->rootNamespace()],
-            file_get_contents(__DIR__ . '/stubs/make/controllers/BaseController.stub')
-        );
-    }
-
-    /**
-     * Export Module Constant file.
-     *
-     * @return void
-     */
-    protected function exportModuleConstant()
-    {
-        $this->makeDirectory(app_path('Contracts'));
-
-        $moduleConstantPath = app_path('Contracts/ModuleConstant.php');
-
-        if (!file_exists($moduleConstantPath)) {
-            file_put_contents(
-                $moduleConstantPath,
-                $this->compileModuleConstantStub()
-            );
-
-            $this->info('Generated: ' . $moduleConstantPath);
-        }
-    }
-
-    /**
-     * Compiles the BaseController stub.
-     *
-     * @return string
-     */
-    protected function compileModuleConstantStub()
-    {
-        return str_replace(
-            ['DummyRootNamespace'],
-            [$this->rootNamespace()],
-            file_get_contents(__DIR__ . '/stubs/make/contracts/ModuleConstant.stub')
-        );
     }
 
     /**
@@ -254,8 +184,8 @@ class ControllerMakeCommand extends GeneratorCommand
                 'DummyModelNamespace',
                 'DummyModel',
                 'DummyLowerModel',
-                'DummyModuleConstant',
                 'DummyMenuConstant',
+                'DummyModuleConstant',
             ],
             [
                 $this->adminControllerNamespace(),
@@ -264,8 +194,8 @@ class ControllerMakeCommand extends GeneratorCommand
                 $this->modelNamespace(),
                 $this->modelName($name),
                 strtolower($name),
-                "ModuleConstant::{$this->moduleConstantName()}",
-                $this->menuConstantName() ? "ModuleConstant::{$this->menuConstantName()}" : 'null',
+                $this->menuConstantName(),
+                $this->moduleConstantName() ? "ModuleConstant::{$this->moduleConstantName()}" : '',
             ],
             file_get_contents(__DIR__ . '/stubs/make/controllers/Controller.stub')
         );
@@ -274,17 +204,14 @@ class ControllerMakeCommand extends GeneratorCommand
     /**
      * Get module constant name.
      *
-     * @return string
+     * @return string|null
      */
     protected function moduleConstantName()
     {
-        $name = $this->argument('name');
         $module = $this->option('module');
 
         if ($module) {
             $moduleConstantName = strtoupper("MODULE_$module");
-        } else {
-            $moduleConstantName = strtoupper("MODULE_$name");
         }
 
         return $moduleConstantName;
@@ -293,7 +220,7 @@ class ControllerMakeCommand extends GeneratorCommand
     /**
      * Get menu constant name.
      *
-     * @return string|null
+     * @return string
      */
     protected function menuConstantName()
     {
@@ -304,6 +231,8 @@ class ControllerMakeCommand extends GeneratorCommand
 
         if ($module) {
             $menuConstantName = strtoupper("MENU_{$module}_$name");
+        } else {
+            $menuConstantName = strtoupper("MENU_$name");
         }
 
         return $menuConstantName;
@@ -339,16 +268,6 @@ class ControllerMakeCommand extends GeneratorCommand
     protected function modelNamespace()
     {
         return $this->getNamespace($this->rootNamespace()) . '\Models';
-    }
-
-    /**
-     * Get the default namespace for the class.
-     *
-     * @return string
-     */
-    protected function adminControllerNamespace()
-    {
-        return $this->getNamespace($this->rootNamespace()) . '\Http\Controllers\Admin';
     }
 
     /**

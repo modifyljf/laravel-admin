@@ -12,13 +12,14 @@ class BaseController extends Controller
      * @param null $module
      * @param null $menu
      */
-    protected function initSetting($module = null, $menu = null)
+    protected function initSetting($menu = null, $module = null)
     {
-        if (isset($module)) {
-            request()->session()->flash("module", $module);
-        }
         if (isset($menu)) {
             request()->session()->flash("menu", $menu);
+        }
+
+        if (isset($module)) {
+            request()->session()->flash("module", $module);
         }
     }
 }
