@@ -145,13 +145,13 @@
                                         <a href="../../../header/actions.html" class="m-menu__link ">
                                             <i class="m-menu__link-icon flaticon-graphic-2"></i>
                                             <span class="m-menu__link-title">
-															<span class="m-menu__link-wrap">
-																<span class="m-menu__link-text">Campaigns</span>
-																<span class="m-menu__link-badge">
-																	<span class="m-badge m-badge--success">3</span>
-																</span>
-															</span>
-														</span>
+                                                <span class="m-menu__link-wrap">
+                                                    <span class="m-menu__link-text">Campaigns</span>
+                                                    <span class="m-menu__link-badge">
+                                                        <span class="m-badge m-badge--success">3</span>
+                                                    </span>
+                                                </span>
+                                            </span>
                                         </a>
                                     </li>
                                     <li class="m-menu__item  m-menu__item--submenu" m-menu-submenu-toggle="hover"
@@ -169,15 +169,15 @@
                                                     <a href="../../../header/actions.html" class="m-menu__link ">
                                                         <i class="m-menu__link-icon flaticon-add"></i>
                                                         <span class="m-menu__link-title">
-																		<span class="m-menu__link-wrap">
-																			<span
-                                                                                    class="m-menu__link-text">File Upload</span>
-																			<span class="m-menu__link-badge">
-																				<span
-                                                                                        class="m-badge m-badge--danger">3</span>
-																			</span>
-																		</span>
-																	</span>
+                                                            <span class="m-menu__link-wrap">
+                                                                <span
+                                                                        class="m-menu__link-text">File Upload</span>
+                                                                <span class="m-menu__link-badge">
+                                                                    <span
+                                                                            class="m-badge m-badge--danger">3</span>
+                                                                </span>
+                                                            </span>
+                                                        </span>
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
@@ -434,7 +434,7 @@
                             >
                                 <a href="#" class="m-nav__link m-dropdown__toggle">
                                     <span class="m-topbar__userpic">
-                                        <img src="{{ asset('images/gu.png') }}"
+                                        <img src="{{ asset('admin/images/gu.png') }}"
                                              class="m--img-rounded m--marginless" alt="{{ config('app.name') }}"
                                         />
                                     </span>
@@ -449,14 +449,13 @@
                                         >
                                             <div class="m-card-user m-card-user--skin-dark">
                                                 <div class="m-card-user__pic">
-                                                    <img src="{{ asset('images/gu.png') }}"
+                                                    <img src="{{ asset('admin/images/gu.png') }}"
                                                          class="m--img-rounded m--marginless" alt="avatar"
                                                     />
 
                                                 </div>
                                                 <div class="m-card-user__details">
-                                                    <span
-                                                            class="m-card-user__name m--font-weight-500">{{ $user->name }}</span>
+                                                    <span class="m-card-user__name m--font-weight-500">{{ $user->name }}</span>
                                                     <a href="javascript:void(0);"
                                                        class="m-card-user__email m--font-weight-300 m-link">{{ $user->email }}</a>
                                                 </div>
