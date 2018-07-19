@@ -72,7 +72,6 @@ class GenerateCommand extends GeneratorCommand
             'name' => $name,
             '--module' => $module,
         ]);
-
     }
 
     /**
@@ -142,49 +141,138 @@ class GenerateCommand extends GeneratorCommand
     }
 
     /**
-     * Get the views that need to be exported.
-     *
-     * @return array
-     */
-    protected function getViews()
-    {
-        $template = $this->option('template') ?: Constant::TEMPLATE_DEFAULT;
-        $name = strtolower($this->getNameInput());
-
-        return [
-            "{$template}/model/index.blade.stub" => "$name/index.blade.php",
-            "{$template}/model/edit.blade.stub" => "$name/edit.blade.php",
-        ];
-    }
-
-    /**
      * Make views.
-     *
-     * @return void
      */
     protected function makeViews()
     {
-        $views = $this->getViews();
-        foreach ($views as $key => $value) {
-            if (file_exists($view = resource_path('views/admin/models/' . $value)) && !$this->option('force')) {
-                if (!$this->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
-                    continue;
-                }
+        $this->makeIndexView();
+        $this->makeEditView();
+
+        $this->info('Generated: Index and Edit views.');
+    }
+
+    /**
+     * Make index view.
+     */
+    protected function makeIndexView()
+    {
+        $name = strtolower($this->getNameInput());
+
+        $indexViewPath = resource_path('views/admin/models/' . $name . '/index.blade.php');
+
+        if (file_exists($indexViewPath) && !$this->option('force')) {
+            if (!$this->confirm("The [{$indexViewPath}] view already exists. Do you want to replace it?")) {
+                return;
             }
+        }
 
-            copy(
-                __DIR__ . '/stubs/make/views/templates/' . $key,
-                $view
+        file_put_contents(
+            $indexViewPath,
+            $this->compileIndexViewStub()
+        );
+
+        $this->info('Created: ' . $indexViewPath);
+    }
+
+    /**
+     * Compile index view stub.
+     *
+     * @return string
+     */
+    protected function compileIndexViewStub()
+    {
+        $name = $this->getNameInput();
+        $module = $this->option('module');
+
+        $menuName = ucfirst($name);
+        $moduleName = $module ? ucfirst($module) . ' Module' : null;
+        $createUrl = str_plural(strtolower($name)) . '/create';
+        $tableId = $this->tableId();
+
+        if ($moduleName) {
+            return str_replace(
+                [
+                    'DummyMenuName',
+                    'DummyModuleName',
+                    'DummyCreateURL',
+                    'DummyLowerModel',
+                    'DummyTableId'
+                ],
+                [$menuName, $moduleName, $createUrl, strtolower($name), $tableId],
+                file_get_contents($this->getIndexModuleViewStub())
             );
-
-            $this->info('Generated: ' . $view);
+        } else {
+            return str_replace(
+                [
+                    'DummyMenuName',
+                    'DummyCreateURL',
+                    'DummyLowerModel',
+                    'DummyTableId'
+                ],
+                [$menuName, $createUrl, strtolower($name), $tableId],
+                file_get_contents($this->getIndexViewStub())
+            );
         }
     }
 
     /**
-     * Make navigator item.
+     * Get edit view stub.
      *
-     * @return void
+     * @param string
+     * @return string
+     */
+    protected function getIndexViewStub()
+    {
+        return $this->getTemplateViewStub() . "/model/index.blade.stub";
+    }
+
+    /**
+     * Get edit view stub.
+     *
+     * @param string
+     * @return string
+     */
+    protected function getIndexModuleViewStub()
+    {
+        return $this->getTemplateViewStub() . "/model/index.module.blade.stub";
+    }
+
+    /**
+     * Make edit view.
+     */
+    protected function makeEditView()
+    {
+        $name = strtolower($this->getNameInput());
+
+        $editViewPath = resource_path('views/admin/models/' . $name . '/edit.blade.php');
+
+        if (file_exists($editViewPath) && !$this->option('force')) {
+            if (!$this->confirm("The [{$editViewPath}] view already exists. Do you want to replace it?")) {
+                return;
+            }
+        }
+
+        file_put_contents(
+            $editViewPath,
+            file_get_contents($this->getEditViewStub())
+        );
+
+        $this->info('Created: ' . $editViewPath);
+    }
+
+    /**
+     * Get edit view stub.
+     *
+     * @param string
+     * @return string
+     */
+    protected function getEditViewStub()
+    {
+        return $this->getTemplateViewStub() . "/model/edit.blade.stub";
+    }
+
+    /**
+     * Make navigator item.
      */
     protected function makeNavItem()
     {
@@ -293,6 +381,91 @@ class GenerateCommand extends GeneratorCommand
     }
 
     /**
+     * Make assets.
+     */
+    protected function makeAssets()
+    {
+        $this->makeIndexAssets();
+
+        $this->info('Successful: Assets Generated.');
+    }
+
+    /**
+     * Make index assets.
+     */
+    protected function makeIndexAssets()
+    {
+        $this->makePublicJs();
+        $this->makeResourceJs();
+    }
+
+    /**
+     * Make js file under public folder.
+     */
+    protected function makePublicJs()
+    {
+        $name = strtolower($this->getNameInput());
+        $assetModel = strtolower($name);
+
+        $indexJsPath = public_path('admin/js/' . $assetModel . '/index.js');
+        if (file_exists($indexJsPath) && !$this->option('force')) {
+            if (!$this->confirm("The [{$indexJsPath}] view already exists. Do you want to replace it?")) {
+                return;
+            }
+        }
+
+        file_put_contents(
+            $indexJsPath,
+            $this->compileIndexJsStub()
+        );
+
+        $this->info('Created: ' . $indexJsPath);
+    }
+
+    /**
+     * Make js file under resource folder.
+     */
+    protected function makeResourceJs()
+    {
+        $name = strtolower($this->getNameInput());
+        $assetModel = strtolower($name);
+
+        $indexJsPath = resource_path('assets/admin/js/' . $assetModel . '/index.js');
+        if (file_exists($indexJsPath) && !$this->option('force')) {
+            if (!$this->confirm("The [{$indexJsPath}] view already exists. Do you want to replace it?")) {
+                return;
+            }
+        }
+
+        file_put_contents(
+            $indexJsPath,
+            $this->compileIndexJsStub()
+        );
+
+        $this->info('Created: ' . $indexJsPath);
+    }
+
+    /**
+     * Compile the index js stub.
+     *
+     * @return string
+     */
+    protected function compileIndexJsStub()
+    {
+        $stub = $this->getIndexJsStub();
+
+        return str_replace(
+            [
+                'DummyTableId',
+            ],
+            [
+                $this->tableId(),
+            ],
+            file_get_contents($stub)
+        );
+    }
+
+    /**
      * Get the template view stub.
      *
      * @return string
@@ -305,52 +478,27 @@ class GenerateCommand extends GeneratorCommand
     }
 
     /**
-     * Get the assets that need to be exported.
+     * Get the template view stub.
      *
-     * @return array
+     * @return string
      */
-    protected function getAssets()
+    protected function getIndexJsStub()
     {
         $template = $this->option('template') ?: Constant::TEMPLATE_DEFAULT;
-        $name = strtolower($this->getNameInput());
 
-        return [
-            "{$template}/assets/js/index.js.stub" => "admin/js/$name/index.js",
-        ];
+        return __DIR__ . "/stubs/make/resources/${template}/assets/js/index.js.stub";
     }
 
     /**
-     * Make assets.
+     * Get the table id by 'name' argument.
      *
-     * @return void
+     * @return string
      */
-    protected function makeAssets()
+    protected function tableId()
     {
-        $assets = $this->getAssets();
-        foreach ($assets as $key => $value) {
-            if (file_exists($asset = resource_path('assets/' . $value)) && !$this->option('force')) {
-                if (!$this->confirm("The [{$value}] file already exists under resource path. Do you want to replace it?")) {
-                    continue;
-                }
-            }
+        $name = $this->argument('name');
+        $tableId = camel_case(str_replace(' ', '_', strtolower($name)) . 'Table');
 
-            copy(
-                __DIR__ . '/stubs/make/resources/' . $key,
-                $asset
-            );
-
-            if (file_exists($assetPublic = public_path($value)) && !$this->option('force')) {
-                if (!$this->confirm("The [{$value}] file already exists under public path. Do you want to replace it?")) {
-                    continue;
-                }
-            }
-
-            copy(
-                __DIR__ . '/stubs/make/resources/' . $key,
-                $assetPublic
-            );
-
-            $this->info('Generated: ' . $asset);
-        }
+        return $tableId;
     }
 }
