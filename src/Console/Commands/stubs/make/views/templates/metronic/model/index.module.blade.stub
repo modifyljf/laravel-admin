@@ -16,6 +16,12 @@
                         <li class="m-nav__separator">-</li>
                         <li class="m-nav__item">
                             <a href="" class="m-nav__link">
+                                <span class="m-nav__link-text">DummyModuleName</span>
+                            </a>
+                        </li>
+                        <li class="m-nav__separator">-</li>
+                        <li class="m-nav__item">
+                            <a href="" class="m-nav__link">
                                 <span class="m-nav__link-text">DummyMenuName</span>
                             </a>
                         </li>
@@ -31,7 +37,8 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
-                                DummyMenuName Data List
+                                DummyModuleName
+                                <small>DummyMenuName Data List</small>
                             </h3>
                         </div>
                     </div>

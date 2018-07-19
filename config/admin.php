@@ -4,7 +4,7 @@ return [
     /*
      * Version displayed in footer.
      */
-    'version' => config('app.version', env('APP_VERSION')),
+    'version' => env('APP_VERSION', 'v1.0.0'),
 
     /*
      * Laravel Admin Name.
