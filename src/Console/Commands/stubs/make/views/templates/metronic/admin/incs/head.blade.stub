@@ -7,13 +7,12 @@
 
 <meta id="path" name="path" content="{{ url('/') }}">
 <meta id="ctx" name='ctx' content="{{ url('/') }}">
-<meta id="token" name="token" content="{{ csrf_token() }}">
-<meta id="cdnUrl" content="{{ config("app.cdn") }}">
-<meta id="awsUrl" content="{{ \Illuminate\Support\Facades\Storage::url("/")  }}">
-<meta id="appVersion" name="version" content="{{ config("app.version") }}">
-<meta id="appName" content="{{ config("app.name") }}">
-<meta id="appUrl" content="{{ config("app.url") }}">
-<meta id="appLocale" content="{{ App::getLocale() }}">
+<meta id="token" name="csrf-token" content="{{ csrf_token() }}">
+<meta id="cdnUrl" name="cdn-url" content="{{ config("app.cdn") }}">
+<meta id="awsUrl" name="aws-url" content="{{ \Illuminate\Support\Facades\Storage::url("/")  }}">
+<meta id="appVersion" name="app-version" content="{{ config("admin.version") }}">
+<meta id="appName" name="app-name" content="{{ config("app.name") }}">
+<meta id="appLocale" name="app-locale" content="{{ App::getLocale() }}">
 
 <link rel="shortcut icon" href="{{ \Illuminate\Support\Facades\Storage::url("images/icons/16.png")}}"
       type="image/x-icon"
@@ -40,7 +39,7 @@
         google: {
             "families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"]
         },
-        active: function() {
+        active: function () {
             sessionStorage.fonts = true;
         }
     });
@@ -49,10 +48,12 @@
 <!--end::Web font -->
 
 <!--begin::Base Styles -->
-<link href="{{ asset("templates/metronic/default/assets/vendors/base/vendors.bundle.css") }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset("templates/metronic/default/assets/vendors/base/vendors.bundle.css") }}" rel="stylesheet"
+      type="text/css"/>
 
 <!--RTL version:<link href="../../../assets/vendors/base/vendors.bundle.rtl.css" rel="stylesheet" type="text/css" />-->
-<link href="{{ asset("templates/metronic/default/assets/demo/default/base/style.bundle.css") }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset("templates/metronic/default/assets/demo/default/base/style.bundle.css") }}" rel="stylesheet"
+      type="text/css"/>
 
 <!--RTL version:<link href="../../../assets/demo/default/base/style.bundle.rtl.css" rel="stylesheet" type="text/css" />-->
 

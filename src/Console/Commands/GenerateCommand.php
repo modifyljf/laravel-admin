@@ -442,31 +442,7 @@ class GenerateCommand extends GeneratorCommand
      */
     protected function makeIndexAssets()
     {
-        $this->makePublicJs();
         $this->makeResourceJs();
-    }
-
-    /**
-     * Make js file under public folder.
-     */
-    protected function makePublicJs()
-    {
-        $name = strtolower($this->getNameInput());
-        $assetModel = strtolower($name);
-
-        $indexJsPath = public_path('admin/js/' . $assetModel . '/index.js');
-        if (file_exists($indexJsPath) && !$this->option('force')) {
-            if (!$this->confirm("The [{$indexJsPath}] view already exists. Do you want to replace it?")) {
-                return;
-            }
-        }
-
-        file_put_contents(
-            $indexJsPath,
-            $this->compileIndexJsStub()
-        );
-
-        $this->info('Created: ' . $indexJsPath);
     }
 
     /**
@@ -504,9 +480,13 @@ class GenerateCommand extends GeneratorCommand
         return str_replace(
             [
                 'DummyTableId',
+                'DummyCreateUrl',
+                'DummyDestroyUrl',
             ],
             [
                 $this->tableId(),
+                '/' . str_plural(strtolower($this->getNameInput())) . '/create',
+                '/' . str_plural(strtolower($this->getNameInput())) . '/create',
             ],
             file_get_contents($stub)
         );
