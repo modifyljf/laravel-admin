@@ -2,7 +2,18 @@ import React from 'react';
 import {render, hydrate} from 'react-dom';
 import DataTableComponent from '../../components/DataTableComponent';
 
+let defColumns = [{
+    field: 'id',
+    title: '#',
+    sortable: false,
+    width: 40,
+    selector: false,
+    textAlign: 'center'
+}];
+
 render(
-    <DataTableComponent/>,
-    document.getElementById("userTable"),
+    <DataTableComponent
+        defColumns={defColumns}
+    />,
+    document.getElementById("DummyTableId"),
 )

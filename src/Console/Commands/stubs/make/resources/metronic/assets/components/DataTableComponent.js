@@ -2,10 +2,10 @@
  * Data table component.
  */
 
-import * as App from '../config/app';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
+import * as App from '../config/app';
 
 class DataTableComponent extends React.PureComponent {
     componentDidMount() {
@@ -18,13 +18,18 @@ class DataTableComponent extends React.PureComponent {
             });
         });
     }
-    
+
     destroy(rowId) {
-        alert(rowId);
+        const {destroyHandler} = this.props;
+
+        if (destroyHandler) {
+            destroyHandler(rowId, this.dataTable);
+        } else {
+            //axiso.delete();
+        }
     }
 
     actionTemplate(t, e, a) {
-        console.log(t, e, a);
         return (
             <span>
                 <a href={`${App.APP_URL}DummyEditUrl`}
@@ -85,61 +90,7 @@ class DataTableComponent extends React.PureComponent {
 
     initColumns() {
         const {deletable, editable} = this.props;
-
-        let defColumns = [{
-            field: 'RecordID',
-            title: '#',
-            sortable: false,
-            width: 40,
-            selector: false,
-            textAlign: 'center'
-        }, {
-            field: 'OrderID',
-            title: 'Order ID',
-            filterable: false,
-            width: 150,
-            template: '{{OrderID}} - {{ShipCountry}}'
-        }, {
-            field: 'ShipCountry',
-            title: 'Ship Country',
-            attr: {nowrap: 'nowrap'},
-            width: 150,
-            template: function (t) {
-                return t.ShipCountry + '- ' + t.ShipCity
-            }
-        }, {field: 'ShipCity', title: 'Ship City'}, {
-            field: 'Currency',
-            title: 'Currency',
-            width: 100
-        }, {field: 'ShipDate', title: 'Ship Date', type: 'date', format: 'MM/DD/YYYY'}, {
-            field: 'Latitude',
-            title: 'Latitude',
-            type: 'number'
-        }, {
-            field: 'Status', title: 'Status', template: function (t) {
-                let e = {
-                    1: {title: 'Pending', class: 'm-badge--brand'},
-                    2: {title: 'Delivered', class: 'm-badge--metal'},
-                    3: {title: 'Canceled', class: 'm-badge--primary'},
-                    4: {title: 'Success', class: 'm-badge--success'},
-                    5: {title: 'Info', class: 'm-badge--info'},
-                    6: {title: 'Danger', class: 'm-badge--danger'},
-                    7: {title: 'Warning', class: 'm-badge--warning'}
-                };
-
-                return '<span class="m-badge ' + e[t.Status].class + ' m-badge--wide">' + e[t.Status].title + "</span>"
-            }
-        }, {
-            field: 'Type', title: 'Type', template: function (t) {
-                let e = {
-                    1: {title: 'Online', state: 'danger'},
-                    2: {title: 'Retail', state: 'primary'},
-                    3: {title: 'Direct', state: 'accent'}
-                };
-
-                return '<span class="m-badge m-badge--' + e[t.Type].state + ' m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-' + e[t.Type].state + '">' + e[t.Type].title + "</span>"
-            }
-        }];
+        const {defColumns} = this.props;
 
         if ((deletable || editable)) {
             defColumns.push({
@@ -151,9 +102,7 @@ class DataTableComponent extends React.PureComponent {
                 textAlign: 'center',
                 template: (t, e, a) => {
                     let actions = this.actionTemplate(t, e, a);
-                    let str = ReactDOMServer.renderToString(actions);
-                    console.log(str);
-                    return str;
+                    return ReactDOMServer.renderToString(actions);
                 }
             });
         }
@@ -173,6 +122,7 @@ class DataTableComponent extends React.PureComponent {
 DataTableComponent.propTypes = {
     deletable: PropTypes.bool,
     editable: PropTypes.bool,
+    defColumns: PropTypes.array.required,
 };
 
 DataTableComponent.defaultProps = {

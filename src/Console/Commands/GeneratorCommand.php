@@ -42,6 +42,56 @@ abstract class GeneratorCommand extends Command
     }
 
     /**
+     * Get module name.
+     *
+     * @return string
+     */
+    protected function getModuleName()
+    {
+        $moduleInput = $this->option('module');
+        return $moduleInput ? ucfirst(trim($moduleInput)) : null;
+    }
+
+    /**
+     * Get module constant name.
+     *
+     * @return string|null
+     */
+    protected function moduleConstantName()
+    {
+        $moduleConstantName = null;
+
+        $module = $this->getModuleName();
+
+        if ($module) {
+            $moduleConstantName = strtoupper("MODULE_$module");
+        }
+
+        return $moduleConstantName;
+    }
+
+    /**
+     * Get menu constant name.
+     *
+     * @return string
+     */
+    protected function menuConstantName()
+    {
+        $menuConstantName = null;
+
+        $name = $this->getNameInput();
+        $module = $this->getModuleName();
+
+        if ($module) {
+            $menuConstantName = strtoupper("MENU_{$module}_$name");
+        } else {
+            $menuConstantName = strtoupper("MENU_$name");
+        }
+
+        return $menuConstantName;
+    }
+
+    /**
      * Get the stub file for the generator.
      *
      * @return string

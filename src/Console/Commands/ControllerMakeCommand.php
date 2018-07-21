@@ -200,45 +200,6 @@ class ControllerMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Get module constant name.
-     *
-     * @return string|null
-     */
-    protected function moduleConstantName()
-    {
-        $moduleConstantName = null;
-
-        $module = $this->option('module');
-
-        if ($module) {
-            $moduleConstantName = strtoupper("MODULE_$module");
-        }
-
-        return $moduleConstantName;
-    }
-
-    /**
-     * Get menu constant name.
-     *
-     * @return string
-     */
-    protected function menuConstantName()
-    {
-        $menuConstantName = null;
-
-        $name = $this->argument('name');
-        $module = $this->option('module');
-
-        if ($module) {
-            $menuConstantName = strtoupper("MENU_{$module}_$name");
-        } else {
-            $menuConstantName = strtoupper("MENU_$name");
-        }
-
-        return $menuConstantName;
-    }
-
-    /**
      * Get controller name.
      *
      * @param $name
