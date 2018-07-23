@@ -2,6 +2,7 @@
 
 namespace Guesl\Admin\Console\Commands;
 
+use Guesl\Admin\Contracts\Constant;
 use Illuminate\Console\GeneratorCommand as Command;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -50,6 +51,16 @@ abstract class GeneratorCommand extends Command
     {
         $moduleInput = $this->option('module');
         return $moduleInput ? ucfirst(trim($moduleInput)) : null;
+    }
+
+    /**
+     * Get template name.
+     *
+     * @return string
+     */
+    protected function getTemplate()
+    {
+        return $this->option('template') ?: Constant::TEMPLATE_DEFAULT;
     }
 
     /**

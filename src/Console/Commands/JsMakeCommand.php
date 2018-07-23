@@ -35,6 +35,7 @@ class JsMakeCommand extends GeneratorCommand
 
         $this->makePackageJson();
         $this->makeAssets();
+        $this->exportWebpackIndexJs();
 
         $this->info('Admin views generated successfully.');
     }
@@ -141,21 +142,47 @@ class JsMakeCommand extends GeneratorCommand
      */
     protected function getIndexJsStub()
     {
-        $template = $this->option('template') ?: Constant::TEMPLATE_DEFAULT;
+        $template = $this->getTemplate();
 
         return __DIR__ . "/stubs/make/resources/${template}/assets/js/index.js.stub";
     }
 
     /**
-     * Get the table id by 'name' argument.
+     * Export index js webpack configuration to webpack.mix.js file.
      *
      * @return string
      */
-    protected function tableId()
+    protected function exportWebpackIndexJs()
     {
-        $name = $this->argument('name');
-        $tableId = camel_case(str_replace(' ', '_', strtolower($name)) . 'Table');
+        $webpackPath = base_path('webpack.mix.js');
 
-        return $tableId;
+        if (file_exists($webpackPath)) {
+            file_put_contents(
+                $webpackPath,
+                $this->compileIndexJsConfig(),
+                FILE_APPEND
+            );
+
+            $this->info('Updated: Add index js to webpack.mix.js.');
+        } else {
+            $this->error('Webpack file does not exists.');
+        }
+    }
+
+    /**
+     * Compile index js webpack configuration.
+     *
+     * @return string
+     */
+    protected function compileIndexJsConfig()
+    {
+        $template = $this->getTemplate();
+        $modelName = strtolower($this->getNameInput());
+
+        return str_replace(
+            ['DummyModel'],
+            [$modelName],
+            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/webpack.min.js")
+        );
     }
 }
