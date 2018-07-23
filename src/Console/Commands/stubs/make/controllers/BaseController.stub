@@ -3,9 +3,25 @@
 namespace DummyNamespace;
 
 use DummyRootNamespaceHttp\Controllers\Controller;
+use Guesl\Admin\Contracts\BaseService;
 
 class BaseController extends Controller
 {
+    /**
+     * BaseController constructor.
+     * @var BaseService
+     */
+    protected $baseService;
+
+    /**
+     * BaseController constructor.
+     * @param BaseService $baseService
+     */
+    public function __construct(BaseService $baseService)
+    {
+        $this->baseService = $baseService;
+    }
+
     /**
      * Init setting of navigator.
      *

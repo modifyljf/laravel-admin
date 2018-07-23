@@ -3,6 +3,7 @@
 namespace DummyNamespace;
 
 use DummyRootNamespaceContracts\ModuleConstant;
+use Guesl\Admin\Contracts\DataTableUtility;
 use Illuminate\Http\Request;
 use DummyRootNamespaceHttp\Controllers\Admin\BaseController as Controller;
 use DummyModelNamespace\DummyModel;
@@ -18,7 +19,19 @@ class DummyClass extends Controller
     public function index(Request $request)
     {
         if ($request->expectsJson()) {
-            //
+            list($page, $pageSize) = DataTableUtility::getPageInfo($request);
+            $searchColumns = DataTableUtility::getSearchColumns($request);
+            $sortColumn = DataTableUtility::getSortColumn($request);
+            $filterColumns = DataTableUtility::getFilterColumns($request);
+
+            $pageInfo = ['page' => $page, 'pageSize' => $pageSize];
+
+            $result = $this->baseService->fetch(User::class, $pageInfo, $filterColumns, $sortColumn, $searchColumns);
+
+            dd($result);
+
+            return response()->json($result);
+
         } else {
             $this->initSetting(ModuleConstant::DummyMenuConstant, ModuleConstant::DummyModuleConstant);
             return view('admin.models.DummyLowerModel.index');
