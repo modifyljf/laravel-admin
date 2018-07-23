@@ -92,6 +92,19 @@ abstract class GeneratorCommand extends Command
     }
 
     /**
+     * Get the table id by 'name' argument.
+     *
+     * @return string
+     */
+    protected function tableId()
+    {
+        $name = $this->argument('name');
+        $tableId = camel_case(str_replace(' ', '_', strtolower($name)) . 'Table');
+
+        return $tableId;
+    }
+
+    /**
      * Get the stub file for the generator.
      *
      * @return string

@@ -124,11 +124,11 @@ class JsMakeCommand extends GeneratorCommand
         return str_replace(
             [
                 'DummyTableId',
-                'DummyCreateUrl',
+                'DummyResource',
             ],
             [
                 $this->tableId(),
-                '/' . str_plural(strtolower($this->getNameInput())) . '/create',
+                str_plural(strtolower($this->getNameInput())),
             ],
             file_get_contents($stub)
         );

@@ -11,8 +11,10 @@ let defColumns = [{
     textAlign: 'center'
 }];
 
-render(
+hydrate(
     <DataTableComponent
+        restful={true}
+        resource='DummyResource'
         defColumns={defColumns}
     />,
     document.getElementById("DummyTableId"),

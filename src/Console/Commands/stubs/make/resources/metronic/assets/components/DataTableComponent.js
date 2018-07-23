@@ -6,6 +6,7 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
 import * as App from '../config/app';
+import _ from 'lodash';
 
 class DataTableComponent extends React.PureComponent {
     componentDidMount() {
@@ -19,6 +20,54 @@ class DataTableComponent extends React.PureComponent {
         });
     }
 
+    indexUrl() {
+        const {restful, resource} = this.props;
+        let {indexUrl} = this.props;
+
+        if (_.isNil(indexUrl) && restful) {
+            indexUrl = App.APP_URL + '/' + resource.toLowerCase();
+        }
+
+        return indexUrl;
+    }
+
+    createUrl() {
+        const {restful, resource} = this.props;
+        let {createUrl} = this.props;
+
+        if (_.isNil(createUrl) && restful) {
+            createUrl = App.APP_URL + '/' + resource.toLowerCase();
+        }
+
+        return createUrl;
+    }
+
+    editUrl(selectedRowId) {
+        const {restful, resource} = this.props;
+        let {editUrl} = this.props;
+
+        if (_.isNil(editUrl) && restful) {
+            editUrl = App.APP_URL + '/' + resource.toLowerCase() + '/' + selectedRowId + '/edit';
+        } else if (editUrl.indexOf('{id}')) {
+            editUrl.replace('{id}', selectedRowId);
+        }
+
+        return editUrl;
+    }
+
+    showUrl(selectedRowId) {
+        const {restful, resource} = this.props;
+        let {showUrl} = this.props;
+
+        if (_.isNil(showUrl) && restful) {
+            showUrl = App.APP_URL + '/' + resource.toLowerCase() + '/' + selectedRowId;
+        } else if (showUrl.indexOf('{id}')) {
+            showUrl.replace('{id}', selectedRowId);
+        }
+
+        return showUrl;
+    }
+
     destroy(rowId) {
         const {destroyHandler} = this.props;
 
@@ -30,16 +79,18 @@ class DataTableComponent extends React.PureComponent {
     }
 
     actionTemplate(t, e, a) {
+        let editUrl = this.editUrl(t.id);
+
         return (
             <span>
-                <a href={`${App.APP_URL}DummyEditUrl`}
+                <a href={editUrl}
                    className='m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill'
                    title='Edit details'
                 >
                     <i className='la la-edit'/>
                 </a>
 
-                <a data-row-id={t.RecordID}
+                <a data-row-id={t.id}
                    className='btn-delete m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill delete-btn'
                    title='Delete record'
                 >
@@ -50,6 +101,8 @@ class DataTableComponent extends React.PureComponent {
     }
 
     initDataTable() {
+        const {onInit} = this.props;
+
         let defColumns = this.initColumns();
 
         this.dataTable = $(this.dataTableNode).mDatatable({
@@ -60,7 +113,7 @@ class DataTableComponent extends React.PureComponent {
                         url: 'https://keenthemes.com/metronic/preview/inc/api/datatables/demos/default.php',
                         map: function (t) {
                             let e = t;
-                            return void 0 !== t.data && (e = t.data), e
+                            return void 0 !== t.data && (e = t.data), e;
                         }
                     }
                 },
@@ -77,15 +130,19 @@ class DataTableComponent extends React.PureComponent {
             columns: defColumns,
         });
 
-        $('#m_form_status').on('change', function () {
-            t.search($(this).val(), 'Status');
-        });
+        // $('#m_form_status').on('change', function () {
+        //     t.search($(this).val(), 'Status');
+        // });
+        //
+        // $('#m_form_type').on('change', function () {
+        //     t.search($(this).val(), 'Type');
+        // });
+        //
+        // $('#m_form_status, #m_form_type').selectpicker();
 
-        $('#m_form_type').on('change', function () {
-            t.search($(this).val(), 'Type');
-        });
-
-        $('#m_form_status, #m_form_type').selectpicker();
+        if (onInit) {
+            onInit(this.dataTable);
+        }
     }
 
     initColumns() {
@@ -123,11 +180,21 @@ DataTableComponent.propTypes = {
     deletable: PropTypes.bool,
     editable: PropTypes.bool,
     defColumns: PropTypes.array.required,
+    restful: PropTypes.bool.isRequired,
+    resource: PropTypes.string.isRequired,
+    indexUrl: PropTypes.string,
+    createUrl: PropTypes.string,
+    editUrl: PropTypes.string,
+    showUrl: PropTypes.string,
+
+    onInit: PropTypes.func,
 };
 
 DataTableComponent.defaultProps = {
     deletable: true,
     editable: true,
+    restful: true,
+    resource: '',
 };
 
 export default DataTableComponent;

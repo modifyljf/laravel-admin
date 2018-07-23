@@ -38,6 +38,7 @@ class GenerateCommand extends GeneratorCommand
         $this->makeModel();
 
         $this->makeViews();
+        $this->makeAssets();
 
         $this->info('Admin views generated successfully.');
     }
@@ -131,7 +132,7 @@ class GenerateCommand extends GeneratorCommand
         $name = $this->getNameInput();
         $modelName = "Models/$name";
         $this->call('make:model', [
-            'name' => $modelName
+            'name' => $modelName,
         ]);
     }
 
@@ -142,10 +143,28 @@ class GenerateCommand extends GeneratorCommand
     {
         $name = $this->getNameInput();
         $module = $this->getModuleName();
+        $force = $this->option('force');
 
         $this->call('guesl:view', [
             'name' => $name,
             '--module' => $module,
+            '--force' => $force,
+        ]);
+    }
+
+    /**
+     * Make assets.
+     */
+    protected function makeAssets()
+    {
+        $name = $this->getNameInput();
+        $module = $this->getModuleName();
+        $force = $this->option('force');
+
+        $this->call('guesl:js', [
+            'name' => $name,
+            '--module' => $module,
+            '--force' => $force,
         ]);
     }
 }
