@@ -34,6 +34,7 @@ class JsMakeCommand extends GeneratorCommand
         $this->createDirectories();
 
         $this->makePackageJson();
+        $this->exportComponents();
         $this->makeAssets();
         $this->exportWebpackIndexJs();
 
@@ -50,6 +51,7 @@ class JsMakeCommand extends GeneratorCommand
         $name = strtolower($this->getNameInput());
         $this->makeDirectory(resource_path("assets/admin/js/$name"));
         $this->makeDirectory(public_path("admin/js/$name"));
+        $this->makeDirectory(resource_path('assets/admin/js/components'));
     }
 
     /**
@@ -70,6 +72,25 @@ class JsMakeCommand extends GeneratorCommand
         );
 
         $this->info('Created: ' . $packageJsonPath);
+    }
+
+    /**
+     * Export common components.
+     */
+    protected function exportComponents()
+    {
+        $dataTableComponent = resource_path('assets/admin/js/components/DataTableComponent.js');
+
+        if (file_exists($dataTableComponent)) {
+            $this->error('DataTableComponent already exists.');
+        }
+
+        $template = $this->getTemplate();
+
+        file_put_contents(
+            $dataTableComponent,
+            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/components/DataTableComponent.js")
+        );
     }
 
     /**
