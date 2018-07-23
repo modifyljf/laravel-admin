@@ -182,7 +182,7 @@ class JsMakeCommand extends GeneratorCommand
         return str_replace(
             ['DummyModel'],
             [$modelName],
-            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/webpack.min.js")
+            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/webpack.mix.js")
         );
     }
 }
