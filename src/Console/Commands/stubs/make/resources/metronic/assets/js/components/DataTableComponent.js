@@ -20,6 +20,16 @@ class DataTableComponent extends React.PureComponent {
         });
     }
 
+    getSearchColumns() {
+        const {defColumns} = this.props;
+        let searchColumns = [];
+        _.forEach(defColumns, (defColumn, index) => {
+            if (defColumn['searchable']) {
+                searchColumns.push(defColumn['field']);
+            }
+        });
+    }
+
     indexUrl() {
         const {restful, resource} = this.props;
         let {indexUrl} = this.props;
@@ -78,6 +88,7 @@ class DataTableComponent extends React.PureComponent {
         }
     }
 
+
     actionTemplate(t, e, a) {
         let editUrl = this.editUrl(t.id);
 
@@ -91,7 +102,7 @@ class DataTableComponent extends React.PureComponent {
                 </a>
 
                 <a data-row-id={t.id}
-                   className='btn-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill delete-btn'
+                   className='btn-delete m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill delete-btn'
                    title='Delete record'
                 >
                     <i className='la la-trash'/>
@@ -104,16 +115,23 @@ class DataTableComponent extends React.PureComponent {
         const {onInit} = this.props;
 
         let defColumns = this.initColumns();
+        let searchColumns = this.getSearchColumns();
+
+        let indexUrl = this.indexUrl();
 
         this.dataTable = $(this.dataTableNode).mDatatable({
             data: {
                 type: 'remote',
                 source: {
                     read: {
-                        url: 'https://keenthemes.com/metronic/preview/inc/api/datatables/demos/default.php',
+                        method: 'GET',
+                        url: indexUrl,
                         map: function (t) {
                             let e = t;
                             return void 0 !== t.data && (e = t.data), e;
+                        },
+                        param: {
+                            searchColumns: searchColumns,
                         }
                     }
                 },

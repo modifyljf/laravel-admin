@@ -8,7 +8,8 @@ let defColumns = [{
     sortable: false,
     width: 40,
     selector: false,
-    textAlign: 'center'
+    textAlign: 'center',
+    searchable: true,
 }];
 
 hydrate(

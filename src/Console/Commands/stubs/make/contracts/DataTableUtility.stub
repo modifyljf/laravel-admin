@@ -1,0 +1,84 @@
+<?php
+
+namespace DummyRootNamespaceContracts;
+
+use Illuminate\Http\Request;
+
+/**
+ * Created by Jianfeng Li.
+ * User: Jianfeng Li
+ * Date: 2018/07/23
+ */
+class DataTableUtility
+{
+    /**
+     * Get pagination info from request.
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function getPageInfo(Request $request)
+    {
+        $pagination = $request->get('pagination');
+
+        if (isset($pagination)) {
+            $page = $pagination['page'];
+            $pageSize = $pagination['perpage'];
+        } else {
+            $page = 1;
+            $pageSize = Constant::DEFAULT_PAGE_SIZE;
+        }
+
+        return [$page, $pageSize];
+    }
+
+    /**
+     * Get filter columns.
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function getFilterColumns($request)
+    {
+        $query = $request->get('query');
+        if (isset($query) && array_key_exists('generalSearch', $query)) {
+            unset($query['generalSearch']);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Get keyword to search.
+     *
+     * @param Request $request
+     * @return string|null
+     */
+    public static function getKeyword(Request $request)
+    {
+        $search = null;
+        $query = $request->get('query');
+        if (isset($query)) {
+            $search = $query['generalSearch'];
+        }
+
+        return $search;
+    }
+
+    /**
+     * Get sort column and type.
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function getSortColumn(Request $request)
+    {
+        $sortColumn = [];
+        $sort = $request->get('sort');
+        if (isset($sort)) {
+            $sortColumn[$sort['field']] = $sort['sort'];
+        }
+
+        return $sortColumn;
+    }
+}
