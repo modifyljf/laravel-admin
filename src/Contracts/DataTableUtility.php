@@ -1,6 +1,6 @@
 <?php
 
-namespace DummyRootNamespaceContracts;
+namespace Guesl\Admin\Contracts;
 
 use Illuminate\Http\Request;
 
@@ -49,20 +49,24 @@ class DataTableUtility
     }
 
     /**
-     * Get keyword to search.
+     * Get search columns.
      *
      * @param Request $request
-     * @return string|null
+     * @return array
      */
-    public static function getKeyword(Request $request)
+    public static function getSearchColumns(Request $request)
     {
-        $search = null;
+        $searchColumns = [];
         $query = $request->get('query');
-        if (isset($query)) {
+        $searchColumnsName = $request->get('search_columns');
+        if (isset($query) && isset($searchColumnsName)) {
             $search = $query['generalSearch'];
+            foreach ($searchColumnsName as $columnName) {
+                $searchColumns[$columnName] = $search;
+            }
         }
 
-        return $search;
+        return $searchColumns;
     }
 
     /**

@@ -24,10 +24,12 @@ class DataTableComponent extends React.PureComponent {
         const {defColumns} = this.props;
         let searchColumns = [];
         _.forEach(defColumns, (defColumn, index) => {
-            if (defColumn['searchable']) {
-                searchColumns.push(defColumn['field']);
+            if (defColumn.searchable) {
+                searchColumns.push(defColumn.field);
             }
         });
+
+        return searchColumns;
     }
 
     indexUrl() {
@@ -126,19 +128,23 @@ class DataTableComponent extends React.PureComponent {
                     read: {
                         method: 'GET',
                         url: indexUrl,
+                        params: {
+                            search_columns: searchColumns,
+                        },
                         map: function (t) {
                             let e = t;
                             return void 0 !== t.data && (e = t.data), e;
-                        },
-                        param: {
-                            searchColumns: searchColumns,
                         }
                     }
                 },
                 pageSize: 10,
                 serverPaging: true,
                 serverFiltering: true,
-                serverSorting: true
+                serverSorting: true,
+                saveState: {
+                    cookie: false,
+                    webstorage: false,
+                }
             },
             layout: {scroll: false, footer: true},
             sortable: true,
@@ -197,7 +203,7 @@ class DataTableComponent extends React.PureComponent {
 DataTableComponent.propTypes = {
     deletable: PropTypes.bool,
     editable: PropTypes.bool,
-    defColumns: PropTypes.array.required,
+    defColumns: PropTypes.array.isRequired,
     restful: PropTypes.bool.isRequired,
     resource: PropTypes.string.isRequired,
     indexUrl: PropTypes.string,

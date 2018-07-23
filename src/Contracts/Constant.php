@@ -10,4 +10,5 @@ namespace Guesl\Admin\Contracts;
 class Constant
 {
     const TEMPLATE_DEFAULT = 'metronic';
+    const DEFAULT_PAGE_SIZE = 10;
 }

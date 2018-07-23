@@ -29,11 +29,6 @@ class AdminServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        $this->publishes(
-            [__DIR__ . '/../../config' => config_path()],
-            'guesl-admin'
-        );
     }
 
     /**
@@ -44,6 +39,7 @@ class AdminServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerRouteMiddleware();
+        $this->registerBeansContainer();
         $this->commands($this->commands);
     }
 
@@ -83,14 +79,31 @@ class AdminServiceProvider extends ServiceProvider
 
     /**
      * Register the route middleware.
-     *
-     * @return void
      */
     protected function registerRouteMiddleware()
     {
         // register route middleware.
         foreach ($this->routeMiddleware as $key => $middleware) {
             app('router')->aliasMiddleware($key, $middleware);
+        }
+    }
+
+    /**
+     * Register beans.
+     */
+    protected function registerBeansContainer()
+    {
+        $beans = config('beans');
+        foreach ($beans as $i => $impl) {
+            if ($impl['singleton']) {
+                $this->app->singleton($i, function () use ($impl) {
+                    return $this->app->make($impl['class']);
+                }, empty($impl['shared']) ? null : $impl['shared']);
+            } else {
+                $this->app->bind($i, function () use ($impl) {
+                    return $this->app->make($impl['class']);
+                }, empty($impl['shared']) ? null : $impl['shared']);
+            }
         }
     }
 }

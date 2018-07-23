@@ -3,15 +3,14 @@
 namespace Guesl\Admin\Services;
 
 use Guesl\Admin\Contracts\BaseService;
+use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
 /**
  * Created by Jianfeng Li.
  * User: Jianfeng Li
  * Date: 2017/4/30
- * Time: 14:31
  */
 class BaseServiceImpl implements BaseService
 {
@@ -22,7 +21,7 @@ class BaseServiceImpl implements BaseService
      * Page Info : page num and page size.
      * Filter Columns : Key : column's name, Value : filter value.
      * Search Columns :  Key : column's name, Value : search value
-     * Order Columns : Key : column's name, Value : ordering type ("asc", or "desc")
+     * Order Columns : Key : column's name, Value : ordering type ('asc', or 'desc')
      * Eager Loading : Eager Loading attributes;
      *
      * @param $modelClass
@@ -36,38 +35,38 @@ class BaseServiceImpl implements BaseService
      */
     public function fetch($modelClass, $pageInfo = [], $filterColumn = [], $orderColumn = [], $searchColumn = [], $eagerLoading = [], $scopes = [])
     {
-        Log::debug(get_class($this) . "::fetch => Fetch page object by table's name , page size, searching info ,and ordering info.");
+        Log::debug(get_class($this) . '::fetch => Fetch page object by table\'s name , page size, searching info ,and ordering info.');
 
-        $query = $modelClass::whereRaw("1=1");
+        $query = $modelClass::whereRaw('1=1');
 
         if (isset($scopes) && sizeof($scopes) > 0) {
             foreach ($scopes as $scope) {
-                if (isset($scope["parameters"]))
-                    $query->{$scope["scope"]}($scope["parameters"]);
+                if (isset($scope['parameters']))
+                    $query->{$scope['scope']}($scope['parameters']);
                 else
-                    $query->{$scope["scope"]}();
+                    $query->{$scope['scope']}();
             }
         }
 
         if (isset($filterColumn) && sizeof($filterColumn) > 0) {
             $query->where(function ($q) use ($filterColumn) {
                 foreach ($filterColumn as $column => $filter) {
-                    if (strpos($column, ".") !== false) {
-                        $relationColumn = explode(".", $column);
-                        $className = "App\\Models\\" . ucfirst($relationColumn[0]);
+                    if (strpos($column, '.') !== false) {
+                        $relationColumn = explode('.', $column);
+                        $className = Container::getInstance()->getNamespace() . 'Models\\' . ucfirst($relationColumn[0]);
                         if (class_exists($className)) {
                             $relationTable = (new $className)->getTable();
                         } else {
                             $relationTable = $relationColumn[0];
                         }
                         if (isset($filter)) {
-                            if (is_array($filter) && array_get($filter, "type") == BaseModel::STATUS_NEGATIVE) {
+                            if (is_array($filter) && array_get($filter, 'type') == false) {
                                 $q->whereDoesntHave($relationColumn[0], function ($relateQuery) use ($relationTable, $relationColumn, $filter) {
-                                    $this->generateCriteria($relateQuery, $relationTable . "." . $relationColumn[1], $filter);
+                                    $this->generateCriteria($relateQuery, $relationTable . '.' . $relationColumn[1], $filter);
                                 });
                             } else {
                                 $q->whereHas($relationColumn[0], function ($relateQuery) use ($relationTable, $relationColumn, $filter) {
-                                    $this->generateCriteria($relateQuery, $relationTable . "." . $relationColumn[1], $filter);
+                                    $this->generateCriteria($relateQuery, $relationTable . '.' . $relationColumn[1], $filter);
                                 });
                             }
                         } else {
@@ -83,15 +82,15 @@ class BaseServiceImpl implements BaseService
         if (isset($searchColumn) && sizeof($searchColumn) > 0) {
             $query->where(function ($q) use ($searchColumn) {
                 foreach ($searchColumn as $column => $search) {
-                    if (strpos($column, ".") !== false) {
-                        $relationColumn = explode(".", $column);
-                        $className = "App\\Models\\" . ucfirst($relationColumn[0]);
+                    if (strpos($column, '.') !== false) {
+                        $relationColumn = explode('.', $column);
+                        $className = Container::getInstance()->getNamespace() . 'Models\\' . ucfirst($relationColumn[0]);
                         $relationTable = (new $className)->getTable();
                         $q->orWhereHas($relationColumn[0], function ($relateQuery) use ($relationTable, $relationColumn, $search) {
-                            $relateQuery->where($relationTable . "." . $relationColumn[1], "like", "%" . $search . "%");
+                            $relateQuery->where($relationTable . '.' . $relationColumn[1], 'like', '%' . $search . '%');
                         });
                     } else {
-                        $q->orWhere($column, "like", "%" . $search . "%");
+                        $q->orWhere($column, 'like', '%' . $search . '%');
                     }
                 }
             });
@@ -105,8 +104,8 @@ class BaseServiceImpl implements BaseService
 
         if (isset($orderColumn) && sizeof($orderColumn) > 0) {
             foreach ($orderColumn as $column => $dir) {
-                if (strpos($column, ".") !== false) {
-                    $relationColumn = explode(".", $column);
+                if (strpos($column, '.') !== false) {
+                    $relationColumn = explode('.', $column);
                     $query->with([$relationColumn[0] => function ($relateQuery) use ($relationColumn, $dir) {
                         $relateQuery->orderBy($relationColumn[1], $dir);
                     }]);
@@ -116,11 +115,11 @@ class BaseServiceImpl implements BaseService
                 }
             }
         } else {
-            $query->orderBy("updated_at", "desc");
+            $query->orderBy('updated_at', 'desc');
         }
 
-        if (isset($pageInfo) && array_get($pageInfo, "pageSize")) { // if the page info exists , then fetch the pagination info.
-            $pageSize = $pageInfo["pageSize"];
+        if (isset($pageInfo) && array_get($pageInfo, 'pageSize')) { // if the page info exists , then fetch the pagination info.
+            $pageSize = $pageInfo['pageSize'];
             $result = $query->paginate($pageSize);
         } else {
             $result = $query->get();
@@ -139,17 +138,17 @@ class BaseServiceImpl implements BaseService
     protected function generateCriteria($q, $column, $filter)
     {
         if (is_array($filter)) {
-            $operation = array_get($filter, "operation");
-            $value = array_get($filter, "value");
-            if ("isNull" == $operation) {
+            $operation = array_get($filter, 'operation');
+            $value = array_get($filter, 'value');
+            if ('isNull' == $operation) {
                 $q->whereNull($column);
-            } else if ("isNotNull" == $operation) {
+            } else if ('isNotNull' == $operation) {
                 $q->whereNotNull($column);
-            } else if ("in" == $operation && is_array($value)) {
+            } else if ('in' == $operation && is_array($value)) {
                 $q->whereIn($column, $value);
-            } else if ("notIn" == $operation && is_array($value)) {
+            } else if ('notIn' == $operation && is_array($value)) {
                 $q->whereNotIn($column, $value);
-            } else if ("between" == $operation && is_array($value)) {
+            } else if ('between' == $operation && is_array($value)) {
                 $q->whereBetween($column, $value);
             } else {
                 $q->where($column, $operation, $value);
@@ -158,7 +157,7 @@ class BaseServiceImpl implements BaseService
             if (!isset($filter)) {
                 $q->whereNull($column);
             } else {
-                $q->where($column, "=", $filter);
+                $q->where($column, '=', $filter);
             }
         }
 

@@ -78,6 +78,7 @@ class GenerateCommand extends GeneratorCommand
     protected function makeRoute()
     {
         $adminRoute = base_path('routes/admin.php');
+
         file_put_contents(
             $adminRoute,
             $this->compileRouteStub(),

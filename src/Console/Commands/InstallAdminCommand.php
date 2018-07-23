@@ -57,8 +57,6 @@ class InstallAdminCommand extends GeneratorCommand
 
     /**
      * Create the directories for the files.
-     *
-     * @return void
      */
     protected function createDirectories()
     {
@@ -68,14 +66,21 @@ class InstallAdminCommand extends GeneratorCommand
 
     /**
      * Export the routes file.
-     *
-     * @return void
      */
     public function exportConfig()
     {
         if (!file_exists($configPath = config_path('admin.php')) || $this->option('force')) {
             copy(
                 __DIR__ . '/../../../config/admin.php',
+                $configPath
+            );
+
+            $this->info('Generated: ' . $configPath);
+        }
+
+        if (!file_exists($configPath = config_path('beans.php')) || $this->option('force')) {
+            copy(
+                __DIR__ . '/../../../config/beans.php',
                 $configPath
             );
 
