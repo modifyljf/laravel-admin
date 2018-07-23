@@ -1,6 +1,6 @@
 import React from 'react';
 import {render, hydrate} from 'react-dom';
-import DataTableComponent from '../../components/DataTableComponent';
+import DataTableComponent from '../components/DataTableComponent';
 
 let defColumns = [{
     field: 'id',
