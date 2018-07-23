@@ -91,7 +91,7 @@ class DataTableComponent extends React.PureComponent {
                 </a>
 
                 <a data-row-id={t.id}
-                   className='btn-delete m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill delete-btn'
+                   className='btn-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill delete-btn'
                    title='Delete record'
                 >
                     <i className='la la-trash'/>
