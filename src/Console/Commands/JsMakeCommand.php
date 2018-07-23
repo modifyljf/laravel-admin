@@ -34,7 +34,7 @@ class JsMakeCommand extends GeneratorCommand
         $this->createDirectories();
 
         $this->makePackageJson();
-        $this->exportComponents();
+        $this->exportCommonJs();
         $this->makeAssets();
         $this->exportWebpackIndexJs();
 
@@ -52,6 +52,7 @@ class JsMakeCommand extends GeneratorCommand
         $this->makeDirectory(resource_path("assets/admin/js/$name"));
         $this->makeDirectory(public_path("admin/js/$name"));
         $this->makeDirectory(resource_path('assets/admin/js/components'));
+        $this->makeDirectory(resource_path('assets/admin/js/config'));
     }
 
     /**
@@ -75,7 +76,16 @@ class JsMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Export common components.
+     * Export common js files.
+     */
+    protected function exportCommonJs()
+    {
+        $this->exportComponents();
+        $this->exportConfig();
+    }
+
+    /**
+     * Export component files.
      */
     protected function exportComponents()
     {
@@ -89,7 +99,26 @@ class JsMakeCommand extends GeneratorCommand
 
         file_put_contents(
             $dataTableComponent,
-            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/components/DataTableComponent.js")
+            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/components/DataTableComponent.js")
+        );
+    }
+
+    /**
+     * Export config files.
+     */
+    protected function exportConfig()
+    {
+        $configAppJs = resource_path('assets/admin/js/config/app.js');
+
+        if (file_exists($configAppJs)) {
+            $this->error(' app.js config file already exists.');
+        }
+
+        $template = $this->getTemplate();
+
+        file_put_contents(
+            $configAppJs,
+            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/config/app.js")
         );
     }
 
