@@ -57,6 +57,7 @@ class ViewMakeCommand extends GeneratorCommand
     {
         $this->makeIndexView();
         $this->makeEditView();
+        $this->makeCreateView();
 
         $this->info('Generated: Index and Edit views.');
     }
@@ -179,6 +180,40 @@ class ViewMakeCommand extends GeneratorCommand
     protected function getEditViewStub()
     {
         return $this->getTemplateViewStub() . "/model/edit.blade.stub";
+    }
+
+    /**
+     * Make Create view.
+     */
+    protected function makeCreateView()
+    {
+        $name = strtolower($this->getNameInput());
+
+        $createViewPath = resource_path('views/admin/models/' . $name . '/create.blade.php');
+
+        if (file_exists($createViewPath) && !$this->option('force')) {
+            if (!$this->confirm("The [{$createViewPath}] view already exists. Do you want to replace it?")) {
+                return;
+            }
+        }
+
+        file_put_contents(
+            $createViewPath,
+            file_get_contents($this->getCreateViewStub())
+        );
+
+        $this->info('Created: ' . $createViewPath);
+    }
+
+    /**
+     * Get edit view stub.
+     *
+     * @param string
+     * @return string
+     */
+    protected function getCreateViewStub()
+    {
+        return $this->getTemplateViewStub() . "/model/create.blade.stub";
     }
 
     /**
