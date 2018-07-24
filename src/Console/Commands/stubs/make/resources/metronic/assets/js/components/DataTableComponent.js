@@ -82,13 +82,13 @@ class DataTableComponent extends React.PureComponent {
     }
 
     destroy(rowId) {
-        const {deleteHandler, afterDeleted, deleteErrorHandler} = this.props;
+        const {deleteHandler, afterDeleted, deleteErrorHandler, resource} = this.props;
 
         if (deleteHandler) {
             deleteHandler(rowId, this.dataTable);
 
         } else {
-            axios.delete(`${App.APP_URL}/${rowId}`).then((response) => {
+            axios.delete(`${App.APP_URL}/${resource.toLowerCase()}/${rowId}`).then((response) => {
                 if (afterDeleted) {
                     afterDeleted(response);
                 }
