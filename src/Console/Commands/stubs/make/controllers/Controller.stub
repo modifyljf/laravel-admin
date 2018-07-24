@@ -25,7 +25,7 @@ class DummyClass extends Controller
             $filterColumns = DataTableUtility::getFilterColumns($request);
 
             $pageInfo = ['page' => $page, 'pageSize' => $pageSize];
-            $result = $this->baseService->fetch(DummyModeClass::class, $pageInfo, $filterColumns, $sortColumn, $searchColumns);
+            $result = $this->baseService->fetch(DummyModelClass::class, $pageInfo, $filterColumns, $sortColumn, $searchColumns);
 
             $result = DataTableUtility::formatPageObject($result);
 
