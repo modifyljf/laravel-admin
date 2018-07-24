@@ -27,6 +27,8 @@ class DummyClass extends Controller
             $pageInfo = ['page' => $page, 'pageSize' => $pageSize];
             $result = $this->baseService->fetch(DummyModeClass::class, $pageInfo, $filterColumns, $sortColumn, $searchColumns);
 
+            $result = DataTableUtility::formatPageObject($result);
+
             return response()->json($result);
 
         } else {

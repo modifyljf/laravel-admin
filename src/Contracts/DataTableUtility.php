@@ -2,6 +2,7 @@
 
 namespace Guesl\Admin\Contracts;
 
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
 
 /**
@@ -84,5 +85,26 @@ class DataTableUtility
         }
 
         return $sortColumn;
+    }
+
+    /**
+     * Format the result to the special page object.
+     *
+     * @param Paginator $result
+     * @return Paginator
+     */
+    public static function formatPageObject(Paginator $result)
+    {
+        $meta = [
+            'page' => $result->currentPage(),
+            'pages' => $result->count(),
+            'perpage' => $result->perPage(),
+            'total' => $result->total(),
+        ];
+
+        $result = $result->toArray();
+        $result['meta'] = $meta;
+
+        return $result;
     }
 }
