@@ -39,9 +39,7 @@ class InstallAdminCommand extends GeneratorCommand
         $this->exportConfig();
         $this->exportRoutes();
 
-        $this->exportBaseController();
         $this->exportModuleConstant();
-
         $this->exportHomeController();
 
         $this->call('guesl:auth', [
@@ -103,39 +101,6 @@ class InstallAdminCommand extends GeneratorCommand
 
             $this->info('Generated: ' . $routePath);
         }
-    }
-
-    /**
-     * Export BaseController.
-     *
-     * @return void
-     */
-    protected function exportBaseController()
-    {
-        $baseControllerPath = app_path('Http/Controllers/Admin/BaseController.php');
-
-        if (!file_exists($baseControllerPath)) {
-            file_put_contents(
-                $baseControllerPath,
-                $this->compileBaseControllerStub()
-            );
-
-            $this->info('Generated: ' . $baseControllerPath);
-        }
-    }
-
-    /**
-     * Compiles the BaseController stub.
-     *
-     * @return string
-     */
-    protected function compileBaseControllerStub()
-    {
-        return str_replace(
-            ['DummyNamespace', 'DummyRootNamespace'],
-            [$this->adminControllerNamespace(), $this->rootNamespace()],
-            file_get_contents(__DIR__ . '/stubs/make/controllers/BaseController.stub')
-        );
     }
 
     /**
