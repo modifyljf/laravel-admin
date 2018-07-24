@@ -2,8 +2,6 @@
 
 namespace Guesl\Admin\Console\Commands;
 
-use Guesl\Admin\Contracts\Constant;
-
 class GenerateCommand extends GeneratorCommand
 {
     /**
@@ -13,6 +11,7 @@ class GenerateCommand extends GeneratorCommand
      */
     protected $signature = 'guesl:generate 
                     {name : The name of model.}
+                    {--table: The name of the table}
                     {--template : Template name, "metronic" as default.}
                     {--force : Overwrite existing objects by default.}
                     {--module= : The module which the `name` belongs to.}';
@@ -131,9 +130,11 @@ class GenerateCommand extends GeneratorCommand
     protected function makeModel()
     {
         $name = $this->getNameInput();
+        $table = $this->option('table');
         $modelName = "Models/$name";
         $this->call('make:model', [
             'name' => $modelName,
+            '--table' => $table
         ]);
     }
 
