@@ -51,6 +51,7 @@ class JsMakeCommand extends GeneratorCommand
         $name = strtolower($this->getNameInput());
         $this->makeDirectory(resource_path("assets/admin/js/$name"));
         $this->makeDirectory(public_path("admin/js/$name"));
+        $this->makeDirectory(resource_path('assets/admin/js/helpers'));
         $this->makeDirectory(resource_path('assets/admin/js/components'));
         $this->makeDirectory(resource_path('assets/admin/js/config'));
     }
@@ -80,8 +81,25 @@ class JsMakeCommand extends GeneratorCommand
      */
     protected function exportCommonJs()
     {
+        $this->exportHelperJs();
         $this->exportComponents();
         $this->exportConfig();
+    }
+
+    protected function exportHelperJs()
+    {
+        $interceptorsJs = resource_path('assets/admin/js/helpers/interceptors.js');
+
+        if (file_exists($interceptorsJs)) {
+            $this->error('Interceptors JS file already exists.');
+        }
+
+        $template = $this->getTemplate();
+
+        file_put_contents(
+            $interceptorsJs,
+            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/helpers/interceptors.js")
+        );
     }
 
     /**
