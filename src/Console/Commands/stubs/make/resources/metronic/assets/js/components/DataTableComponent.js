@@ -118,7 +118,6 @@ class DataTableComponent extends React.PureComponent {
                     })
                 }
             }).then((result) => {
-                console.log(result);
                 if (result.value) {
                     swal({
                         title: 'Deleted!',
