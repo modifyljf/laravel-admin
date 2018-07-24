@@ -6,7 +6,7 @@ use DummyRootNamespaceContracts\ModuleConstant;
 use Guesl\Admin\Contracts\DataTableUtility;
 use Guesl\Admin\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use DummyModelNamespace\DummyModeClass;
+use DummyModelNamespace\DummyModelClass;
 
 class DummyClass extends Controller
 {
