@@ -7,7 +7,7 @@ import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
 import * as App from '../config/app';
 import _ from 'lodash';
-import '../helpers/interceptors';
+import axios from '../helpers/axios';
 
 class DataTableComponent extends React.PureComponent {
     componentDidMount() {
@@ -88,7 +88,7 @@ class DataTableComponent extends React.PureComponent {
             deleteHandler(rowId, this.dataTable);
 
         } else {
-            axiso.delete(`${App.APP_URL}/${rowId}`).then((response) => {
+            axios.delete(`${App.APP_URL}/${rowId}`).then((response) => {
                 if (afterDeleted) {
                     afterDeleted(response);
                 }
