@@ -180,7 +180,7 @@ class ControllerMakeCommand extends GeneratorCommand
                 'DummyRootNamespace',
                 'DummyClass',
                 'DummyModelNamespace',
-                'DummyModel',
+                'DummyModeClass',
                 'DummyLowerModel',
                 'DummyMenuConstant',
                 'DummyModuleConstant',

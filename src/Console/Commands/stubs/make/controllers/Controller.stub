@@ -6,7 +6,7 @@ use DummyRootNamespaceContracts\ModuleConstant;
 use Guesl\Admin\Contracts\DataTableUtility;
 use Illuminate\Http\Request;
 use DummyRootNamespaceHttp\Controllers\Admin\BaseController as Controller;
-use DummyModelNamespace\DummyModel;
+use DummyModelNamespace\DummyModeClass;
 
 class DummyClass extends Controller
 {
@@ -25,10 +25,7 @@ class DummyClass extends Controller
             $filterColumns = DataTableUtility::getFilterColumns($request);
 
             $pageInfo = ['page' => $page, 'pageSize' => $pageSize];
-
-            $result = $this->baseService->fetch(User::class, $pageInfo, $filterColumns, $sortColumn, $searchColumns);
-
-            dd($result);
+            $result = $this->baseService->fetch(DummyModeClass::class, $pageInfo, $filterColumns, $sortColumn, $searchColumns);
 
             return response()->json($result);
 
@@ -45,7 +42,7 @@ class DummyClass extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.models.DummyLowerModel.create');
     }
 
     /**
@@ -78,7 +75,7 @@ class DummyClass extends Controller
      */
     public function edit($id)
     {
-        $model = DummyModel::find($id);
+        $model = DummyModelClass::find($id);
         if (!isset($model)) {
             abort(404);
         }
