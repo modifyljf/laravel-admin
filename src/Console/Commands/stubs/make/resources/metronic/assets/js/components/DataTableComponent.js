@@ -105,23 +105,38 @@ class DataTableComponent extends React.PureComponent {
                             if (afterDeleted) {
                                 afterDeleted(response);
                             }
+
+                            resolve(response);
+
                         }).catch(error => {
                             if (deleteErrorHandler) {
                                 deleteErrorHandler(error);
                             }
+
+                            reject(response);
                         });
                     })
                 }
             }).then((result) => {
+                console.log(result);
                 if (result.value) {
                     swal({
                         title: 'Deleted!',
                         text: 'The record has been deleted.',
-                        type: 'success'
+                        type: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonClass: 'btn btn-focus m-btn m-btn--pill m-btn--air',
                     });
                     this.dataTable.ajax.reload();
                 } else {
-                    "cancel" === result.dismiss && swal("Cancelled", "Your record is safe :)", "error");
+                    "cancel" === result.dismiss &&
+                    swal({
+                        title: 'Cancelled',
+                        text: 'Your record is safe :)',
+                        type: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonClass: 'btn btn-focus m-btn m-btn--pill m-btn--air',
+                    });
                 }
             }).catch((e) => {
                 console.error(e);
