@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import * as App from '../config/app';
 import _ from 'lodash';
 import axios from '../helpers/axios';
+import swal from 'sweetalert2';
 
 class DataTableComponent extends React.PureComponent {
     componentDidMount() {
@@ -88,18 +89,45 @@ class DataTableComponent extends React.PureComponent {
             deleteHandler(rowId, this.dataTable);
 
         } else {
-            axios.delete(`${App.APP_URL}/${resource.toLowerCase()}/${rowId}`).then((response) => {
-                if (afterDeleted) {
-                    afterDeleted(response);
+            swal({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                showCancelButton: true,
+                cancelButtonText: 'Cancel',
+                cancelButtonClass: 'btn btn-secondary m-btn m-btn--pill m-btn--icon',
+                confirmButtonText: 'Yes, delete it!',
+                confirmButtonClass: 'btn btn-focus m-btn m-btn--pill m-btn--air',
+                showLoaderOnConfirm: true,
+                allowOutsideClick: () => !swal.isLoading(),
+                preConfirm: function () {
+                    return new Promise(function (resolve, reject) {
+                        axios.delete(`${App.APP_URL}/${resource.toLowerCase()}/${rowId}`).then((response) => {
+                            if (afterDeleted) {
+                                afterDeleted(response);
+                            }
+                        }).catch(error => {
+                            if (deleteErrorHandler) {
+                                deleteErrorHandler(error);
+                            }
+                        });
+                    })
                 }
-            }).catch(error => {
-                if (deleteErrorHandler) {
-                    deleteErrorHandler(error);
+            }).then((result) => {
+                if (result.value) {
+                    swal({
+                        title: 'Deleted!',
+                        text: 'The record has been deleted.',
+                        type: 'success'
+                    });
+                    this.dataTable.ajax.reload();
+                } else {
+                    "cancel" === result.dismiss && swal("Cancelled", "Your record is safe :)", "error");
                 }
+            }).catch((e) => {
+                console.error(e);
             });
         }
     }
-
 
     actionTemplate(t, e, a) {
         let editUrl = this.editUrl(t.id);
