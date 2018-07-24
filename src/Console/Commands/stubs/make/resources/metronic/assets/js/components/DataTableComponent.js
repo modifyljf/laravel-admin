@@ -7,6 +7,7 @@ import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
 import * as App from '../config/app';
 import _ from 'lodash';
+import '../helpers/interceptors';
 
 class DataTableComponent extends React.PureComponent {
     componentDidMount() {
@@ -81,12 +82,21 @@ class DataTableComponent extends React.PureComponent {
     }
 
     destroy(rowId) {
-        const {destroyHandler} = this.props;
+        const {deleteHandler, afterDeleted, deleteErrorHandler} = this.props;
 
-        if (destroyHandler) {
-            destroyHandler(rowId, this.dataTable);
+        if (deleteHandler) {
+            deleteHandler(rowId, this.dataTable);
+
         } else {
-            //axiso.delete();
+            axiso.delete(`${App.APP_URL}/${rowId}`).then((response) => {
+                if (afterDeleted) {
+                    afterDeleted(response);
+                }
+            }).catch(error => {
+                if (deleteErrorHandler) {
+                    deleteErrorHandler(error);
+                }
+            });
         }
     }
 
@@ -216,6 +226,10 @@ DataTableComponent.propTypes = {
     showUrl: PropTypes.string,
 
     onInit: PropTypes.func,
+
+    deleteHandler: PropTypes.func,
+    afterDeleted: PropTypes.func,
+    deleteErrorHandler: PropTypes.func,
 };
 
 DataTableComponent.defaultProps = {
