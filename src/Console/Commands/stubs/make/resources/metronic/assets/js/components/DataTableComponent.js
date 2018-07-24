@@ -131,9 +131,13 @@ class DataTableComponent extends React.PureComponent {
                         params: {
                             search_columns: searchColumns,
                         },
-                        map: function (t) {
-                            let e = t;
-                            return void 0 !== t.data && (e = t.data), e;
+                        map: function (raw) {
+                            // sample data mapping
+                            let dataSet = raw;
+                            if (typeof raw.data !== 'undefined') {
+                                dataSet = raw.data;
+                            }
+                            return dataSet;
                         }
                     }
                 },
