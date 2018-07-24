@@ -119,8 +119,9 @@ class BaseServiceImpl implements BaseService
         }
 
         if (isset($pageInfo) && array_get($pageInfo, 'pageSize')) { // if the page info exists , then fetch the pagination info.
-            $pageSize = $pageInfo['pageSize'];
-            $result = $query->paginate($pageSize);
+            $perPage = $pageInfo['pageSize'];
+            $page = $pageInfo['page'];
+            $result = $query->paginate($perPage, null, null, $page);
         } else {
             $result = $query->get();
         }
