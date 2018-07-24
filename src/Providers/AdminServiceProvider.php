@@ -94,15 +94,18 @@ class AdminServiceProvider extends ServiceProvider
     protected function registerBeansContainer()
     {
         $beans = config('beans');
-        foreach ($beans as $i => $impl) {
-            if ($impl['singleton']) {
-                $this->app->singleton($i, function () use ($impl) {
-                    return $this->app->make($impl['class']);
-                }, empty($impl['shared']) ? null : $impl['shared']);
-            } else {
-                $this->app->bind($i, function () use ($impl) {
-                    return $this->app->make($impl['class']);
-                }, empty($impl['shared']) ? null : $impl['shared']);
+
+        if ($beans) {
+            foreach ($beans as $i => $impl) {
+                if ($impl['singleton']) {
+                    $this->app->singleton($i, function () use ($impl) {
+                        return $this->app->make($impl['class']);
+                    }, empty($impl['shared']) ? null : $impl['shared']);
+                } else {
+                    $this->app->bind($i, function () use ($impl) {
+                        return $this->app->make($impl['class']);
+                    }, empty($impl['shared']) ? null : $impl['shared']);
+                }
             }
         }
     }

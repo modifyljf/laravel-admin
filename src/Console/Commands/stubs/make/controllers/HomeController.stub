@@ -3,7 +3,7 @@
 namespace DummyNamespace;
 
 use DummyRootNamespaceContracts\ModuleConstant;
-use DummyRootNamespaceHttp\Controllers\Admin\BaseController as Controller;
+use Guesl\Admin\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {

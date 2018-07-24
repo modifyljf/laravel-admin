@@ -1,12 +1,17 @@
 <?php
 
-namespace DummyNamespace;
+namespace Guesl\Admin\Http\Controllers;
 
-use DummyRootNamespaceHttp\Controllers\Controller;
 use Guesl\Admin\Contracts\BaseService;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class BaseController extends Controller
+class Controller extends BaseController
 {
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
     /**
      * BaseController constructor.
      * @var BaseService
