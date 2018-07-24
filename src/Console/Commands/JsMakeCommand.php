@@ -86,19 +86,22 @@ class JsMakeCommand extends GeneratorCommand
         $this->exportConfig();
     }
 
+    /**
+     * Export helper js files.
+     */
     protected function exportHelperJs()
     {
-        $interceptorsJs = resource_path('assets/admin/js/helpers/interceptors.js');
+        $axiosJs = resource_path('assets/admin/js/helpers/axios.js');
 
-        if (file_exists($interceptorsJs)) {
-            $this->error('Interceptors JS file already exists.');
+        if (file_exists($axiosJs)) {
+            $this->error('AxiosJs file already exists.');
         }
 
         $template = $this->getTemplate();
 
         file_put_contents(
-            $interceptorsJs,
-            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/helpers/interceptors.js")
+            $axiosJs,
+            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/helpers/axios.js")
         );
     }
 
