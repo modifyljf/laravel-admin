@@ -112,7 +112,7 @@ class JsMakeCommand extends GeneratorCommand
         }
 
         file_put_contents(
-            $axiosJs,
+            $toastJs,
             file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/helpers/toast.js")
         );
     }
