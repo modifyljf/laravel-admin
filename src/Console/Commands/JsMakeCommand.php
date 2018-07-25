@@ -3,6 +3,7 @@
 namespace Guesl\Admin\Console\Commands;
 
 use Guesl\Admin\Contracts\Constant;
+use Illuminate\Support\Facades\DB;
 
 class JsMakeCommand extends GeneratorCommand
 {
@@ -192,15 +193,19 @@ class JsMakeCommand extends GeneratorCommand
     protected function compileIndexJsStub()
     {
         $stub = $this->getIndexJsStub();
+        $defColumns = $this->getDefColumns();
+        $defColumnsJSON = json_encode($defColumns);
 
         return str_replace(
             [
                 'DummyTableId',
                 'DummyResource',
+                'DummyDefColumns'
             ],
             [
                 $this->tableId(),
                 str_plural(strtolower($this->getNameInput())),
+                $defColumnsJSON,
             ],
             file_get_contents($stub)
         );
@@ -216,6 +221,33 @@ class JsMakeCommand extends GeneratorCommand
         $template = $this->getTemplate();
 
         return __DIR__ . "/stubs/make/resources/${template}/assets/js/index.js.stub";
+    }
+
+    /**
+     * Get the defined columns in the table js file.
+     *
+     * @return array
+     */
+    protected function getDefColumns()
+    {
+        $tableName = $this->getTableName();
+        $tableMetas = DB::getSchemaBuilder()->getColumnListing($tableName);
+
+        $defColumns = [];
+        if (!empty($tablemetas)) {
+            foreach ($tableMetas as $meta) {
+                array_push($defColumns, [
+                    'field' => $meta,
+                    'title' => camel_case($meta),
+                    'sortable' => false,
+                    'selector' => false,
+                    'textAlign' => 'center',
+                    'searchable' => true,
+                ]);
+            }
+        }
+
+        return $defColumns;
     }
 
     /**

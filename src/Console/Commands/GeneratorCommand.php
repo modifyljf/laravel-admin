@@ -4,6 +4,7 @@ namespace Guesl\Admin\Console\Commands;
 
 use Guesl\Admin\Contracts\Constant;
 use Illuminate\Console\GeneratorCommand as Command;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
 abstract class GeneratorCommand extends Command
@@ -103,6 +104,18 @@ abstract class GeneratorCommand extends Command
     }
 
     /**
+     * Get the table of the model.
+     *
+     * @return string
+     */
+    protected function getTableName()
+    {
+        $table = Str::plural(Str::snake(class_basename($this->argument('name'))));
+
+        return $table;
+    }
+
+    /**
      * Get the table id by 'name' argument.
      *
      * @return string
@@ -110,7 +123,7 @@ abstract class GeneratorCommand extends Command
     protected function tableId()
     {
         $name = $this->argument('name');
-        $tableId = camel_case(str_replace(' ', '_', strtolower($name)) . 'Table');
+        $tableId = lcfirst($name) . 'Table';
 
         return $tableId;
     }

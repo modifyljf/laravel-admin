@@ -2,15 +2,7 @@ import React from 'react';
 import {render, hydrate} from 'react-dom';
 import DataTableComponent from '../components/DataTableComponent';
 
-let defColumns = [{
-    field: 'id',
-    title: '#',
-    sortable: false,
-    width: 40,
-    selector: false,
-    textAlign: 'center',
-    searchable: true,
-}];
+let defColumns = DummyDefColumns;
 
 hydrate(
     <DataTableComponent
