@@ -199,10 +199,24 @@ class ViewMakeCommand extends GeneratorCommand
 
         file_put_contents(
             $createViewPath,
-            file_get_contents($this->getCreateViewStub())
+            $this->compileCreateViewStub()
         );
 
         $this->info('Created: ' . $createViewPath);
+    }
+
+    /**
+     * Compile create view stub.
+     *
+     * @return string
+     */
+    protected function compileCreateViewStub()
+    {
+        return str_replace(
+            ['DummyMenuName'],
+            [ucfirst($this->getNameInput())],
+            file_get_contents($this->getCreateViewStub())
+        );
     }
 
     /**
@@ -270,7 +284,6 @@ class ViewMakeCommand extends GeneratorCommand
     {
         $name = $this->getNameInput();
         $module = $this->getModuleName();
-
 
         $stub = $this->getTemplateViewStub();
         if ($module) {
