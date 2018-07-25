@@ -23,7 +23,7 @@ class Toast {
     static show(type, message) {
         toastr[type](message);
     }
-};
+}
 
 Toast.TYPE_ERROR = 'error';
 Toast.TYPE_SUCCESS = 'success';
