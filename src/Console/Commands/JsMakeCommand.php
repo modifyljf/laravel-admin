@@ -104,6 +104,17 @@ class JsMakeCommand extends GeneratorCommand
             $axiosJs,
             file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/helpers/axios.js")
         );
+
+        $toastJs = resource_path('assets/admin/js/helpers/toast.js');
+
+        if (file_exists($toastJs)) {
+            $this->error('Toast Js file already exists.');
+        }
+
+        file_put_contents(
+            $axiosJs,
+            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/helpers/toast.js")
+        );
     }
 
     /**
