@@ -234,11 +234,11 @@ class JsMakeCommand extends GeneratorCommand
         $tableMetas = DB::getSchemaBuilder()->getColumnListing($tableName);
 
         $defColumns = [];
-        if (!empty($tablemetas)) {
+        if (!empty($tableMetas)) {
             foreach ($tableMetas as $meta) {
                 array_push($defColumns, [
                     'field' => $meta,
-                    'title' => camel_case($meta),
+                    'title' => ucfirst(camel_case($meta)),
                     'sortable' => false,
                     'selector' => false,
                     'textAlign' => 'center',
