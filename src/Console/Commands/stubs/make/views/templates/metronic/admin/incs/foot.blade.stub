@@ -1,8 +1,8 @@
 @php
-    $gueslAdminSuccessHint = \Illuminate\Support\Facades\Session::flush(\Guesl\Admin\Contracts\Constant::SESSION_KEY_SUCCESS);
-    $gueslAdminWarnHint = \Illuminate\Support\Facades\Session::flush(\Guesl\Admin\Contracts\Constant::SESSION_KEY_WARN);
-    $gueslAdminInfoHint = \Illuminate\Support\Facades\Session::flush(\Guesl\Admin\Contracts\Constant::SESSION_KEY_INFO);
-    $gueslAdminErrorHint = \Illuminate\Support\Facades\Session::flush(\Guesl\Admin\Contracts\Constant::SESSION_KEY_ERROR);
+    $gueslAdminSuccessHint = \Illuminate\Support\Facades\Session::pull(\Guesl\Admin\Contracts\Constant::SESSION_KEY_SUCCESS);
+    $gueslAdminWarnHint = \Illuminate\Support\Facades\Session::pull(\Guesl\Admin\Contracts\Constant::SESSION_KEY_WARN);
+    $gueslAdminInfoHint = \Illuminate\Support\Facades\Session::pull(\Guesl\Admin\Contracts\Constant::SESSION_KEY_INFO);
+    $gueslAdminErrorHint = \Illuminate\Support\Facades\Session::pull(\Guesl\Admin\Contracts\Constant::SESSION_KEY_ERROR);
 @endphp
 
 @if(isset($gueslAdminSuccessHint))
