@@ -9,7 +9,7 @@ class GenerateCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'guesl:generate 
+    protected $signature = 'guesl:make
                     {name : The name of model.}
                     {--template : Template name, "metronic" as default.}
                     {--force : Overwrite existing objects by default.}

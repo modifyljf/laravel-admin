@@ -96,6 +96,7 @@ class JsMakeCommand extends GeneratorCommand
 
         if (file_exists($axiosJs)) {
             $this->error('AxiosJs file already exists.');
+            return;
         }
 
         $template = $this->getTemplate();
@@ -126,6 +127,7 @@ class JsMakeCommand extends GeneratorCommand
 
         if (file_exists($dataTableComponent)) {
             $this->error('DataTableComponent already exists.');
+            return;
         }
 
         $template = $this->getTemplate();
@@ -145,6 +147,7 @@ class JsMakeCommand extends GeneratorCommand
 
         if (file_exists($configAppJs)) {
             $this->error(' app.js config file already exists.');
+            return;
         }
 
         $template = $this->getTemplate();
