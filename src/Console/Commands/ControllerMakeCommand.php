@@ -103,7 +103,7 @@ class ControllerMakeCommand extends GeneratorCommand
         $moduleExists = false;
 
         foreach ($fileArray as $line) {
-            if (strpos($line, $moduleConstant) !== false) {
+            if (strpos($line, $moduleConstant . ';') !== false) {
                 $moduleExists = true;
                 break;
             }
@@ -131,7 +131,7 @@ class ControllerMakeCommand extends GeneratorCommand
         $menuExists = false;
 
         foreach ($fileArray as $line) {
-            if (strpos($line, $menuConstant) !== false) {
+            if (strpos($line, $menuConstant . ';') !== false) {
                 $menuExists = true;
                 break;
             }

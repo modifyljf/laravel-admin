@@ -76,7 +76,8 @@ abstract class GeneratorCommand extends Command
         $module = $this->getModuleName();
 
         if ($module) {
-            $moduleConstantName = strtoupper("MODULE_$module");
+            $moduleName = Str::snake($module);
+            $moduleConstantName = strtoupper("MODULE_$moduleName");
         }
 
         return $moduleConstantName;
@@ -95,9 +96,11 @@ abstract class GeneratorCommand extends Command
         $module = $this->getModuleName();
 
         if ($module) {
-            $menuConstantName = strtoupper("MENU_{$module}_$name");
+            $moduleName = Str::snake($module);
+            $menuConstantName = strtoupper("MENU_{$moduleName}_$name");
         } else {
-            $menuConstantName = strtoupper("MENU_$name");
+            $menuName = Str::snake($name);
+            $menuConstantName = strtoupper("MENU_$menuName");
         }
 
         return $menuConstantName;
