@@ -296,7 +296,7 @@ class ViewMakeCommand extends GeneratorCommand
             $stub .= '/admin/incs/navitem.blade.stub';
         }
 
-        $menuName = ucfirst($name);
+        $menuName = ucfirst(str_plural($name));
         $moduleName = ucfirst($module);
         $indexUrl = str_plural(strtolower($name));
 
