@@ -276,8 +276,7 @@ class JsMakeCommand extends GeneratorCommand
         if (file_exists($webpackPath)) {
             file_put_contents(
                 $webpackPath,
-                $this->compileIndexJsConfig(),
-                FILE_APPEND
+                $this->compileIndexJsConfig()
             );
 
             $this->info('Updated: Add index js to webpack.mix.js.');
@@ -293,13 +292,45 @@ class JsMakeCommand extends GeneratorCommand
      */
     protected function compileIndexJsConfig()
     {
-        $template = $this->getTemplate();
+        $webpackPath = base_path('webpack.mix.js');
+        $fileArray = $fileArray = file($webpackPath);
+
+        if (!$this->isWebpackExists()) {
+            $template = $this->getTemplate();
+            $modelName = strtolower($this->getNameInput());
+
+            $jsNewLine = str_replace(
+                ['DummyModel'],
+                [$modelName],
+                file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/webpack.mix.js")
+            );
+
+            array_push($fileArray, $jsNewLine);
+        }
+
+        return implode("", $fileArray);
+    }
+
+    /**
+     * Check if the webpack js line exists.
+     *
+     * @return bool
+     */
+    protected function isWebpackExists()
+    {
+        $webpackPath = base_path('webpack.mix.js');
+        $fileArray = $fileArray = file($webpackPath);
+
         $modelName = strtolower($this->getNameInput());
 
-        return str_replace(
-            ['DummyModel'],
-            [$modelName],
-            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/webpack.mix.js")
-        );
+        $webpackExist = false;
+        foreach ($fileArray as $line) {
+            if (strpos($line, "/$modelName/") !== false) {
+                $webpackExist = true;
+                break;
+            }
+        }
+
+        return $webpackExist;
     }
 }
