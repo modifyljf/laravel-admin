@@ -63,10 +63,10 @@ class JsMakeCommand extends GeneratorCommand
     protected function makePackageJson()
     {
         $packageJsonPath = base_path('package.json');
-        if (file_exists($packageJsonPath) && !$this->option('force')) {
-            if (!$this->confirm("The [{$packageJsonPath}] library config file already exists. Do you want to replace it?")) {
-                return;
-            }
+        if (file_exists($packageJsonPath)) {
+            //if (!$this->confirm("The [{$packageJsonPath}] library config file already exists. Do you want to replace it?")) {
+            return;
+            // }
         }
 
         file_put_contents(
