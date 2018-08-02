@@ -128,7 +128,7 @@ class DataTableComponent extends React.PureComponent {
                         confirmButtonText: 'OK',
                         confirmButtonClass: 'btn btn-focus m-btn m-btn--pill m-btn--air',
                     });
-                    dataTable.ajax.reload();
+                    dataTable.reload();
 
                 } else {
                     "cancel" === result.dismiss &&
