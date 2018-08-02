@@ -77,11 +77,38 @@ class GenerateCommand extends GeneratorCommand
     {
         $adminRoute = base_path('routes/admin.php');
 
-        file_put_contents(
-            $adminRoute,
-            $this->compileRouteStub(),
-            FILE_APPEND
-        );
+        if (!$this->isUrlConfigExists()) {
+            file_put_contents(
+                $adminRoute,
+                $this->compileRouteStub(),
+                FILE_APPEND
+            );
+
+            $this->info('Updated: ' . $adminRoute);
+        }
+    }
+
+    /**
+     * Check if the url config exists.
+     *
+     * @return bool
+     */
+    protected function isUrlConfigExists()
+    {
+        $isUrlConfigExists = false;
+        $adminRoutePath = base_path('routes/admin.php');
+        $fileArray = file($adminRoutePath);
+
+        $newLine = $this->compileRouteStub();
+
+        foreach ($fileArray as $line) {
+            if (strpos($line, $newLine) !== false) {
+                $isUrlConfigExists = true;
+                break;
+            }
+        }
+
+        return $isUrlConfigExists;
     }
 
     /**

@@ -46,13 +46,40 @@ class AuthMakeCommand extends GeneratorCommand
     protected function exportRoute()
     {
         $webRoutePath = base_path('routes/web.php');
-        file_put_contents(
-            $webRoutePath,
-            file_get_contents(__DIR__ . '/stubs/make/routes.auth.stub'),
-            FILE_APPEND
-        );
+        if (!$this->isAuthConfigExists()) {
+            $authRoutes = 'Auth::routes();';
 
-        $this->info('Updated: ' . $webRoutePath);
+            file_put_contents(
+                $webRoutePath,
+                $authRoutes,
+                FILE_APPEND
+            );
+
+            $this->info('Updated: ' . $webRoutePath);
+        }
+    }
+
+    /**
+     * Check if the url config exists.
+     *
+     * @return bool
+     */
+    protected function isAuthConfigExists()
+    {
+        $isAuthConfigExists = false;
+        $webRoutePath = base_path('routes/web.php');
+        $fileArray = file($webRoutePath);
+
+        $authRoutes = 'Auth::routes();';
+
+        foreach ($fileArray as $line) {
+            if (strpos($line, $authRoutes) !== false) {
+                $isAuthConfigExists = true;
+                break;
+            }
+        }
+
+        return $isAuthConfigExists;
     }
 
     /**
