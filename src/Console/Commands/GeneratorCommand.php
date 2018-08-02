@@ -95,11 +95,12 @@ abstract class GeneratorCommand extends Command
         $name = $this->getNameInput();
         $module = $this->getModuleName();
 
+        $menuName = Str::snake($name);
+
         if ($module) {
             $moduleName = Str::snake($module);
-            $menuConstantName = strtoupper("MENU_{$moduleName}_$name");
+            $menuConstantName = strtoupper("MENU_{$moduleName}_$menuName");
         } else {
-            $menuName = Str::snake($name);
             $menuConstantName = strtoupper("MENU_$menuName");
         }
 
