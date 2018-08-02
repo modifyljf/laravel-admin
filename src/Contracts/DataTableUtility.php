@@ -61,9 +61,11 @@ class DataTableUtility
         $query = $request->get('query');
         $searchColumnsName = $request->get('search_columns');
         if (isset($query) && isset($searchColumnsName)) {
-            $search = $query['generalSearch'];
-            foreach ($searchColumnsName as $columnName) {
-                $searchColumns[$columnName] = $search;
+            if (array_key_exists('generalSearch', $query)) {
+                $search = $query['generalSearch'];
+                foreach ($searchColumnsName as $columnName) {
+                    $searchColumns[$columnName] = $search;
+                }
             }
         }
 
