@@ -105,6 +105,6 @@ class DummyClass extends Controller
      */
     public function destroy($id)
     {
-        //
+        DummyModelClass::destroy($id);
     }
 }

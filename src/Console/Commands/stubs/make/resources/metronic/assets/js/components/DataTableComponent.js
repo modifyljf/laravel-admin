@@ -85,8 +85,10 @@ class DataTableComponent extends React.PureComponent {
     destroy(rowId) {
         const {deleteHandler, afterDeleted, deleteErrorHandler, resource} = this.props;
 
+        let dataTable = this.dataTable;
+
         if (deleteHandler) {
-            deleteHandler(rowId, this.dataTable);
+            deleteHandler(rowId, dataTable);
 
         } else {
             swal({
@@ -126,7 +128,8 @@ class DataTableComponent extends React.PureComponent {
                         confirmButtonText: 'OK',
                         confirmButtonClass: 'btn btn-focus m-btn m-btn--pill m-btn--air',
                     });
-                    this.dataTable.ajax.reload();
+                    dataTable.ajax.reload();
+
                 } else {
                     "cancel" === result.dismiss &&
                     swal({
