@@ -15,7 +15,7 @@ composer install/update
 
 php artisan guesl:install
 
-php artisan guesl:generate User --module=User --force
+php artisan guesl:make User --module=User --force
 
 yarn install
 yarn run dev
