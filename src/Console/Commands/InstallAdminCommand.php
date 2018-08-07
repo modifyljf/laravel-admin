@@ -13,7 +13,6 @@ class InstallAdminCommand extends GeneratorCommand
      */
     protected $signature = 'guesl:install
                     {--force : Overwrite existing views by default.}
-                    {--migrate : Run the migrate command.}
                     {--template : Template name, "metronic" as default.}';
 
     /**
@@ -185,8 +184,6 @@ class InstallAdminCommand extends GeneratorCommand
      */
     public function initDatabase()
     {
-        if ($this->option('migrate')) {
-            $this->call('migrate');
-        }
+        $this->call('migrate');
     }
 }
