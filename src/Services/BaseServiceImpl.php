@@ -6,6 +6,7 @@ use Guesl\Admin\Contracts\BaseService;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Created by Jianfeng Li.
@@ -19,8 +20,8 @@ class BaseServiceImpl implements BaseService
      *
      * $modelClass : The  Class Name of eloquent model.
      * Page Info : page num and page size.
-     * Filter Columns : Key : column's name, Value : filter value.
-     * Search Columns :  Key : column's name, Value : search value
+     * Filter Columns : Key : column's name, Value : filter value(The filter could be array, like ['value' => ['1,2,3'], 'operation' => 'in']).
+     * Search Columns :  Key : column's name, Value : search value.
      * Order Columns : Key : column's name, Value : ordering type ('asc', or 'desc')
      * Eager Loading : Eager Loading attributes;
      *
@@ -37,7 +38,7 @@ class BaseServiceImpl implements BaseService
     {
         Log::debug(get_class($this) . '::fetch => Fetch page object by table\'s name , page size, searching info ,and ordering info.');
 
-        $query = $modelClass::whereRaw('1=1');
+        $query = $modelClass::query();
 
         if (isset($scopes) && sizeof($scopes) > 0) {
             foreach ($scopes as $scope) {
@@ -163,5 +164,30 @@ class BaseServiceImpl implements BaseService
         }
 
         return $q;
+    }
+
+    protected function validateFilterColumns($filterColumns)
+    {
+
+    }
+
+    protected function validateOrderColumns($orderColumns)
+    {
+
+    }
+
+    protected function validateSearchColumns($searchColumns)
+    {
+
+    }
+
+    protected function validateEagerLoading($eagerLoading)
+    {
+
+    }
+
+    protected function validateScope($scope)
+    {
+
     }
 }
