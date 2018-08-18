@@ -6,12 +6,10 @@ use Guesl\Admin\Contracts\BaseService;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 
 /**
- * Created by Jianfeng Li.
- * User: Jianfeng Li
- * Date: 2017/4/30
+ * Class BaseServiceImpl
+ * @package Guesl\Admin\Services
  */
 class BaseServiceImpl implements BaseService
 {
@@ -166,26 +164,41 @@ class BaseServiceImpl implements BaseService
         return $q;
     }
 
+    /**
+     * @param $filterColumns
+     */
     protected function validateFilterColumns($filterColumns)
     {
 
     }
 
+    /**
+     * @param $orderColumns
+     */
     protected function validateOrderColumns($orderColumns)
     {
 
     }
 
+    /**
+     * @param $searchColumns
+     */
     protected function validateSearchColumns($searchColumns)
     {
 
     }
 
+    /**
+     * @param $eagerLoading
+     */
     protected function validateEagerLoading($eagerLoading)
     {
 
     }
 
+    /**
+     * @param $scope
+     */
     protected function validateScope($scope)
     {
 

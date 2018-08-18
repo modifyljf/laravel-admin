@@ -6,12 +6,16 @@ use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
 
 /**
- * Created by Jianfeng Li.
- * User: Jianfeng Li
- * Date: 2018/07/23
+ * Class DataTableUtility
+ * @package Guesl\Admin\Contracts
  */
 class DataTableUtility
 {
+    /**
+     * Default page size of data table.
+     */
+    const DEFAULT_PAGE_SIZE = 10;
+
     /**
      * Get pagination info from request.
      *
@@ -25,12 +29,13 @@ class DataTableUtility
         if (isset($pagination)) {
             $page = $pagination['page'];
             $pageSize = $pagination['perpage'];
+
         } else {
             $page = 1;
-            $pageSize = Constant::DEFAULT_PAGE_SIZE;
+            $pageSize = self::DEFAULT_PAGE_SIZE;
         }
 
-        return [$page, $pageSize];
+        return ['page' => $page, 'pageSize' => $pageSize];
     }
 
     /**
@@ -41,12 +46,16 @@ class DataTableUtility
      */
     public static function getFilterColumns($request)
     {
+        $filterColumn = [];
+
         $query = $request->get('query');
         if (isset($query) && array_key_exists('generalSearch', $query)) {
             unset($query['generalSearch']);
+            $filterColumn = $query;
+
         }
 
-        return $query;
+        return $filterColumn;
     }
 
     /**
@@ -68,7 +77,6 @@ class DataTableUtility
                 }
             }
         }
-
         return $searchColumns;
     }
 
