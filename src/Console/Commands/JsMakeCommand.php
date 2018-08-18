@@ -125,16 +125,21 @@ class JsMakeCommand extends GeneratorCommand
     {
         $dataTableComponent = resource_path('assets/admin/js/components/DataTableComponent.js');
 
+        $template = $this->getTemplate();
+
         if (file_exists($dataTableComponent)) {
-            $this->error('DataTableComponent already exists.');
+            $this->error("$template Components already exists.");
             return;
         }
-
-        $template = $this->getTemplate();
 
         file_put_contents(
             $dataTableComponent,
             file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/components/DataTableComponent.js")
+        );
+
+        file_put_contents(
+            $dataTableComponent,
+            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/components/ComboComponent.js")
         );
     }
 

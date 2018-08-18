@@ -4,7 +4,6 @@ namespace Guesl\Admin\Http\Controllers;
 
 use Guesl\Admin\Contracts\BaseService;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -43,15 +42,5 @@ class Controller extends BaseController
         if (isset($module)) {
             request()->session()->flash("module", $module);
         }
-    }
-
-    /**
-     * Bootstrap select combo search.
-     *
-     * @param Request $request
-     */
-    public function comboSearch(Request $request)
-    {
-
     }
 }

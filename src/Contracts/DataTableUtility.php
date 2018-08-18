@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class DataTableUtility
 {
     /**
-     * Default page size of data table.
+     * Default page size of the combo selector.
      */
     const DEFAULT_PAGE_SIZE = 10;
 
@@ -27,6 +27,7 @@ class DataTableUtility
         $pagination = $request->get('pagination');
 
         if (isset($pagination)) {
+            $pagination = json_decode($pagination, true);
             $page = $pagination['page'];
             $pageSize = $pagination['perpage'];
 
@@ -49,12 +50,15 @@ class DataTableUtility
         $filterColumn = [];
 
         $query = $request->get('query');
-        if (isset($query) && array_key_exists('generalSearch', $query)) {
-            unset($query['generalSearch']);
-            $filterColumn = $query;
+        if (isset($query)) {
+            $query = json_decode($query, true);
 
+            if (array_key_exists('generalSearch', $query)) {
+                unset($query['generalSearch']);
+                $filterColumn = $query;
+
+            }
         }
-
         return $filterColumn;
     }
 
@@ -69,14 +73,19 @@ class DataTableUtility
         $searchColumns = [];
         $query = $request->get('query');
         $searchColumnsName = $request->get('search_columns');
-        if (isset($query) && isset($searchColumnsName)) {
-            if (array_key_exists('generalSearch', $query)) {
-                $search = $query['generalSearch'];
-                foreach ($searchColumnsName as $columnName) {
-                    $searchColumns[$columnName] = $search;
+        if (isset($query)) {
+            $query = json_decode($query, true);
+
+            if (isset($searchColumnsName)) {
+                if (array_key_exists('generalSearch', $query)) {
+                    $search = $query['generalSearch'];
+                    foreach ($searchColumnsName as $columnName) {
+                        $searchColumns[$columnName] = $search;
+                    }
                 }
             }
         }
+
         return $searchColumns;
     }
 
@@ -91,6 +100,8 @@ class DataTableUtility
         $sortColumn = [];
         $sort = $request->get('sort');
         if (isset($sort)) {
+            $sort = json_decode($sort, true);
+
             $sortColumn[$sort['field']] = $sort['sort'];
         }
 
