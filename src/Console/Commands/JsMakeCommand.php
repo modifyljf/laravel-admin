@@ -123,24 +123,23 @@ class JsMakeCommand extends GeneratorCommand
      */
     protected function exportComponents()
     {
-        $dataTableComponent = resource_path('assets/admin/js/components/DataTableComponent.js');
-
         $template = $this->getTemplate();
 
-        if (file_exists($dataTableComponent)) {
-            $this->error("$template Components already exists.");
-            return;
+        $dataTableComponent = resource_path('assets/admin/js/components/DataTableComponent.js');
+        if (!file_exists($dataTableComponent)) {
+            file_put_contents(
+                $dataTableComponent,
+                file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/components/DataTableComponent.js")
+            );
         }
 
-        file_put_contents(
-            $dataTableComponent,
-            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/components/DataTableComponent.js")
-        );
-
-        file_put_contents(
-            $dataTableComponent,
-            file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/components/ComboComponent.js")
-        );
+        $comboComponent = resource_path('assets/admin/js/components/ComboComponent.js');
+        if (!file_exists($comboComponent)) {
+            file_put_contents(
+                $comboComponent,
+                file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/js/components/ComboComponent.js")
+            );
+        }
     }
 
     /**
