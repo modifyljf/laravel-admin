@@ -19,14 +19,12 @@ class DummyClass extends Controller
     public function index(Request $request)
     {
         if ($request->expectsJson()) {
-            list($page, $pageSize) = DataTableUtility::getPageInfo($request);
+            $pageInfo = DataTableUtility::getPageInfo($request);
             $searchColumns = DataTableUtility::getSearchColumns($request);
             $sortColumn = DataTableUtility::getSortColumn($request);
             $filterColumns = DataTableUtility::getFilterColumns($request);
 
-            $pageInfo = ['page' => $page, 'pageSize' => $pageSize];
             $result = $this->baseService->fetch(DummyModelClass::class, $pageInfo, $filterColumns, $sortColumn, $searchColumns);
-
             $result = DataTableUtility::formatPageObject($result);
 
             return response()->json($result);
