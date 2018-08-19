@@ -4,6 +4,9 @@ namespace Guesl\Admin\Http\Controllers;
 
 use Guesl\Admin\Contracts\BaseService;
 use Guesl\Admin\Contracts\DataTableUtility;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -13,6 +16,8 @@ use Illuminate\Routing\Controller;
  */
 class ComboController extends Controller
 {
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
     /**
      * @var BaseService $service
      */
