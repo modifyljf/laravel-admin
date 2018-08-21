@@ -27,7 +27,7 @@ class DataTableUtility
         $pagination = $request->get('pagination');
 
         if (isset($pagination)) {
-            $pagination = json_decode($pagination, true);
+            $pagination = is_array($pagination) ? $pagination : json_decode($pagination, true);
             $page = $pagination['page'];
             $pageSize = $pagination['perpage'];
 
@@ -51,7 +51,7 @@ class DataTableUtility
 
         $query = $request->get('query');
         if (isset($query)) {
-            $query = json_decode($query, true);
+            $query = is_array($query) ? $query : json_decode($query, true);
 
             if (array_key_exists('generalSearch', $query)) {
                 unset($query['generalSearch']);
@@ -74,7 +74,7 @@ class DataTableUtility
         $query = $request->get('query');
         $searchColumnsName = $request->get('search_columns');
         if (isset($query)) {
-            $query = json_decode($query, true);
+            $query = is_array($query) ? $query : json_decode($query, true);
 
             if (isset($searchColumnsName)) {
                 if (array_key_exists('generalSearch', $query)) {
@@ -100,7 +100,7 @@ class DataTableUtility
         $sortColumn = [];
         $sort = $request->get('sort');
         if (isset($sort)) {
-            $sort = json_decode($sort, true);
+            $sort = is_array($sort) ? $sort : json_decode($sort, true);
 
             $sortColumn[$sort['field']] = $sort['sort'];
         }
