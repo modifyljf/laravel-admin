@@ -109,6 +109,22 @@ class DataTableUtility
     }
 
     /**
+     * Get eager loading.
+     *
+     * @param Request $request
+     * @return array
+     */
+    public static function getEagerLoading(Request $request)
+    {
+        $eagerLoading = [];
+        $eager = $request->get('eager_loading');
+        if (isset($eager)) {
+            $eagerLoading = is_array($eager) ? $eager : json_decode($eager, true);
+        }
+        return $eagerLoading;
+    }
+
+    /**
      * Format the result to the special page object.
      *
      * @param Paginator $result
