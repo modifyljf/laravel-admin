@@ -198,7 +198,6 @@ class BaseServiceImpl implements BaseService
      */
     public function create($modelClass, $data)
     {
-        Log::debug(get_class($this) . '::createModel => Create a new model(Persistence data).');
         $model = new $modelClass();
         foreach ($data as $col => $value) {
             $model->{$col} = $value;
@@ -219,7 +218,6 @@ class BaseServiceImpl implements BaseService
      */
     public function update($modelClass, $id, $data)
     {
-        Log::debug(get_class($this) . '::updateModel => Update model by id.');
         $result = null;
         $model = $modelClass::find($id);
         if ($model) {
