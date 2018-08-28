@@ -32,4 +32,43 @@ interface BaseService
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|Collection
      */
     public function fetch($modelClass, $pageInfo = [], $filterColumn = [], $orderColumn = [], $searchColumn = [], $eagerLoading = [], $scopes = []);
+
+    /**
+     * Fetch Model by id.
+     * Eager Loading : Eager Loading attributes;
+     *
+     * @param $modelClass
+     * @param $id
+     * @param array $eagerLoading
+     * @return Model
+     */
+    public function retrieve($modelClass, $id, $eagerLoading = []);
+
+    /**
+     * Create a new model(Persistence data).
+     *
+     * @param $modelClass
+     * @param $data
+     * @return Model
+     */
+    public function create($modelClass, $data);
+
+    /**
+     * Update model by id.
+     * $data : attributes which should be updated.
+     *
+     * @param $modelClass
+     * @param $id
+     * @param $data
+     * @return Model
+     */
+    public function update($modelClass, $id, $data);
+
+    /**
+     * Delete the model by id.
+     *
+     * @param $modelClass
+     * @param $id
+     */
+    public function delete($modelClass, $id);
 }

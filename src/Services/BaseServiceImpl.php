@@ -5,6 +5,7 @@ namespace Guesl\Admin\Services;
 use Guesl\Admin\Contracts\BaseService;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -165,42 +166,81 @@ class BaseServiceImpl implements BaseService
     }
 
     /**
-     * @param $filterColumns
+     * Fetch Model by id.
+     * Eager Loading : Eager Loading attributes;
+     *
+     * @param $modelClass
+     * @param $id
+     * @param array $eagerLoading
+     * @return Model|null
      */
-    protected function validateFilterColumns($filterColumns)
+    public function retrieve($modelClass, $id, $eagerLoading = [])
     {
+        Log::debug(get_class($this) . '::fetchModelById => Fetch Model by id.');
 
+        $result = null;
+        $query = $modelClass::where('id', $id);
+        if (isset($eagerLoading) && sizeof($eagerLoading) > 0) {
+            foreach ($eagerLoading as $value) {
+                $query = $query->with($value);
+            }
+        }
+        $result = $query->first();
+        return $result;
     }
 
     /**
-     * @param $orderColumns
+     * Create a new model(Persistence data).
+     *
+     * @param $modelClass
+     * @param $data
+     * @return Model
      */
-    protected function validateOrderColumns($orderColumns)
+    public function create($modelClass, $data)
     {
+        Log::debug(get_class($this) . '::createModel => Create a new model(Persistence data).');
+        $model = new $modelClass();
+        foreach ($data as $col => $value) {
+            $model->{$col} = $value;
+        }
+        $model->save();
 
+        return $model;
     }
 
     /**
-     * @param $searchColumns
+     * Update model by id.
+     * $data : attributes which should be updated.
+     *
+     * @param $modelClass
+     * @param $id
+     * @param $data
+     * @return Model
      */
-    protected function validateSearchColumns($searchColumns)
+    public function update($modelClass, $id, $data)
     {
+        Log::debug(get_class($this) . '::updateModel => Update model by id.');
+        $result = null;
+        $model = $modelClass::find($id);
+        if ($model) {
+            foreach ($data as $key => $value) {
+                $model->$key = $value;
+            }
+            $model->save();
+        }
+        $result = $model;
 
+        return $result;
     }
 
     /**
-     * @param $eagerLoading
+     * Delete the model by id.
+     *
+     * @param $modelClass
+     * @param $id
      */
-    protected function validateEagerLoading($eagerLoading)
+    public function delete($modelClass, $id)
     {
-
-    }
-
-    /**
-     * @param $scope
-     */
-    protected function validateScope($scope)
-    {
-
+        $modelClass::where('id', $id)->delete();
     }
 }
