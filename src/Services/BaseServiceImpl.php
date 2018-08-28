@@ -176,8 +176,6 @@ class BaseServiceImpl implements BaseService
      */
     public function retrieve($modelClass, $id, $eagerLoading = [])
     {
-        Log::debug(get_class($this) . '::fetchModelById => Fetch Model by id.');
-
         $result = null;
         $query = $modelClass::where('id', $id);
         if (isset($eagerLoading) && sizeof($eagerLoading) > 0) {
