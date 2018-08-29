@@ -177,7 +177,7 @@ class BaseServiceImpl implements BaseService
     public function retrieve($modelClass, $id, $eagerLoading = [])
     {
         $result = null;
-        $query = $modelClass::where('id', $id);
+        $query = $modelClass::where((new $modelClass())->getKeyName(), $id);
         if (isset($eagerLoading) && sizeof($eagerLoading) > 0) {
             foreach ($eagerLoading as $value) {
                 $query = $query->with($value);
@@ -237,6 +237,6 @@ class BaseServiceImpl implements BaseService
      */
     public function delete($modelClass, $id)
     {
-        $modelClass::where('id', $id)->delete();
+        $modelClass::where((new $modelClass())->getKeyName(), $id)->delete();
     }
 }
