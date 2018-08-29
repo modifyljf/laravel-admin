@@ -40,9 +40,10 @@ interface BaseService
      * @param $modelClass
      * @param $id
      * @param array $eagerLoading
+     * @param null $keyName
      * @return Model
      */
-    public function retrieve($modelClass, $id, $eagerLoading = []);
+    public function retrieve($modelClass, $id, $eagerLoading = [], $keyName = null);
 
     /**
      * Create a new model(Persistence data).
@@ -60,15 +61,18 @@ interface BaseService
      * @param $modelClass
      * @param $id
      * @param $data
+     * @param null $keyName
      * @return Model
      */
-    public function update($modelClass, $id, $data);
+    public function update($modelClass, $id, $data, $keyName = null);
 
     /**
      * Delete the model by id.
      *
      * @param $modelClass
      * @param $id
+     * @param null $keyName
+     * @return
      */
-    public function delete($modelClass, $id);
+    public function delete($modelClass, $id, $keyName = null);
 }

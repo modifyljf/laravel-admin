@@ -172,12 +172,18 @@ class BaseServiceImpl implements BaseService
      * @param $modelClass
      * @param $id
      * @param array $eagerLoading
+     * @param null $keyName
      * @return Model|null
      */
-    public function retrieve($modelClass, $id, $eagerLoading = [])
+    public function retrieve($modelClass, $id, $eagerLoading = [], $keyName = null)
     {
         $result = null;
-        $query = $modelClass::where((new $modelClass())->getKeyName(), $id);
+        if (isset($keyName)) {
+            $query = $modelClass::where($keyName, $id);
+        } else {
+            $query = $modelClass::where((new $modelClass())->getKeyName(), $id);
+        }
+
         if (isset($eagerLoading) && sizeof($eagerLoading) > 0) {
             foreach ($eagerLoading as $value) {
                 $query = $query->with($value);
@@ -212,12 +218,18 @@ class BaseServiceImpl implements BaseService
      * @param $modelClass
      * @param $id
      * @param $data
+     * @param null $keyName
      * @return Model
      */
-    public function update($modelClass, $id, $data)
+    public function update($modelClass, $id, $data, $keyName = null)
     {
         $result = null;
-        $model = $modelClass::find($id);
+        if (isset($keyName)) {
+            $model = $modelClass::where($keyName, $id);
+        } else {
+            $model = $modelClass::find($id);
+        }
+
         if ($model) {
             foreach ($data as $key => $value) {
                 $model->$key = $value;
@@ -234,9 +246,16 @@ class BaseServiceImpl implements BaseService
      *
      * @param $modelClass
      * @param $id
+     * @param null $keyName
      */
-    public function delete($modelClass, $id)
+    public function delete($modelClass, $id, $keyName = null)
     {
-        $modelClass::where((new $modelClass())->getKeyName(), $id)->delete();
+        if (isset($keyName)) {
+            $model = $modelClass::where($keyName, $id);
+        } else {
+            $model = $modelClass::where((new $modelClass())->getKeyName(), $id);
+        }
+
+        $model->delete();
     }
 }
