@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Log;
 class BaseServiceImpl implements BaseService
 {
     /**
+     * Default page size.
+     */
+    const PAGE_SIZE = 20;
+
+    /**
      * Fetch page object by table's name , page size, searching info ,and ordering info;
      *
      * $modelClass : The  Class Name of eloquent model.
@@ -119,8 +124,8 @@ class BaseServiceImpl implements BaseService
         }
 
         if (isset($pageInfo) && array_get($pageInfo, 'pageSize')) { // if the page info exists , then fetch the pagination info.
-            $perPage = $pageInfo['pageSize'];
-            $page = $pageInfo['page'];
+            $perPage = $pageInfo['pageSize'] ?: self::PAGE_SIZE;
+            $page = $pageInfo['page'] ?: 1;
             $result = $query->paginate($perPage, null, null, $page);
         } else {
             $result = $query->get();
