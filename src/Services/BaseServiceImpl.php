@@ -230,7 +230,7 @@ class BaseServiceImpl implements BaseService
     {
         $result = null;
         if (isset($keyName)) {
-            $model = $modelClass::where($keyName, $id);
+            $model = $modelClass::where($keyName, $id)->first();
         } else {
             $model = $modelClass::find($id);
         }
