@@ -80,6 +80,8 @@ class DummyClass extends Controller
             abort(404);
         }
 
+        $this->initSetting(ModuleConstant::DummyMenuConstant, ModuleConstant::DummyModuleConstant);
+
         return view('admin.models.DummyLowerModel.edit');
     }
 
