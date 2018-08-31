@@ -218,7 +218,7 @@ class DataTableComponent extends React.PureComponent {
                     webstorage: false,
                 }
             },
-            layout: {scroll: false, footer: true},
+            layout: {scroll: true, footer: true},
             sortable: true,
             pagination: true,
             toolbar: {items: {pagination: {pageSizeSelect: [10, 20, 30, 50, 100]}}},
@@ -253,6 +253,7 @@ class DataTableComponent extends React.PureComponent {
                 sortable: false,
                 overflow: 'visible',
                 textAlign: 'center',
+                locked: {right: "md"},
                 template: (t, e, a) => {
                     let actions = this.actionTemplate(t, e, a);
                     return ReactDOMServer.renderToString(actions);
