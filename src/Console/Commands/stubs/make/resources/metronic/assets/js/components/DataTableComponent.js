@@ -147,23 +147,36 @@ class DataTableComponent extends React.PureComponent {
     }
 
     actionTemplate(t, e, a) {
+        const {deletable, editable} = this.props;
+
         let editUrl = this.editUrl(t.id);
 
-        return (
-            <span>
+        let actions = [];
+        if (editable) {
+            actions.push(
                 <a href={editUrl}
                    className='m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill'
                    title='Edit details'
                 >
                     <i className='la la-edit'/>
                 </a>
+            );
+        }
 
+        if (deletable) {
+            actions.push(
                 <a data-row-id={t.id}
                    className='btn-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill delete-btn'
                    title='Delete record'
                 >
                     <i className='la la-trash'/>
                 </a>
+            );
+        }
+
+        return (
+            <span>
+                {actions}
             </span>
         );
     }
