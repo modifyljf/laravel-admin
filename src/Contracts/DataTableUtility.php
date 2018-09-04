@@ -79,8 +79,17 @@ class DataTableUtility
             if (isset($searchColumnsName)) {
                 if (array_key_exists('generalSearch', $query)) {
                     $search = $query['generalSearch'];
+                    $key = null;
                     foreach ($searchColumnsName as $columnName) {
-                        $searchColumns[$columnName] = $search;
+                        if (strpos($columnName, '.') !== false) {
+                            $columnArr = explode('.', $columnName);
+                            $related = $columnArr[0];
+                            $key = camel_case($related) . '.' . $columnArr[1];
+                        } else {
+                            $key = $columnName;
+                        }
+
+                        $searchColumns[$key] = $search;
                     }
                 }
             }
