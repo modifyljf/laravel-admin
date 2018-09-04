@@ -160,7 +160,7 @@ class DataTableComponent extends React.PureComponent {
         let actions = [];
         if (editable) {
             actions.push(
-                <a href={editUrl}
+                <a key="edit" href={editUrl}
                    className='m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill'
                    title='Edit details'
                 >
@@ -171,7 +171,7 @@ class DataTableComponent extends React.PureComponent {
 
         if (deletable) {
             actions.push(
-                <a data-row-id={t.id}
+                <a key="delete" data-row-id={t.id}
                    className='btn-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill delete-btn'
                    title='Delete record'
                 >
