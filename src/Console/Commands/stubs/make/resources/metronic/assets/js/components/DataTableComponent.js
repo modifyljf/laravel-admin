@@ -34,6 +34,12 @@ class DataTableComponent extends React.PureComponent {
         return searchColumns;
     }
 
+    getExtra() {
+        const {extra} = this.props;
+
+        return extra;
+    }
+
     indexUrl() {
         const {restful, resource} = this.props;
         let {indexUrl} = this.props;
@@ -186,6 +192,7 @@ class DataTableComponent extends React.PureComponent {
 
         let defColumns = this.initColumns();
         let searchColumns = this.getSearchColumns();
+        let extra = this.getExtra();
 
         let indexUrl = this.indexUrl();
 
@@ -198,6 +205,7 @@ class DataTableComponent extends React.PureComponent {
                         url: indexUrl,
                         params: {
                             search_columns: searchColumns,
+                            extra: extra,
                         },
                         map: function (raw) {
                             // sample data mapping
