@@ -297,6 +297,8 @@ DataTableComponent.propTypes = {
     deleteHandler: PropTypes.func,
     afterDeleted: PropTypes.func,
     deleteErrorHandler: PropTypes.func,
+
+    extra: PropTypes.any,
 };
 
 DataTableComponent.defaultProps = {
