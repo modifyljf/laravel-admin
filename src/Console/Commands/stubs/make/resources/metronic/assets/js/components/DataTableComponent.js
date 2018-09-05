@@ -12,13 +12,29 @@ import swal from 'sweetalert2';
 
 class DataTableComponent extends React.PureComponent {
     componentDidMount() {
+        const {actions} = this.props;
+
         this.initDataTable();
+
         let that = this;
-        this.dataTable.on('m-datatable--on-layout-updated', function () {
+        let dataTable = this.dataTable;
+        dataTable.on('m-datatable--on-layout-updated', function () {
             $('.btn-delete').on('click', function () {
                 let rowId = this.dataset.rowId;
                 that.destroy(rowId);
             });
+
+            if (!_.isEmpty(actions)) {
+                _.forEach(actions, function (action, index) {
+                    $('.' + action['className']).on('click', function () {
+                        let callback = action.handler;
+                        if (!_.isNil(callback)) {
+                            let rowId = this.dataset.rowId;
+                            callback(rowId, dataTable);
+                        }
+                    });
+                })
+            }
         });
     }
 
@@ -154,12 +170,42 @@ class DataTableComponent extends React.PureComponent {
 
     actionTemplate(t, e, a) {
         const {deletable, editable} = this.props;
+        const {actions} = this.props;
 
         let editUrl = this.editUrl(t.id);
 
-        let actions = [];
+        let actionsDiv = [];
+        if (!_.isEmpty(actions)) {
+            let actionList = actions.map((action, index) => {
+                return (
+                    <a key={index} className={"dropdown-item " + action.className} href="#"
+                       data-row-id={t.id}
+                    >
+                        <i className={action.iconClass}/>
+                        {action.title}
+                    </a>
+                );
+            });
+
+            let dropClass = "dropdown" + (a.getPageSize() - e <= 4 ? " dropup" : "");
+            actionsDiv.push(
+                <div key="extraActions" className={dropClass}>
+                    <a href="#"
+                       className="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
+                       data-toggle="dropdown"
+                       data-row-id={t.id}
+                    >
+                        <i className="la la-ellipsis-h"/>
+                    </a>
+                    <div className="dropdown-menu dropdown-menu-right">
+                        {actionList}
+                    </div>
+                </div>
+            );
+        }
+
         if (editable) {
-            actions.push(
+            actionsDiv.push(
                 <a key="edit" href={editUrl}
                    className='m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill'
                    title='Edit details'
@@ -170,7 +216,7 @@ class DataTableComponent extends React.PureComponent {
         }
 
         if (deletable) {
-            actions.push(
+            actionsDiv.push(
                 <a key="delete" data-row-id={t.id}
                    className='btn-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill delete-btn'
                    title='Delete record'
@@ -182,7 +228,7 @@ class DataTableComponent extends React.PureComponent {
 
         return (
             <span>
-                {actions}
+                {actionsDiv}
             </span>
         );
     }
@@ -251,9 +297,10 @@ class DataTableComponent extends React.PureComponent {
 
     initColumns() {
         const {deletable, editable} = this.props;
+        const {actions} = this.props;
         const {defColumns} = this.props;
 
-        if ((deletable || editable)) {
+        if ((deletable || editable || !_.isEmpty(actions))) {
             defColumns.push({
                 field: 'Actions',
                 width: 110,
@@ -298,6 +345,7 @@ DataTableComponent.propTypes = {
     afterDeleted: PropTypes.func,
     deleteErrorHandler: PropTypes.func,
 
+    actions: PropTypes.array,
     extra: PropTypes.any,
 };
 
@@ -306,6 +354,7 @@ DataTableComponent.defaultProps = {
     editable: true,
     restful: true,
     resource: '',
+    actions: [],
 };
 
 export default DataTableComponent;
