@@ -126,17 +126,17 @@ class DataTableComponent extends React.PureComponent {
                 preConfirm: function () {
                     return new Promise(function (resolve, reject) {
                         axios.delete(`${App.APP_URL}/${resource.toLowerCase()}/${rowId}`).then((response) => {
+                            resolve(response);
                             if (afterDeleted) {
                                 afterDeleted(response);
                             }
-
-                            resolve(response);
-
                         }).catch(error => {
+                            swal.close(() => {
+                            });
+
                             if (deleteErrorHandler) {
                                 deleteErrorHandler(error);
                             }
-
                             reject(response);
                         });
                     })
@@ -163,7 +163,6 @@ class DataTableComponent extends React.PureComponent {
                     });
                 }
             }).catch((e) => {
-                console.error(e);
             });
         }
     }
