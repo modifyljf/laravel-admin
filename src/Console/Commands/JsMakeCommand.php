@@ -309,6 +309,7 @@ class JsMakeCommand extends GeneratorCommand
                 file_get_contents(__DIR__ . "/stubs/make/resources/${template}/assets/webpack.mix.js")
             );
 
+            array_push($fileArray, "\n");
             array_push($fileArray, $jsNewLine);
         }
 
