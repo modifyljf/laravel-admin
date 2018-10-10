@@ -178,9 +178,18 @@ class ViewMakeCommand extends GeneratorCommand
      */
     protected function compileEditViewStub()
     {
+        $menuName = ucfirst($this->getNameInput());
+        $indexUrl = str_plural(strtolower($this->getNameInput()));
+
         return str_replace(
-            ['DummyMenuName'],
-            [ucfirst($this->getNameInput())],
+            [
+                'DummyMenuName',
+                'DummyIndexUrl',
+            ],
+            [
+                $menuName,
+                $indexUrl,
+            ],
             file_get_contents($this->getEditViewStub())
         );
     }
@@ -226,9 +235,18 @@ class ViewMakeCommand extends GeneratorCommand
      */
     protected function compileCreateViewStub()
     {
+        $menuName = ucfirst($this->getNameInput());
+        $indexUrl = str_plural(strtolower($this->getNameInput()));
+
         return str_replace(
-            ['DummyMenuName'],
-            [ucfirst($this->getNameInput())],
+            [
+                'DummyMenuName',
+                'DummyIndexUrl',
+            ],
+            [
+                $menuName,
+                $indexUrl,
+            ],
             file_get_contents($this->getCreateViewStub())
         );
     }
