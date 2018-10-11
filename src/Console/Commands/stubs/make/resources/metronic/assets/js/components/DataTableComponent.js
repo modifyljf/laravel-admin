@@ -271,7 +271,7 @@ class DataTableComponent extends React.PureComponent {
                     webstorage: false,
                 }
             },
-            layout: {scroll: true, footer: true, height: 200},
+            layout: {scroll: true, footer: true},
             sortable: true,
             pagination: true,
             toolbar: {items: {pagination: {pageSizeSelect: [10, 20, 30, 50, 100]}}},
