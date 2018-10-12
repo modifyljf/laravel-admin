@@ -51,7 +51,7 @@ abstract class GeneratorCommand extends Command
     protected function getModuleName()
     {
         $moduleInput = $this->option('module');
-        return $moduleInput ? ucfirst(trim($moduleInput)) : null;
+        return $moduleInput ? ucfirst(camel_case(trim($moduleInput))) : null;
     }
 
     /**
