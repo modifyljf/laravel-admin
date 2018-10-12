@@ -119,10 +119,22 @@ class GenerateCommand extends GeneratorCommand
     protected function compileRouteStub()
     {
         $name = $this->argument('name');
+        $controllerName = $this->controllerName($name);
+
+        $moduleName = $this->getModuleName();
+        $moduleName = $moduleName ? ($moduleName . '\\') : '';
 
         return str_replace(
-            ['DummyPluralModel', 'DummyController'],
-            [strtolower(str_plural($name)), $this->controllerName($name)],
+            [
+                'DummyPluralModel',
+                'DummyController',
+                'DummyModuleName'
+            ],
+            [
+                strtolower(str_plural($name)),
+                $controllerName,
+                $moduleName,
+            ],
             file_get_contents($this->getRouteStub())
         );
     }

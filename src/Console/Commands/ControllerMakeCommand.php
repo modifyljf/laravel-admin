@@ -34,12 +34,25 @@ class ControllerMakeCommand extends GeneratorCommand
      */
     public function handle()
     {
+        $this->createDirectories();
         $this->makeModuleConstant();
         $this->makeController();
 
         $controllerName = $this->getNameInput();
 
         $this->info('Successful: ' . "BaseController exported and {$controllerName}Controller generated.");
+    }
+
+    /**
+     * Create the directories for the files.
+     */
+    protected function createDirectories()
+    {
+        $moduleName = $this->getModuleName();
+
+        if (isset($moduleName)) {
+            $this->makeDirectory(app_path("Http/Controllers/Admin/$moduleName"));
+        }
     }
 
     /**
@@ -148,12 +161,16 @@ class ControllerMakeCommand extends GeneratorCommand
     protected function makeController()
     {
         $name = $this->getNameInput();
+
+        $moduleName = $this->getModuleName();
+        $moduleName = $moduleName ? "/$moduleName" : "";
+
         $controllerName = $this->controllerName($name);
 
-        $controllerPath = app_path("Http/Controllers/Admin/$controllerName.php");
+        $controllerPath = app_path("Http/Controllers/Admin$moduleName/$controllerName.php");
 
         if (file_exists($controllerPath)) {
-            $this->error("Http/Controllers/Admin/$name.php already exists.");
+            $this->error("Http/Controllers/Admin$moduleName/$name.php already exists.");
             return;
         }
 
@@ -173,6 +190,8 @@ class ControllerMakeCommand extends GeneratorCommand
     protected function compileControllerStub()
     {
         $name = $this->argument('name');
+        $moduleName = $this->getModuleName();
+        $moduleName = $moduleName ? '\\' . $moduleName : '';
 
         return str_replace(
             [
@@ -183,6 +202,7 @@ class ControllerMakeCommand extends GeneratorCommand
                 'DummyModelClass',
                 'DummyLowerModel',
                 'DummyMenuConstant',
+                'DummyModuleName',
                 'DummyModuleConstant',
             ],
             [
@@ -193,6 +213,7 @@ class ControllerMakeCommand extends GeneratorCommand
                 $this->modelName($name),
                 strtolower($name),
                 $this->menuConstantName(),
+                $moduleName,
                 $this->moduleConstantName() ? $this->moduleConstantName() : '',
             ],
             file_get_contents(__DIR__ . '/stubs/make/controllers/Controller.stub')
