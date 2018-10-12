@@ -228,6 +228,7 @@ class ControllerMakeCommand extends GeneratorCommand
      */
     protected function controllerName($name)
     {
+        $name = camel_case($name);
         return strpos($name, 'Controller') !== false ? $name : $name . 'Controller';
     }
 
