@@ -137,7 +137,7 @@ class DataTableComponent extends React.PureComponent {
                             if (deleteErrorHandler) {
                                 deleteErrorHandler(error);
                             }
-                            reject(response);
+                            reject(error);
                         });
                     })
                 }
