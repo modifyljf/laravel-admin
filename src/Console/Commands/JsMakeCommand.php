@@ -310,6 +310,7 @@ class JsMakeCommand extends GeneratorCommand
             );
 
             array_push($fileArray, "\n");
+            array_push($fileArray, "\n");
             array_push($fileArray, $jsNewLine);
         }
 
