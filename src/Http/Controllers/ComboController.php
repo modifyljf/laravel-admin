@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace Guesl\Admin\Http\Controllers;
 
 use Guesl\Admin\Contracts\BaseService;
 use Guesl\Admin\Contracts\DataTableUtility;
