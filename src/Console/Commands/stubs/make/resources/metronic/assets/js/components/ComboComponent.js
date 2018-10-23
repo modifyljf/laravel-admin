@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as App from '../config/app';
 import _ from 'lodash';
+import axios from 'axios';
 
 class ComboComponent extends React.PureComponent {
     constructor(props) {
@@ -24,9 +25,18 @@ class ComboComponent extends React.PureComponent {
         const {modelClass} = this.props;
 
         let searchColumn = this.getSearchColumns();
+        let eagerLoading = this.getEagerLoading();
         let pageSize = this.getPageSize();
 
-        axios.get(`${App.APP_URL}/combosearch`, {
+        let instance = null;
+
+        if (window.axios) {
+            instance = window.axios;
+        } else {
+            instance = axios;
+        }
+
+        instance.get(`${App.APP_URL}/combosearch`, {
             params: {
                 model_class: modelClass,
                 pagination: {
@@ -36,7 +46,8 @@ class ComboComponent extends React.PureComponent {
                 query: {
                     generalSearch: search,
                 },
-                search_columns: searchColumn
+                search_columns: searchColumn,
+                eager_loading: eagerLoading
             },
         }).then(response => {
             let optionPageObject = response.data;
@@ -61,6 +72,27 @@ class ComboComponent extends React.PureComponent {
         });
 
         return searchColumns;
+    }
+
+    getEagerLoading() {
+        const {defColumns} = this.props;
+
+        let eagerLoading = [];
+        let eagerColumns = null;
+        _.forEach(defColumns, (defColumn, index) => {
+            if ((defColumn.field).lastIndexOf('.') !== -1) {
+                eagerColumns = _.split(defColumn.field, '.', 2);
+                if (_.size(eagerColumns) > 1) {
+                    eagerColumns = _.join(_.dropRight(eagerColumns), '.');
+                    eagerLoading.push(eagerColumns);
+
+                } else {
+                    eagerLoading.push(eagerColumns);
+                }
+            }
+        });
+
+        return _.uniq(eagerLoading);
     }
 
     getPageSize() {
@@ -103,6 +135,7 @@ class ComboComponent extends React.PureComponent {
         const idKey = this.getIdKey();
         return options.map((option, index) => {
             let optionText = this.getOptionText(option);
+
             return (
                 <option key={index} value={option[idKey]}>
                     {optionText}
@@ -113,16 +146,30 @@ class ComboComponent extends React.PureComponent {
 
     getOptionText(option) {
         const {showColumns} = this.props;
+
+        let optionText = null;
+        let properties = null;
         let optionTextList = showColumns.map((key) => {
-            return !_.isNil(option[key]) ? option[key] : '';
+            if (key.indexOf('.') === -1) {
+                optionText = !_.isNil(option[key]) ? option[key] : '';
+
+            } else {
+                optionText = option;
+                properties = _.split(key, '.');
+
+                for (let i = 0; i < properties.length; i++) {
+                    optionText = optionText[properties[i]];
+                }
+            }
+
+            return optionText;
         });
 
         return _.join(optionTextList, ' | ');
     }
 
-
     initSelector() {
-        const {size, title} = this.props;
+        const {size, title, width} = this.props;
         const initValue = this.getInitValue();
         const idKey = this.getIdKey();
 
@@ -132,11 +179,12 @@ class ComboComponent extends React.PureComponent {
             size: size,
             liveSearch: true,
             title: title,
+            width: width,
         }).on('loaded.bs.select', (e) => {
             let searchBox = $(this.selector).parent().find('.bs-searchbox').find('input');
-            searchBox.on('input', (e) => {
-                thisClass.query(e.target.value);
-            });
+            searchBox.on('input', (e) => _.debounce(
+                thisClass.query(e.target.value), 250
+            ));
         });
 
         if (!_.isNil(initValue)) {
@@ -178,12 +226,14 @@ ComboComponent.propTypes = {
     showColumns: PropTypes.array.isRequired,
     defColumns: PropTypes.array.isRequired,
     initValue: PropTypes.string,
+    width: PropTypes.string,
 };
 
 ComboComponent.defaultProps = {
     idKey: 'id',
     size: 9,
     initValue: '',
+    width: '100%',
 };
 
 export default ComboComponent;

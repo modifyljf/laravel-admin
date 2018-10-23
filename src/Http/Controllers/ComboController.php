@@ -1,6 +1,6 @@
 <?php
 
-namespace Guesl\Admin\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Guesl\Admin\Contracts\BaseService;
 use Guesl\Admin\Contracts\DataTableUtility;
@@ -46,8 +46,9 @@ class ComboController extends Controller
             $filterColumns = DataTableUtility::getFilterColumns($request);
             $searchColumns = DataTableUtility::getSearchColumns($request);
             $sortColumn = DataTableUtility::getSortColumn($request);
+            $eagerColumn = DataTableUtility::getEagerLoading($request);
 
-            $result = $this->service->fetch($modelClass, $pageInfo, $filterColumns, $sortColumn, $searchColumns);
+            $result = $this->service->fetch($modelClass, $pageInfo, $filterColumns, $sortColumn, $searchColumns, $eagerColumn);
 
             return response()->json($result);
         }
