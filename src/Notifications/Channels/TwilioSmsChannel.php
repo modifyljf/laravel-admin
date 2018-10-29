@@ -47,7 +47,7 @@ class TwilioSmsChannel
      */
     public function send($notifiable, Notification $notification)
     {
-        if (!$to = $notifiable->routeNotificationFor('twilio', $notification)) {
+        if (!$to = $notifiable->routeNotificationFor(TwilioSmsChannel::class, $notification)) {
             return;
         }
 
