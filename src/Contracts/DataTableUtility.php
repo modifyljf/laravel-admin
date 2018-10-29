@@ -51,7 +51,7 @@ class DataTableUtility
 
         $query = $request->get('query');
         if (isset($query)) {
-            $query = is_array($query) ? $query : json_decode($query, true);
+            $filterColumn = is_array($query) ? $query : json_decode($query, true);
 
             if (array_key_exists('generalSearch', $query)) {
                 unset($query['generalSearch']);
