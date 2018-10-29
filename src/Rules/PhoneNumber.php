@@ -29,8 +29,8 @@ class PhoneNumber implements Rule
         $phoneNumber = preg_replace('/(\\D)/', '', $value);
 
         $pattern = '/^\+?[1-9]\d{1,14}$/';
-        $isMatch = preg_match($pattern, $value, $phoneNumber);
-        return $isMatch != false;
+        $matches = preg_match($pattern, $phoneNumber, $matches);
+        return !empty($matches);
     }
 
     /**
