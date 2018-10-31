@@ -187,7 +187,7 @@ FileUploadComponent.defaultProps = {
     accept: [],
     imageOnly: true,
     size: 3000, // in KB
-    multiple: false
+    multiple: false,
     title: 'Upload Image',
 };
 
