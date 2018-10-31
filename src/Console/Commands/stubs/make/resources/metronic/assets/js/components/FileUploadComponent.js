@@ -92,6 +92,7 @@ class FileUploadComponent extends React.PureComponent {
             // Show remove button and hide upload label.
             this.setState({
                 file: file,
+                error: '',
             });
 
         }
@@ -100,7 +101,7 @@ class FileUploadComponent extends React.PureComponent {
     handleFilesRemove() {
         this.fileInput.value = null;
         this.setState({
-            file: null
+            file: null,
         });
     }
 
