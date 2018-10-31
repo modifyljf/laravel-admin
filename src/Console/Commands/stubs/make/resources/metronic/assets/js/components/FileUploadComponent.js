@@ -105,7 +105,7 @@ class FileUploadComponent extends React.PureComponent {
     }
 
     render() {
-        const {id, name, placeHolder} = this.props;
+        const {id, name, title, placeHolder} = this.props;
         const {file, error} = this.state;
 
         return (
@@ -140,7 +140,7 @@ class FileUploadComponent extends React.PureComponent {
                         <label htmlFor={id}
                                className="w-100 text-center col-form-label shadow form__input__icon--positive text-info"
                         >
-                            Logo
+                            {title}
                         </label> :
                         null
                 }
@@ -172,6 +172,7 @@ class FileUploadComponent extends React.PureComponent {
 FileUploadComponent.propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
+    title: PropTypes.string,
     placeHolder: PropTypes.string,
     accept: PropTypes.array,
     imageOnly: PropTypes.bool,
@@ -187,6 +188,7 @@ FileUploadComponent.defaultProps = {
     imageOnly: true,
     size: 3000, // in KB
     multiple: false
+    title: 'Upload Image',
 };
 
 export default FileUploadComponent;
