@@ -183,7 +183,7 @@ class ComboComponent extends React.PureComponent {
         }).on('loaded.bs.select', (e) => {
             let searchBox = $(this.selector).parent().find('.bs-searchbox').find('input');
             searchBox.on('input', (e) => _.debounce(
-                thisClass.query(e.target.value), 250
+                () => thisClass.query(e.target.value), 250
             ));
         });
 
