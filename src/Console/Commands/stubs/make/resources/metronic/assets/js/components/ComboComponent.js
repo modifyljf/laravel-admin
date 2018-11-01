@@ -169,7 +169,7 @@ class ComboComponent extends React.PureComponent {
     }
 
     initSelector() {
-        const {size, title, width} = this.props;
+        const {size, title, width, onChange} = this.props;
         const initValue = this.getInitValue();
         const idKey = this.getIdKey();
 
@@ -185,6 +185,13 @@ class ComboComponent extends React.PureComponent {
             searchBox.on('input', (e) => _.debounce(
                 () => thisClass.query(e.target.value), 250
             ));
+        }).on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+            let currentValue = e.target.value;
+            if (isSelected && currentValue != previousValue) {
+                if (onChange) {
+                    onChange(currentValue, previousValue);
+                }
+            }
         });
 
         if (!_.isNil(initValue)) {
@@ -227,6 +234,7 @@ ComboComponent.propTypes = {
     defColumns: PropTypes.array.isRequired,
     initValue: PropTypes.string,
     width: PropTypes.string,
+    onChange: PropTypes.func,
 };
 
 ComboComponent.defaultProps = {
