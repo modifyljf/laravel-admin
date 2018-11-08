@@ -115,8 +115,8 @@ class DataTableUtility
     {
         $sortColumn = [];
 
-        // Get the sort columns by 'sort_columns' parameters.
-        $sort = $request->get('sort_columns');
+        // Get the sort columns by 'sort' parameters.
+        $sort = $request->get('sort');
 
         if (isset($sort)) {
             $sort = is_array($sort) ? $sort : json_decode($sort, true);
