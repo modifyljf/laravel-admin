@@ -47,17 +47,20 @@ class DataTableUtility
      */
     public static function getFilterColumns($request)
     {
-        $filterColumn = [];
+        // Get the search columns bu 'search_colus' parameters.
+        $filterColumn = $request->get('search_columns');
+        $filterColumn = is_array($filterColumn) ? $filterColumn : json_decode($filterColumn, true);
 
         $query = $request->get('query');
+
         if (isset($query)) {
             $query = is_array($query) ? $query : json_decode($query, true);
 
             if (array_key_exists('generalSearch', $query)) {
                 unset($query['generalSearch']);
-                $filterColumn = $query;
-
             }
+
+            $filterColumn = $query;
         }
         return $filterColumn;
     }
@@ -72,7 +75,11 @@ class DataTableUtility
     {
         $searchColumns = [];
         $query = $request->get('query');
+
+        // Get the search columns bu 'search_colus' parameters.
         $searchColumnsName = $request->get('search_columns');
+        $searchColumnsName = is_array($searchColumnsName) ? $searchColumnsName : json_decode($searchColumnsName, true);
+
         if (isset($query)) {
             $query = is_array($query) ? $query : json_decode($query, true);
 
@@ -107,7 +114,10 @@ class DataTableUtility
     public static function getSortColumn(Request $request)
     {
         $sortColumn = [];
-        $sort = $request->get('sort');
+
+        // Get the sort columns by 'sort_columns' parameters.
+        $sort = $request->get('sort_columns');
+
         if (isset($sort)) {
             $sort = is_array($sort) ? $sort : json_decode($sort, true);
 
@@ -127,6 +137,7 @@ class DataTableUtility
     {
         $eagerLoading = [];
         $eager = $request->get('eager_loading');
+
         if (isset($eager)) {
             $eagerLoading = is_array($eager) ? $eager : json_decode($eager, true);
         }
