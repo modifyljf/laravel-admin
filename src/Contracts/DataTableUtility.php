@@ -47,8 +47,8 @@ class DataTableUtility
      */
     public static function getFilterColumns($request)
     {
-        // Get the search columns bu 'search_colus' parameters.
-        $filterColumn = $request->get('search_columns');
+        // Get the search columns bu 'filter_columns' parameters.
+        $filterColumn = $request->get('filter_columns');
         $filterColumn = is_array($filterColumn) ? $filterColumn : json_decode($filterColumn, true);
 
         $query = $request->get('query');
