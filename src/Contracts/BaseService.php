@@ -2,6 +2,7 @@
 
 namespace Guesl\Admin\Contracts;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,14 +23,14 @@ interface BaseService
      * Order Columns : Key : column's name, Value : ordering type ("asc", or "desc")
      * Eager Loading : Eager Loading attributes;
      *
-     * @param $modelClass
+     * @param Model $modelClass
      * @param array $pageInfo
      * @param array $filterColumn
      * @param array $orderColumn
      * @param array $searchColumn
      * @param array $eagerLoading
      * @param array $scopes
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|Collection
+     * @return LengthAwarePaginator|Collection
      */
     public function fetch($modelClass, $pageInfo = [], $filterColumn = [], $orderColumn = [], $searchColumn = [], $eagerLoading = [], $scopes = []);
 
@@ -72,7 +73,6 @@ interface BaseService
      * @param $modelClass
      * @param $id
      * @param null $keyName
-     * @return
      */
     public function delete($modelClass, $id, $keyName = null);
 }

@@ -31,7 +31,7 @@ class BaseServiceImpl implements BaseService
      * Order Columns : Key : column's name, Value : ordering type ('asc', or 'desc')
      * Eager Loading : Eager Loading attributes;
      *
-     * @param $modelClass
+     * @param Model $modelClass
      * @param array $pageInfo
      * @param array $filterColumn
      * @param array $orderColumn
@@ -128,7 +128,7 @@ class BaseServiceImpl implements BaseService
         if (isset($pageInfo) && Arr::get($pageInfo, 'pageSize')) { // if the page info exists , then fetch the pagination info.
             $perPage = $pageInfo['pageSize'] ?: self::PAGE_SIZE;
             $page = $pageInfo['page'] ?: 1;
-            $result = $query->paginate($perPage, null, null, $page);
+            $result = $query->paginate($perPage, ['*'], 'page', $page);
         } else {
             $result = $query->get();
         }
