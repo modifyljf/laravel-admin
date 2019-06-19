@@ -23,7 +23,7 @@ interface BaseService
      * Order Columns : Key : column's name, Value : ordering type ("asc", or "desc")
      * Eager Loading : Eager Loading attributes;
      *
-     * @param Model $modelClass
+     * @param string $modelClass
      * @param array $pageInfo
      * @param array $filterColumn
      * @param array $orderColumn
