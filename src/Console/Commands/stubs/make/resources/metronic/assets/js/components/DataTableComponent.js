@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import * as App from '../config/app';
 import _ from 'lodash';
 import axios from '../helpers/axios';
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 class DataTableComponent extends React.PureComponent {
     componentDidMount() {
@@ -25,7 +25,7 @@ class DataTableComponent extends React.PureComponent {
             });
 
             if (!_.isEmpty(actions)) {
-                _.forEach(actions, function (action, index) {
+                _.forEach(actions, function (action) {
                     $('.' + action['className']).on('click', function () {
                         let callback = action.handler;
                         if (!_.isNil(callback)) {
@@ -33,6 +33,16 @@ class DataTableComponent extends React.PureComponent {
                             callback(rowId, dataTable);
                         }
                     });
+
+                    if (action['enableClassName']) {
+                        $('.' + action['enableClassName']).on('click', function () {
+                            let callback = action.enableHandler;
+                            if (!_.isNil(callback)) {
+                                let rowId = this.dataset.rowId;
+                                callback(rowId, dataTable);
+                            }
+                        });
+                    }
                 })
             }
         });
@@ -41,7 +51,7 @@ class DataTableComponent extends React.PureComponent {
     getSearchColumns() {
         const {defColumns} = this.props;
         let searchColumns = [];
-        _.forEach(defColumns, (defColumn, index) => {
+        _.forEach(defColumns, (defColumn) => {
             if (defColumn.searchable) {
                 searchColumns.push(defColumn.field);
             }
@@ -113,7 +123,7 @@ class DataTableComponent extends React.PureComponent {
             deleteHandler(rowId, dataTable);
 
         } else {
-            swal({
+            Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
                 showCancelButton: true,
@@ -122,7 +132,7 @@ class DataTableComponent extends React.PureComponent {
                 confirmButtonText: 'Yes, delete it!',
                 confirmButtonClass: 'btn btn-focus m-btn m-btn--pill m-btn--air',
                 showLoaderOnConfirm: true,
-                allowOutsideClick: () => !swal.isLoading(),
+                allowOutsideClick: () => !Swal.isLoading(),
                 preConfirm: function () {
                     return new Promise(function (resolve, reject) {
                         axios.delete(`${App.APP_URL}/${resource.toLowerCase()}/${rowId}`).then((response) => {
@@ -131,7 +141,7 @@ class DataTableComponent extends React.PureComponent {
                                 afterDeleted(response);
                             }
                         }).catch(error => {
-                            swal.close(() => {
+                            Swal.close(() => {
                             });
 
                             if (deleteErrorHandler) {
@@ -143,18 +153,17 @@ class DataTableComponent extends React.PureComponent {
                 }
             }).then((result) => {
                 if (result.value) {
-                    swal({
+                    dataTable.reload();
+
+                    return Swal.fire({
                         title: 'Deleted!',
                         text: 'The record has been deleted.',
                         type: 'success',
                         confirmButtonText: 'OK',
                         confirmButtonClass: 'btn btn-focus m-btn m-btn--pill m-btn--air',
                     });
-                    dataTable.reload();
-
                 } else {
-                    "cancel" === result.dismiss &&
-                    swal({
+                    return Swal.fire({
                         title: 'Cancelled',
                         text: 'Your record is safe :)',
                         type: 'error',
@@ -162,7 +171,7 @@ class DataTableComponent extends React.PureComponent {
                         confirmButtonClass: 'btn btn-focus m-btn m-btn--pill m-btn--air',
                     });
                 }
-            }).catch((e) => {
+            }).catch(() => {
             });
         }
     }
@@ -177,11 +186,15 @@ class DataTableComponent extends React.PureComponent {
         if (!_.isEmpty(actions)) {
             let actionList = actions.map((action, index) => {
                 return (
-                    <a key={index} className={"dropdown-item " + action.className} href="#"
+                    <a key={index}
+                       className={`dropdown-item ${!action.enableClassName ? action.className : (t.status ? action.className : action.enableClassName)}`}
+                       href="#"
                        data-row-id={t.id}
                     >
-                        <i className={action.iconClass}/>
-                        {action.title}
+                        <i className={!action.enableIconClass ? action.iconClass : (t.status ? action.iconClass : action.enableIconClass)}/>
+                        {
+                            !action.enableTitle ? action.title : (t.status ? action.title : action.enableTitle)
+                        }
                     </a>
                 );
             });
@@ -233,8 +246,9 @@ class DataTableComponent extends React.PureComponent {
     }
 
     initDataTable() {
-        const {onInit} = this.props;
+        const {onInit, searchElementId} = this.props;
 
+        let searchElementDom = searchElementId ? searchElementId : "generalSearch";
         let defColumns = this.initColumns();
         let searchColumns = this.getSearchColumns();
         let extra = this.getExtra();
@@ -275,7 +289,7 @@ class DataTableComponent extends React.PureComponent {
             sortable: true,
             pagination: true,
             toolbar: {items: {pagination: {pageSizeSelect: [10, 20, 30, 50, 100]}}},
-            search: {input: $('#generalSearch')},
+            search: {input: $(`#${searchElementDom}`)},
             columns: defColumns,
         });
 

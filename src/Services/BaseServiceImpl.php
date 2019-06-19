@@ -4,8 +4,10 @@ namespace Guesl\Admin\Services;
 
 use Guesl\Admin\Contracts\BaseService;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -36,7 +38,7 @@ class BaseServiceImpl implements BaseService
      * @param array $searchColumn
      * @param array $eagerLoading
      * @param array $scopes
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|Collection
+     * @return LengthAwarePaginator|Collection
      */
     public function fetch($modelClass, $pageInfo = [], $filterColumn = [], $orderColumn = [], $searchColumn = [], $eagerLoading = [], $scopes = [])
     {
@@ -65,7 +67,7 @@ class BaseServiceImpl implements BaseService
                             $relationTable = $relationColumn[0];
                         }
                         if (isset($filter)) {
-                            if (is_array($filter) && array_get($filter, 'type') == false) {
+                            if (is_array($filter) && Arr::get($filter, 'type', false) == false) {
                                 $q->whereDoesntHave($relationColumn[0], function ($relateQuery) use ($relationTable, $relationColumn, $filter) {
                                     $this->generateCriteria($relateQuery, $relationTable . '.' . $relationColumn[1], $filter);
                                 });
@@ -123,7 +125,7 @@ class BaseServiceImpl implements BaseService
             $query->orderBy('updated_at', 'desc');
         }
 
-        if (isset($pageInfo) && array_get($pageInfo, 'pageSize')) { // if the page info exists , then fetch the pagination info.
+        if (isset($pageInfo) && Arr::get($pageInfo, 'pageSize')) { // if the page info exists , then fetch the pagination info.
             $perPage = $pageInfo['pageSize'] ?: self::PAGE_SIZE;
             $page = $pageInfo['page'] ?: 1;
             $result = $query->paginate($perPage, null, null, $page);
@@ -144,8 +146,8 @@ class BaseServiceImpl implements BaseService
     protected function generateCriteria($q, $column, $filter)
     {
         if (is_array($filter)) {
-            $operation = array_get($filter, 'operation');
-            $value = array_get($filter, 'value');
+            $operation = Arr::get($filter, 'operation');
+            $value = Arr::get($filter, 'value');
             if ('isNull' == $operation) {
                 $q->whereNull($column);
             } else if ('isNotNull' == $operation) {
