@@ -2,31 +2,19 @@
 
 namespace Guesl\Admin\Http\Controllers;
 
-use Guesl\Admin\Contracts\BaseService;
 use Guesl\Admin\Contracts\Constant;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
+/**
+ * Class Controller
+ * @package Guesl\Admin\Http\Controllers
+ */
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
-    /**
-     * BaseController constructor.
-     * @var BaseService
-     */
-    protected $baseService;
-
-    /**
-     * BaseController constructor.
-     * @param BaseService $baseService
-     */
-    public function __construct(BaseService $baseService)
-    {
-        $this->baseService = $baseService;
-    }
 
     /**
      * Init setting of navigator.
@@ -83,5 +71,15 @@ class Controller extends BaseController
     protected function afterQueried($hint = 'Listing records Successfully.')
     {
         request()->session()->flash(Constant::SESSION_KEY_SUCCESS, $hint);
+    }
+
+    /**
+     * Session hint after updating.
+     *
+     * @param string $hint
+     */
+    protected function afterFailed($hint = 'Updated Failed.')
+    {
+        request()->session()->flash(Constant::SESSION_KEY_ERROR, $hint);
     }
 }

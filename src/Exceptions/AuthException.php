@@ -5,27 +5,35 @@ namespace Guesl\Admin\Exceptions;
 use Exception;
 
 /**
- * Created by Jianfeng Li.
- * User: Jianfeng Li
- * Date: 2017/4/16
+ * Class AuthException
+ * @package Guesl\Admin\Exceptions
  */
 class AuthException extends Exception
 {
+    /**
+     * @var string
+     */
     protected $key;
 
+    /**
+     * @var array
+     */
     protected $attributes;
 
+    /**
+     * @var string
+     */
     protected $errorBag;
 
     /**
      * Create a new authentication exception.
      *
      * @param string $key
-     * @param  string $message
+     * @param string $message
      * @param string $errorBag
      * @param int $code
      */
-    public function __construct($key, $message = 'Business Exception.', $errorBag = "default", $code = 422)
+    public function __construct($key, $message = 'Authorization Exception.', $errorBag = "default", $code = 422)
     {
         parent::__construct($message, $code);
         $this->key = $key;

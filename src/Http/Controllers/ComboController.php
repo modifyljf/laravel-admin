@@ -3,10 +3,11 @@
 namespace Guesl\Admin\Http\Controllers;
 
 use Guesl\Admin\Contracts\BaseService;
-use Guesl\Admin\Contracts\DataTableUtility;
+use Guesl\Admin\Utilities\DataTableQueryBuild;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -16,7 +17,7 @@ use Illuminate\Routing\Controller;
  */
 class ComboController extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, DataTableQueryBuild;
 
     /**
      * @var BaseService $service
@@ -36,20 +37,20 @@ class ComboController extends Controller
      * Bootstrap selector search method.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function comboSearch(Request $request)
     {
         if ($request->expectsJson()) {
             $modelClass = $request->get('model_class');
-            $pageInfo = DataTableUtility::getPageInfo($request);
-            $filterColumns = DataTableUtility::getFilterColumns($request);
-            $searchColumns = DataTableUtility::getSearchColumns($request);
-            $sortColumn = DataTableUtility::getSortColumn($request);
-            $eagerColumn = DataTableUtility::getEagerLoading($request);
 
-            $result = $this->service->fetch($modelClass, $pageInfo, $filterColumns, $sortColumn, $searchColumns, $eagerColumn);
+            $pageInfo = DataTableQueryBuild::getPageInfo($request);
+            $criteria = DataTableQueryBuild::getCriterion($request);
+            $searches = DataTableQueryBuild::getSearches($request);
+            $sorts = DataTableQueryBuild::getSorts($request);
+            $eagerLoadings = DataTableQueryBuild::getEagerLoadings($request);
 
+            $result = $this->service->fetch($modelClass, $pageInfo, $criteria, $sorts, $searches, $eagerLoadings);
             return response()->json($result);
         }
     }

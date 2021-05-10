@@ -5,23 +5,31 @@ namespace Guesl\Admin\Exceptions;
 use Exception;
 
 /**
- * Created by Jianfeng Li.
- * User: Jianfeng Li
- * Date: 2017/8/14
+ * Class BusinessException
+ * @package Guesl\Admin\Exceptions
  */
 class BusinessException extends Exception
 {
+    /**
+     * @var string
+     */
     protected $key;
 
+    /**
+     * @var array
+     */
     protected $attributes;
 
+    /**
+     * @var string
+     */
     protected $errorBag;
 
     /**
      * Create a new authentication exception.
      *
      * @param string $key
-     * @param  string $message
+     * @param string $message
      * @param string $errorBag
      * @param int $code
      */

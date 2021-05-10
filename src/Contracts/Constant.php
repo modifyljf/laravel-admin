@@ -3,9 +3,8 @@
 namespace Guesl\Admin\Contracts;
 
 /**
- * Created by Jianfeng Li.
- * User: Jianfeng Li
- * Date: 2018/7/17
+ * Class Constant
+ * @package Guesl\Admin\Contracts
  */
 class Constant
 {

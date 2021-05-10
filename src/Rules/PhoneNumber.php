@@ -4,6 +4,10 @@ namespace Guesl\Admin\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
+/**
+ * Class PhoneNumber
+ * @package Guesl\Admin\Rules
+ */
 class PhoneNumber implements Rule
 {
     /**
@@ -19,8 +23,8 @@ class PhoneNumber implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string $attribute
-     * @param  mixed $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
@@ -28,7 +32,7 @@ class PhoneNumber implements Rule
         // Give only number from the value.
         $phoneNumber = preg_replace('/(\\D)/', '', $value);
 
-        $pattern = '/^\+?[1-9]\d{1,14}$/';
+        $pattern = '/^\+?[1-9]\d{9,14}$/';
         $matches = preg_match($pattern, $phoneNumber, $matches);
         return !empty($matches);
     }

@@ -5,7 +5,7 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
-import * as App from '../config/app';
+import * as Config from '../config/app';
 import _ from 'lodash';
 import axios from '../helpers/axios';
 import Swal from 'sweetalert2';
@@ -18,14 +18,14 @@ class DataTableComponent extends React.PureComponent {
 
         let that = this;
         let dataTable = this.dataTable;
-        dataTable.on('m-datatable--on-layout-updated', function () {
-            $('.btn-delete').on('click', function () {
+        dataTable.on('kt-datatable--on-layout-updated', function () {
+            $('.btn-hover-danger').on('click', function () {
                 let rowId = this.dataset.rowId;
                 that.destroy(rowId);
             });
 
             if (!_.isEmpty(actions)) {
-                _.forEach(actions, function (action) {
+                _.forEach(actions, function (action, index) {
                     $('.' + action['className']).on('click', function () {
                         let callback = action.handler;
                         if (!_.isNil(callback)) {
@@ -48,71 +48,43 @@ class DataTableComponent extends React.PureComponent {
         });
     }
 
-    getSearchColumns() {
-        const {defColumns} = this.props;
-        let searchColumns = [];
-        _.forEach(defColumns, (defColumn) => {
-            if (defColumn.searchable) {
-                searchColumns.push(defColumn.field);
-            }
-        });
-
-        return searchColumns;
-    }
-
-    getExtra() {
-        const {extra} = this.props;
-
-        return extra;
-    }
-
     indexUrl() {
         const {restful, resource} = this.props;
         let {indexUrl} = this.props;
 
         if (_.isNil(indexUrl) && restful) {
-            indexUrl = App.APP_URL + '/' + resource.toLowerCase();
+            indexUrl = Config.APP_URL + '/' + resource.toLowerCase();
         }
 
         return indexUrl;
     }
 
-    createUrl() {
-        const {restful, resource} = this.props;
-        let {createUrl} = this.props;
-
-        if (_.isNil(createUrl) && restful) {
-            createUrl = App.APP_URL + '/' + resource.toLowerCase();
-        }
-
-        return createUrl;
-    }
-
-    editUrl(selectedRowId) {
+    editUrl(rowId) {
         const {restful, resource} = this.props;
         let {editUrl} = this.props;
 
         if (_.isNil(editUrl) && restful) {
-            editUrl = App.APP_URL + '/' + resource.toLowerCase() + '/' + selectedRowId + '/edit';
+            editUrl = Config.APP_URL + '/' + resource.toLowerCase() + '/' + rowId + '/edit';
         } else if (editUrl.indexOf('{id}')) {
-            editUrl.replace('{id}', selectedRowId);
+            editUrl.replace('{id}', rowId);
         }
 
         return editUrl;
     }
 
-    showUrl(selectedRowId) {
+    showUrl(rowId) {
         const {restful, resource} = this.props;
         let {showUrl} = this.props;
 
         if (_.isNil(showUrl) && restful) {
-            showUrl = App.APP_URL + '/' + resource.toLowerCase() + '/' + selectedRowId;
+            showUrl = Config.APP_URL + '/' + resource.toLowerCase() + '/' + rowId;
         } else if (showUrl.indexOf('{id}')) {
-            showUrl.replace('{id}', selectedRowId);
+            showUrl.replace('{id}', rowId);
         }
 
         return showUrl;
     }
+
 
     destroy(rowId) {
         const {deleteHandler, afterDeleted, deleteErrorHandler, resource} = this.props;
@@ -128,14 +100,14 @@ class DataTableComponent extends React.PureComponent {
                 text: "You won't be able to revert this!",
                 showCancelButton: true,
                 cancelButtonText: 'Cancel',
-                cancelButtonClass: 'btn btn-secondary m-btn m-btn--pill m-btn--icon',
+                cancelButtonClass: 'btn btn-secondary btn-elevate btn-elevate-air',
                 confirmButtonText: 'Yes, delete it!',
-                confirmButtonClass: 'btn btn-focus m-btn m-btn--pill m-btn--air',
+                confirmButtonClass: 'btn btn-primary btn-elevate btn-elevate-air',
                 showLoaderOnConfirm: true,
                 allowOutsideClick: () => !Swal.isLoading(),
                 preConfirm: function () {
                     return new Promise(function (resolve, reject) {
-                        axios.delete(`${App.APP_URL}/${resource.toLowerCase()}/${rowId}`).then((response) => {
+                        axios.delete(`${Config.APP_URL}/${resource.toLowerCase()}/${rowId}`).then((response) => {
                             resolve(response);
                             if (afterDeleted) {
                                 afterDeleted(response);
@@ -153,59 +125,64 @@ class DataTableComponent extends React.PureComponent {
                 }
             }).then((result) => {
                 if (result.value) {
-                    dataTable.reload();
-
-                    return Swal.fire({
+                    Swal.fire({
                         title: 'Deleted!',
                         text: 'The record has been deleted.',
                         type: 'success',
                         confirmButtonText: 'OK',
-                        confirmButtonClass: 'btn btn-focus m-btn m-btn--pill m-btn--air',
+                        confirmButtonClass: 'btn btn-primary btn-elevate btn-elevate-air',
+                    }).then(response => {
+                        dataTable.reload();
+                    }).catch(e => {
+
                     });
                 } else {
-                    return Swal.fire({
+                    "cancel" === result.dismiss &&
+                    Swal.fire({
                         title: 'Cancelled',
                         text: 'Your record is safe :)',
                         type: 'error',
                         confirmButtonText: 'OK',
-                        confirmButtonClass: 'btn btn-focus m-btn m-btn--pill m-btn--air',
+                        confirmButtonClass: 'btn btn-focus btn-elevate btn-elevate-air',
                     });
                 }
-            }).catch(() => {
+            }).catch((e) => {
             });
         }
     }
 
-    actionTemplate(t, e, a) {
+    actionTemplate(row, index, dataTable) {
         const {deletable, editable} = this.props;
         const {actions} = this.props;
 
-        let editUrl = this.editUrl(t.id);
-
+        let editUrl = this.editUrl(row.id);
         let actionsDiv = [];
+
+        //create extra actions
         if (!_.isEmpty(actions)) {
             let actionList = actions.map((action, index) => {
                 return (
                     <a key={index}
-                       className={`dropdown-item ${!action.enableClassName ? action.className : (t.status ? action.className : action.enableClassName)}`}
+                       className={`dropdown-item ${!action.enableClassName ? action.className : (row.status ? action.className : action.enableClassName)}`}
                        href="#"
-                       data-row-id={t.id}
+                       data-row-id={row.id}
                     >
-                        <i className={!action.enableIconClass ? action.iconClass : (t.status ? action.iconClass : action.enableIconClass)}/>
+                        <i className={!action.enableIconClass ? action.iconClass : (row.status ? action.iconClass : action.enableIconClass)}/>
                         {
-                            !action.enableTitle ? action.title : (t.status ? action.title : action.enableTitle)
+                            !action.enableTitle ? action.title : (row.status ? action.title : action.enableTitle)
                         }
                     </a>
                 );
             });
 
-            let dropClass = "dropdown" + (a.getPageSize() - e <= 4 ? " dropup" : "");
+            let dropClass = "dropdown " + (dataTable.getPageSize() - index <= 4 ? "dropup" : "");
+
             actionsDiv.push(
                 <div key="extraActions" className={dropClass}>
                     <a href="#"
-                       className="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
+                       className="btn btn-hover-brand btn-icon btn-pill"
                        data-toggle="dropdown"
-                       data-row-id={t.id}
+                       data-row-id={row.id}
                     >
                         <i className="la la-ellipsis-h"/>
                     </a>
@@ -213,24 +190,25 @@ class DataTableComponent extends React.PureComponent {
                         {actionList}
                     </div>
                 </div>
-            );
+            )
         }
 
         if (editable) {
             actionsDiv.push(
-                <a key="edit" href={editUrl}
-                   className='m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill'
+                <a href={editUrl}
+                   className='btn btn-hover-brand btn-icon btn-pill'
                    title='Edit details'
+                   key="edit"
                 >
                     <i className='la la-edit'/>
                 </a>
-            );
+            )
         }
 
         if (deletable) {
             actionsDiv.push(
-                <a key="delete" data-row-id={t.id}
-                   className='btn-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill delete-btn'
+                <a key="delete" data-row-id={row.id}
+                   className='btn btn-hover-danger btn-icon btn-pill'
                    title='Delete record'
                 >
                     <i className='la la-trash'/>
@@ -245,17 +223,56 @@ class DataTableComponent extends React.PureComponent {
         );
     }
 
-    initDataTable() {
-        const {onInit, searchElementId} = this.props;
+    initColumns() {
+        const {deletable, editable, actions, defColumns} = this.props;
 
-        let searchElementDom = searchElementId ? searchElementId : "generalSearch";
+        if (deletable || editable || !_.isEmpty(actions)) {
+            defColumns.push({
+                field: 'Actions',
+                title: 'Actions',
+                sortable: false,
+                width: 110,
+                overflow: 'visible',
+                textAlign: 'center',
+                locked: {right: 'md'},
+                template: (row, index, dataTable) => {
+                    let actionTemplate = this.actionTemplate(row, index, dataTable);
+                    return ReactDOMServer.renderToString(actionTemplate);
+                }
+            })
+        }
+
+        return defColumns;
+    }
+
+    getSearchColumns() {
+        const {defColumns} = this.props;
+        let searchColumns = [];
+
+        _.forEach(defColumns, (defColumn, index) => {
+            if (defColumn.searchable) {
+                searchColumns.push(defColumn.field);
+            }
+        });
+
+        return searchColumns;
+    }
+
+    getExtra() {
+        const {extra} = this.props;
+
+        return extra;
+    }
+
+    initDataTable() {
+        const {onInit} = this.props;
+
         let defColumns = this.initColumns();
         let searchColumns = this.getSearchColumns();
         let extra = this.getExtra();
-
         let indexUrl = this.indexUrl();
 
-        this.dataTable = $(this.dataTableNode).mDatatable({
+        this.dataTable = $(this.dataTableNode).KTDatatable({
             data: {
                 type: 'remote',
                 source: {
@@ -289,52 +306,18 @@ class DataTableComponent extends React.PureComponent {
             sortable: true,
             pagination: true,
             toolbar: {items: {pagination: {pageSizeSelect: [10, 20, 30, 50, 100]}}},
-            search: {input: $(`#${searchElementDom}`)},
+            search: {input: $('#generalSearch')},
             columns: defColumns,
         });
-
-        // $('#m_form_status').on('change', function () {
-        //     t.search($(this).val(), 'Status');
-        // });
-        //
-        // $('#m_form_type').on('change', function () {
-        //     t.search($(this).val(), 'Type');
-        // });
-        //
-        // $('#m_form_status, #m_form_type').selectpicker();
 
         if (onInit) {
             onInit(this.dataTable);
         }
     }
 
-    initColumns() {
-        const {deletable, editable} = this.props;
-        const {actions} = this.props;
-        const {defColumns} = this.props;
-
-        if ((deletable || editable || !_.isEmpty(actions))) {
-            defColumns.push({
-                field: 'Actions',
-                width: 110,
-                title: 'Actions',
-                sortable: false,
-                overflow: 'visible',
-                textAlign: 'center',
-                locked: {right: "md"},
-                template: (t, e, a) => {
-                    let actions = this.actionTemplate(t, e, a);
-                    return ReactDOMServer.renderToString(actions);
-                }
-            });
-        }
-
-        return defColumns;
-    }
-
     render() {
         return (
-            <div className='m_datatable' ref={(dataTableNode) => {
+            <div className='kt_datatable' ref={(dataTableNode) => {
                 this.dataTableNode = dataTableNode;
             }}/>
         );
