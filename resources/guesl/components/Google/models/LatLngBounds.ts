@@ -1,5 +1,0 @@
-interface LatLngBounds {
-
-}
-
-export {LatLngBounds};
