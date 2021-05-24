@@ -22,8 +22,8 @@ export default (props: ImageInputProps) => {
     const {
         fileName,
         assetUri,
-        placeholder = {url: "", width: 200, height: 150},
-        origin = {url: "", width: 200, height: 150}
+        placeholder = {url: "", width: 288, height: 192},
+        origin = {url: "", width: 288, height: 192}
     } = props;
 
     const imageInput = useRef(null);
@@ -41,21 +41,18 @@ export default (props: ImageInputProps) => {
         <div id={_.uniqueId(fileName + "_")}
              ref={imageInput}
              className="image-input image-input-outline kt-image"
-             style={_.isEmpty(origin.url) ? {
-                 width: placeholder.width ? placeholder.width : 200,
-                 height: placeholder.height ? placeholder.height : 150,
+             style={placeholder ? {
+                 width: placeholder.width ? placeholder.width : 288,
+                 height: placeholder.height ? placeholder.height : 192,
                  backgroundImage: `url(${assetUri + placeholder.url})`
              } : {}}
         >
             <div className="image-input-wrapper"
-                 style={!_.isEmpty(origin.url) ? {
-                     width: origin.width ? origin.width : 200,
-                     height: origin.height ? origin.height : 150,
+                 style={origin ? {
+                     width: origin.width ? origin.width : 288,
+                     height: origin.height ? origin.height : 192,
                      backgroundImage: `url(${assetUri + origin.url})`
-                 } : {
-                     width: origin.width ? origin.width : 200,
-                     height: origin.height ? origin.height : 150,
-                 }}
+                 } : {}}
             />
 
             <label className="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"

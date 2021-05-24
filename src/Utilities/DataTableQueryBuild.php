@@ -9,6 +9,7 @@ use Guesl\Admin\Models\Pagination;
 use Guesl\Admin\Models\Scope;
 use Guesl\Admin\Models\Sort;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -32,7 +33,7 @@ trait DataTableQueryBuild
         if (isset($pagination)) {
             $pagination = is_array($pagination) ? $pagination : json_decode($pagination, true);
             $page = $pagination['page'] ?? 1;
-            $pageSize = $pagination['perpage'] ?? $pageSize = Pagination::DEFAULT_PAGE_SIZE;;
+            $pageSize = $pagination['perpage'] ?? Pagination::DEFAULT_PAGE_SIZE;
         } else {
             return null;
         }
@@ -59,7 +60,7 @@ trait DataTableQueryBuild
                 $searchColumns = is_array($searchColumns) ? $searchColumns : json_decode($searchColumns, true);
 
                 foreach ($searchColumns as $searchColumn) {
-                    if (strpos($searchColumn, '.') !== false) {
+                    if (str_contains($searchColumn, '.')) {
                         $columnArr = explode('.', $searchColumn);
                         //camel case relations except last column
                         for ($i = 0; $i < sizeof($columnArr) - 1; $i++) {
@@ -92,7 +93,7 @@ trait DataTableQueryBuild
             $sorts = is_array($sorts) ? $sorts : json_decode($sorts, true);
             $name = Arr::exists($sorts, 'field') ? $sorts['field'] : '';
 
-            if (strpos($name, '.') !== false) {
+            if (str_contains($name, '.')) {
                 $columnArr = explode('.', $name);
                 //camel case relations except last column
                 for ($i = 0; $i < sizeof($columnArr) - 1; $i++) {
@@ -132,7 +133,7 @@ trait DataTableQueryBuild
                 if (is_array($filter) && $filter[0] == null) continue;
 
                 if (is_array($filter) && sizeof($filter) > 1) {
-                    if ($column == 'created_at' || $column == 'updated_at' || $column == 'ordered_at') {
+                    if ($column == 'created_at' || $column == 'updated_at') {
                         $operation = "between";
                     } else {
                         $operation = "in";
@@ -336,11 +337,11 @@ trait DataTableQueryBuild
     /**
      * Format the result to the special page object.
      *
-     * @param mixed $paginator
-     * @param $isPaginator
+     * @param Paginator|array $paginator
+     * @param bool $isPaginator
      * @return array
      */
-    public static function formatPageObject($paginator, $isPaginator = true)
+    public static function formatPageObject(Paginator|array $paginator, bool $isPaginator = true)
     {
         if ($isPaginator) {
             $meta = [
@@ -360,7 +361,7 @@ trait DataTableQueryBuild
 
     /**
      * @param $data
-     * @return mixed
+     * @return array
      */
     public static function formatRemotePagination($data)
     {
@@ -376,5 +377,6 @@ trait DataTableQueryBuild
 
             return $result;
         }
+        return [];
     }
 }

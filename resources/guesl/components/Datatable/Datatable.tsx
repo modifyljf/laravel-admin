@@ -278,7 +278,7 @@ const Datatable = (props: DatatableProps) => {
                         });
                     })
                 }
-        }).then((result) => {
+        }).then((result: any) => {
             if (result.value) {
                 return Swal.fire({
                     icon: 'success',
@@ -291,7 +291,7 @@ const Datatable = (props: DatatableProps) => {
             } else {
                 Swal.close();
             }
-        }).catch((e) => {
+        }).catch((e: any) => {
             console.warn(e);
         });
     };

@@ -5,6 +5,7 @@ namespace Guesl\Admin\Services;
 use Guesl\Admin\Models\Criterion;
 use Guesl\Admin\Models\EagerLoading;
 use Guesl\Admin\Models\Fuzzy;
+use Guesl\Admin\Models\Pagination;
 use Guesl\Admin\Models\Scope;
 use Guesl\Admin\Models\Sort;
 use Guesl\Admin\Utilities\DataTableQueryBuild;
@@ -27,7 +28,7 @@ trait QueryHelper
      * $modelClass : The  Class Name of eloquent model.
      *
      * @param string $modelClass
-     * @param mixed $pagination
+     * @param Pagination $pagination
      * @param array<Criterion> $criteria
      * @param array<Sort> $sorts
      * @param array<Fuzzy> $searches
@@ -35,7 +36,7 @@ trait QueryHelper
      * @param array<Scope> $scopes
      * @return LengthAwarePaginator|Collection
      */
-    public function fetch($modelClass, $pagination, array $criteria, array $sorts, array $searches, array $eagerLoadings = [], array $scopes = [])
+    public function fetch(string $modelClass, Pagination $pagination, array $criteria, array $sorts, array $searches, array $eagerLoadings = [], array $scopes = [])
     {
         Log::debug(get_class($this) . '::fetch => Fetch page object by table\'s name , page size, searching info ,and ordering info.');
 
@@ -64,7 +65,7 @@ trait QueryHelper
                     $table = DataTableQueryBuild::getModelTable($relations);
 
                     //if relations presented in $name
-                    if (strpos($name, '.') !== false && $table !== "") {
+                    if (str_contains($name, '.') && $table !== "") {
                         if ('' != $criterion->getValue()) {
                             if ($criterion->isExclusive()) {
                                 $q->whereDoesntHave($relations, function ($relateQuery) use ($criterion, $column, $table) {
@@ -90,7 +91,7 @@ trait QueryHelper
                 foreach ($searches as $search) {
                     $searchColumn = $search->getName();
                     $searchValue = $search->getValue();
-                    if (strpos($searchColumn, '.') !== false) {
+                    if (str_contains($searchColumn, '.')) {
                         $columns = explode('.', $searchColumn);
 
                         $column = array_pop($columns);
@@ -100,7 +101,7 @@ trait QueryHelper
                             $relateQuery->where($column, 'like', '%' . $searchValue . '%');
                         });
                     } else {
-                        $q->orWhere($curTable.'.'.$searchColumn, 'like', '%' . $searchValue . '%');
+                        $q->orWhere($curTable . '.' . $searchColumn, 'like', '%' . $searchValue . '%');
                     }
                 }
             });
@@ -116,7 +117,7 @@ trait QueryHelper
             foreach ($sorts as $sort) {
                 $sortColumn = $sort->getName();
                 $dir = $sort->getDirection();
-                if (strpos($sortColumn, '.') !== false) {
+                if (str_contains($sortColumn, '.')) {
                     $columns = explode('.', $sortColumn);
 
                     $column = array_pop($columns);
