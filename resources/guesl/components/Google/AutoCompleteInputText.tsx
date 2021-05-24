@@ -1,13 +1,14 @@
 import React, {useEffect, useRef} from "react";
-import {PlaceResult} from "./models/PlaceResult";
+import {PlaceResult} from "../../models/Google/PlaceResult";
 
 interface AutoCompleteInputTextProps {
+    name?: string;
     onFulfilled?: (place: PlaceResult) => void;
     onRejected?: (err: any) => void;
 }
 
 const AutoCompleteInputText = (props: AutoCompleteInputTextProps) => {
-    const {onFulfilled} = props;
+    const {name, onFulfilled} = props;
 
     const addressAutocomplete = useRef(null);
     useEffect(() => {
@@ -15,15 +16,19 @@ const AutoCompleteInputText = (props: AutoCompleteInputTextProps) => {
         if (google) {
             // @ts-ignore
             let autocomplete: google.maps.places.Autocomplete;
+            const inputField: any = addressAutocomplete.current;
             // @ts-ignore
-            autocomplete = new google.maps.places.Autocomplete(addressAutocomplete.current, {
-                componentRestrictions: {country: ["us"]},
-                fields: ["address_components", "formatted_address", "geometry", "icon", "name", "place_id"],
-                types: ["address"],
-            });
+            autocomplete = new google.maps.places.Autocomplete(
+                inputField,
+                {
+                    componentRestrictions: {country: ["us"]},
+                    fields: ["address_components", "formatted_address", "geometry", "icon", "name", "place_id"],
+                    types: ["address"],
+                }
+            );
 
             autocomplete.addListener("place_changed", () => {
-                const place: PlaceResult = autocomplete.getPlace();
+                const place: PlaceResult = autocomplete.getPlace() as PlaceResult;
 
                 if (onFulfilled) {
                     onFulfilled(place);
@@ -34,7 +39,8 @@ const AutoCompleteInputText = (props: AutoCompleteInputTextProps) => {
 
     return (
         <>
-            <input type="text"
+            <input name={name}
+                   type="text"
                    className="form-control"
                    placeholder="Address Line 1, Address Line 2, City, State, Zip Code..."
                    aria-label="autoCompleteLabel"
