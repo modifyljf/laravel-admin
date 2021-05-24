@@ -341,7 +341,7 @@ trait DataTableQueryBuild
      * @param bool $isPaginator
      * @return array
      */
-    public static function formatPageObject(Paginator|array $paginator, bool $isPaginator = true)
+    public static function formatPageObject($paginator, bool $isPaginator = true)
     {
         if ($isPaginator) {
             $meta = [
