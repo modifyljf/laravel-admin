@@ -59,7 +59,7 @@ class Pagination implements JsonSerializable, Jsonable, Arrayable
      */
     public function getPageSize(): int
     {
-        return $this->pageSize ? $this->pageSize : self::DEFAULT_PAGE_SIZE;
+        return $this->pageSize ?: self::DEFAULT_PAGE_SIZE;
     }
 
     /**

@@ -28,7 +28,7 @@ trait QueryHelper
      * $modelClass : The  Class Name of eloquent model.
      *
      * @param string $modelClass
-     * @param Pagination $pagination
+     * @param Pagination|null $pagination
      * @param array<Criterion> $criteria
      * @param array<Sort> $sorts
      * @param array<Fuzzy> $searches
@@ -36,7 +36,7 @@ trait QueryHelper
      * @param array<Scope> $scopes
      * @return LengthAwarePaginator|Collection
      */
-    public function fetch(string $modelClass, Pagination $pagination, array $criteria, array $sorts, array $searches, array $eagerLoadings = [], array $scopes = [])
+    public function fetch(string $modelClass, ?Pagination $pagination, array $criteria = [], array $sorts = [], array $searches = [], array $eagerLoadings = [], array $scopes = [])
     {
         Log::debug(get_class($this) . '::fetch => Fetch page object by table\'s name , page size, searching info ,and ordering info.');
 

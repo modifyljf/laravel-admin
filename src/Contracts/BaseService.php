@@ -24,7 +24,7 @@ interface BaseService
      * $modelClass : The  Class Name of eloquent model.
      *
      * @param string $modelClass
-     * @param Pagination $pagination
+     * @param Pagination|null $pagination
      * @param array<Criterion> $criteria
      * @param array<Sort> $sorts
      * @param array<Fuzzy> $searches
@@ -32,7 +32,7 @@ interface BaseService
      * @param array<Scope> $scopes
      * @return LengthAwarePaginator|Collection
      */
-    public function fetch(string $modelClass, Pagination $pagination, array $criteria, array $sorts, array $searches, array $eagerLoadings = [], array $scopes = []);
+    public function fetch(string $modelClass, ?Pagination $pagination, array $criteria = [], array $sorts = [], array $searches = [], array $eagerLoadings = [], array $scopes = []);
 
     /**
      * Fetch Model by id.

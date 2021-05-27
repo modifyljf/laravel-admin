@@ -1,57 +1,58 @@
 {
-    "name": "guesl/laravel-admin",
-    "description": "Laravel admin wrote by Jianfeng Li.",
-    "keywords": [
-        "admin",
-        "laravel"
-    ],
-    "license": "MIT",
-    "homepage": "https://github.com/guesl/laravel-admin",
-    "support": {
-        "issues": "https://github.com/guesl/laravel-admin/issues",
-        "source": "https://github.com/guesl/laravel-admin"
-    },
-    "authors": [
-        {
-            "name": "Jianfeng Li",
-            "email": "modifyljf@gmail.com"
-        }
-    ],
-    "require": {
-        "php": "^7.2|^8.0",
-        "laravel/framework": "^7.0|^8.0",
-        "ext-json": "*"
-    },
-    "require-dev": {
-        "facade/ignition": "^2.9.0",
-        "fzaninotto/faker": "^v1.9.2",
-        "mockery/mockery": "^1.4.2",
-        "nunomaduro/collision": "^v5.4.0",
-        "phpunit/phpunit": "^9.5.4"
-    },
-    "autoload": {
-        "psr-4": {
-            "Guesl\\Admin\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Guesl\\Admin\\Providers\\AdminServiceProvider"
-            ],
-            "aliases": {
-                "Admin": "Guesl\\Admin\\Facades\\Admin"
-            }
-        }
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+  "name": "guesl/laravel-admin",
+  "description": "Laravel admin wrote by Jianfeng Li.",
+  "keywords": [
+    "admin",
+    "laravel"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/guesl/laravel-admin",
+  "support": {
+    "issues": "https://github.com/guesl/laravel-admin/issues",
+    "source": "https://github.com/guesl/laravel-admin"
+  },
+  "authors": [
+    {
+      "name": "Jianfeng Li",
+      "email": "modifyljf@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.2|^8.0",
+    "laravel/framework": "^7.0|^8.0",
+    "laravel/helpers": "^v1.4",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "facade/ignition": "^2.9.0",
+    "fzaninotto/faker": "^v1.9.2",
+    "mockery/mockery": "^1.4.2",
+    "nunomaduro/collision": "^v5.4.0",
+    "phpunit/phpunit": "^9.5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Guesl\\Admin\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Guesl\\Admin\\Providers\\AdminServiceProvider"
+      ],
+      "aliases": {
+        "Admin": "Guesl\\Admin\\Facades\\Admin"
+      }
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
