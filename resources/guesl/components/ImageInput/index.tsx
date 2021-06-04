@@ -39,7 +39,7 @@ export default (props: ImageInputProps) => {
             const id = imageInput.current.id;
             // @ts-ignore
             let kt = new KTImageInput(id);
-            let placeHolderImage = placeholder;
+            let placeHolderImage = placeholder.url + '';
 
             //show place holder image when file is canceled or removed
             kt.on('cancel', function (imageInput: any) {

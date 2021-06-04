@@ -133,7 +133,7 @@ trait DataTableQueryBuild
                 if (is_array($filter) && $filter[0] == null) continue;
 
                 if (is_array($filter) && sizeof($filter) > 1) {
-                    if ($column == 'created_at' || $column == 'updated_at') {
+                    if ($column == 'created_at' || $column == 'updated_at' || $column == 'ordered_at') {
                         $operation = "between";
                     } else {
                         $operation = "in";
