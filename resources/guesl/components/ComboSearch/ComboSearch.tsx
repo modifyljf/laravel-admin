@@ -179,7 +179,7 @@ const ComboSearch = (props: ComboSearchProps) => {
                 }
             });
 
-            if ("undefined" == exists) {
+            if (_.isNil(exists)) {
                 optionValues.push(initValue as {});
             }
         }
