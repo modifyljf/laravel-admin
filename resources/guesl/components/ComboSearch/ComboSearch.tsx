@@ -3,6 +3,7 @@ import {Column} from "../../types";
 import * as _ from "lodash";
 import Pagination from "../../classes/Pagination";
 import * as Axios from "../Utilities/Axios";
+import clsx from "clsx";
 
 interface ComboSearchProps {
     baseUri?: string;
@@ -11,6 +12,7 @@ interface ComboSearchProps {
     idKey?: string;
     name?: string;
     title?: string;
+    containerClass?: string;
     size?: number;
     pageSize?: number;
     initValue?: object;
@@ -24,7 +26,7 @@ interface ComboSearchProps {
 
 const ComboSearch = (props: ComboSearchProps) => {
     const {baseUri, remoteUri} = props;
-    const {id, idKey, name, title, initValue, size, multiple} = props;
+    const {id, idKey, name, title, containerClass, initValue, size, multiple} = props;
     const {pageSize, modelClass, showColumns, defColumns, filter, onChange} = props;
     const [options, setOptions] = useState([]);
     const [selectedValue, setSelectedValue] = useState(null);
@@ -45,7 +47,7 @@ const ComboSearch = (props: ComboSearchProps) => {
         // @ts-ignore
         $(picker).selectpicker({
             actionsBox: false,
-            style: "btn btn-primary btn-round",
+            style: clsx("btn btn-primary btn-round", containerClass),
             size: size,
             liveSearch: true,
             title: title,
@@ -54,7 +56,7 @@ const ComboSearch = (props: ComboSearchProps) => {
             // @ts-ignore
             let searchBox = $(picker).parent().find(".bs-searchbox").find("input");
             searchBox.on("input", _.debounce(
-                (e) => {
+                (e: any) => {
                     e.preventDefault();
                     fetchData(e.target.value)
                 }, 250
@@ -177,7 +179,7 @@ const ComboSearch = (props: ComboSearchProps) => {
                 }
             });
 
-            if ("undefined" == exists) {
+            if (_.isNil(exists)) {
                 optionValues.push(initValue as {});
             }
         }
