@@ -4,7 +4,6 @@ import * as _ from "lodash";
 
 interface ImageInputProps {
     fileName: string;
-    assetUri: string;
     placeholder?: {
         url?: string;
         width?: number;
@@ -24,7 +23,6 @@ interface ImageInputProps {
 export default (props: ImageInputProps) => {
     const {
         fileName,
-        assetUri,
         placeholder = {url: "", width: 288, height: 192},
         origin = {url: "", width: 288, height: 192},
         editable = true,
@@ -39,7 +37,7 @@ export default (props: ImageInputProps) => {
             const id = imageInput.current.id;
             // @ts-ignore
             let kt = new KTImageInput(id);
-            let placeHolderImage = placeholder.url + '';
+            let placeHolderImage = placeholder.url;
 
             //show place holder image when file is canceled or removed
             kt.on('cancel', function (imageInput: any) {
@@ -68,7 +66,7 @@ export default (props: ImageInputProps) => {
                  style={{
                      width: origin.width ? origin.width : 288,
                      height: origin.height ? origin.height : 192,
-                     backgroundImage: !_.isEmpty(origin.url) ? `url(${assetUri + origin.url})` : `url(${assetUri + placeholder.url})`
+                     backgroundImage: !_.isEmpty(origin.url) ? `url(${origin.url})` : `url(${placeholder.url})`
                  }}
             />
             {
