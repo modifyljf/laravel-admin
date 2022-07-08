@@ -10,5 +10,3 @@ let mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-
-mix.js('resources/templates/metronic/assets/js/custom.js', 'public/templates/metronic/default/assets/app/js/custom.bundle.js');

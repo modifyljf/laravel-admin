@@ -18,12 +18,12 @@ class BusinessException extends Exception
     /**
      * @var array
      */
-    protected $attributes;
+    protected array $attributes;
 
     /**
      * @var string
      */
-    protected $errorBag;
+    protected string $errorBag;
 
     /**
      * Create a new authentication exception.
@@ -33,7 +33,7 @@ class BusinessException extends Exception
      * @param string $errorBag
      * @param int $code
      */
-    public function __construct($key, $message = 'Business Exception.', $errorBag = "default", $code = 422)
+    public function __construct(string $key, $message = 'Business Exception.', $errorBag = "default", int $code = 422)
     {
         parent::__construct($message, $code);
         $this->key = $key;

@@ -13,17 +13,17 @@ class AuthException extends Exception
     /**
      * @var string
      */
-    protected $key;
+    protected string $key;
 
     /**
      * @var array
      */
-    protected $attributes;
+    protected array $attributes;
 
     /**
      * @var string
      */
-    protected $errorBag;
+    protected string $errorBag;
 
     /**
      * Create a new authentication exception.
@@ -33,7 +33,7 @@ class AuthException extends Exception
      * @param string $errorBag
      * @param int $code
      */
-    public function __construct($key, $message = 'Authorization Exception.', $errorBag = "default", $code = 422)
+    public function __construct(string $key, $message = 'Authorization Exception.', $errorBag = "default", int $code = 422)
     {
         parent::__construct($message, $code);
         $this->key = $key;

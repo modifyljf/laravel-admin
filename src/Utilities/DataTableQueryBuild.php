@@ -1,13 +1,13 @@
 <?php
 
-namespace Guesl\Admin\Utilities;
+namespace Modifyljf\Admin\Utilities;
 
-use Guesl\Admin\Models\Criterion;
-use Guesl\Admin\Models\EagerLoading;
-use Guesl\Admin\Models\Fuzzy;
-use Guesl\Admin\Models\Pagination;
-use Guesl\Admin\Models\Scope;
-use Guesl\Admin\Models\Sort;
+use Modifyljf\Admin\Models\Criterion;
+use Modifyljf\Admin\Models\EagerLoading;
+use Modifyljf\Admin\Models\Fuzzy;
+use Modifyljf\Admin\Models\Pagination;
+use Modifyljf\Admin\Models\Scope;
+use Modifyljf\Admin\Models\Sort;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 
 /**
  * Trait QueryBuild
- * @package Guesl\Query\Utilities
+ * @package Modifyljf\Query\Utilities
  */
 trait DataTableQueryBuild
 {
