@@ -1,12 +1,12 @@
 <?php
 
-namespace Guesl\Admin\Exceptions;
+namespace Modifyljf\Admin\Exceptions;
 
 use Exception;
 
 /**
  * Class AuthException
- * @package Guesl\Admin\Exceptions
+ * @package Modifyljf\Admin\Exceptions
  */
 class AuthException extends Exception
 {

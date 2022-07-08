@@ -1,6 +1,6 @@
 <?php
 
-namespace Guesl\Admin\Models;
+namespace Modifyljf\Admin\Models;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
@@ -8,7 +8,7 @@ use JsonSerializable;
 
 /**
  * Class Fuzzy
- * @package Guesl\Admin\Models
+ * @package Modifyljf\Admin\Models
  */
 class Fuzzy implements JsonSerializable, Jsonable, Arrayable
 {

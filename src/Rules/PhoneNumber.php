@@ -1,12 +1,12 @@
 <?php
 
-namespace Guesl\Admin\Rules;
+namespace Modifyljf\Admin\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
 /**
  * Class PhoneNumber
- * @package Guesl\Admin\Rules
+ * @package Modifyljf\Admin\Rules
  */
 class PhoneNumber implements Rule
 {

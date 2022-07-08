@@ -1,12 +1,12 @@
 <?php
 
-namespace Guesl\Admin\Exceptions;
+namespace Modifyljf\Admin\Exceptions;
 
 use Exception;
 
 /**
  * Class BusinessException
- * @package Guesl\Admin\Exceptions
+ * @package Modifyljf\Admin\Exceptions
  */
 class BusinessException extends Exception
 {

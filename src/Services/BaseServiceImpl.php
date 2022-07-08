@@ -1,13 +1,13 @@
 <?php
 
-namespace Guesl\Admin\Services;
+namespace Modifyljf\Admin\Services;
 
-use Guesl\Admin\Contracts\BaseService;
+use Modifyljf\Admin\Contracts\BaseService;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class BaseServiceImpl
- * @package Guesl\Admin\Services
+ * @package Modifyljf\Admin\Services
  */
 class BaseServiceImpl implements BaseService
 {

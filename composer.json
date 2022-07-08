@@ -32,7 +32,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Guesl\\Admin\\": "src/"
+      "Modifyljf\\Admin\\": "src/"
     }
   },
   "autoload-dev": {
@@ -43,7 +43,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Modifyljf\\Providers\\BeanServiceProvider"
+        "Modifyljf\\Admin\\Providers\\BeanServiceProvider"
       ]
     }
   },

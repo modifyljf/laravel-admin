@@ -1,20 +1,20 @@
 <?php
 
-namespace Guesl\Admin\Contracts;
+namespace Modifyljf\Admin\Contracts;
 
-use Guesl\Admin\Models\Criterion;
-use Guesl\Admin\Models\EagerLoading;
-use Guesl\Admin\Models\Fuzzy;
-use Guesl\Admin\Models\Pagination;
-use Guesl\Admin\Models\Scope;
-use Guesl\Admin\Models\Sort;
+use Modifyljf\Admin\Models\Criterion;
+use Modifyljf\Admin\Models\EagerLoading;
+use Modifyljf\Admin\Models\Fuzzy;
+use Modifyljf\Admin\Models\Pagination;
+use Modifyljf\Admin\Models\Scope;
+use Modifyljf\Admin\Models\Sort;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Interface BaseService
- * @package Guesl\Admin\Contracts
+ * @package Modifyljf\Admin\Contracts
  */
 interface BaseService
 {

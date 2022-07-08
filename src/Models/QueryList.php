@@ -1,12 +1,12 @@
 <?php
 
-namespace Guesl\Admin\Models;
+namespace Modifyljf\Admin\Models;
 
 use ArrayIterator;
 
 /**
  * Class EagerLoading
- * @package Guesl\Admin\Models
+ * @package Modifyljf\Admin\Models
  */
 class QueryList extends ArrayIterator
 {

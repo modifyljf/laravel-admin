@@ -1,9 +1,9 @@
 <?php
 
-namespace Guesl\Admin\Http\Controllers;
+namespace Modifyljf\Admin\Http\Controllers;
 
-use Guesl\Admin\Contracts\BaseService;
-use Guesl\Admin\Utilities\DataTableQueryBuild;
+use Modifyljf\Admin\Contracts\BaseService;
+use Modifyljf\Admin\Utilities\DataTableQueryBuild;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;

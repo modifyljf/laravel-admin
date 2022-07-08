@@ -1,10 +1,10 @@
 <?php
 
-namespace Guesl\Admin\Contracts;
+namespace Modifyljf\Admin\Contracts;
 
 /**
  * Class Constant
- * @package Guesl\Admin\Contracts
+ * @package Modifyljf\Admin\Contracts
  */
 class Constant
 {

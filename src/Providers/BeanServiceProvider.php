@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Providers;
+namespace Modifyljf\Admin\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
 /**
  * Class BeanServiceProvider
- * @package App\Providers
+ * @package Modifyljf\Admin\Providers
  */
 class BeanServiceProvider extends ServiceProvider
 {

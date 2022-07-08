@@ -1,8 +1,8 @@
 <?php
 
-namespace Guesl\Admin\Http\Controllers;
+namespace Modifyljf\Admin\Http\Controllers;
 
-use Guesl\Admin\Contracts\Constant;
+use Modifyljf\Admin\Contracts\Constant;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 /**
  * Class Controller
- * @package Guesl\Admin\Http\Controllers
+ * @package Modifyljf\Admin\Http\Controllers
  */
 class Controller extends BaseController
 {

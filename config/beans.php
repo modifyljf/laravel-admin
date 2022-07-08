@@ -1,7 +1,7 @@
 <?php
 
-use Guesl\Admin\Contracts\BaseService;
-use Guesl\Admin\Services\BaseServiceImpl;
+use Modifyljf\Admin\Contracts\BaseService;
+use Modifyljf\Admin\Services\BaseServiceImpl;
 
 return [
     BaseService::class => [

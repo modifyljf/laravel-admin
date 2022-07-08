@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 
 /**
  * Trait QueryBuild
- * @package Modifyljf\Query\Utilities
+ * @package Modifyljf\Admin\Query\Utilities
  */
 trait DataTableQueryBuild
 {
